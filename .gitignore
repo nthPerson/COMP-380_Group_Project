@@ -16,3 +16,9 @@ venv/
 
 # macOS junk
 .DS_Store
+.idea/COMP-380_Group_Project.iml
+.gitignore
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/profiles_settings.xml
