@@ -17,6 +17,8 @@ venv/
 # macOS junk
 .DS_Store
 .idea/COMP-380_Group_Project.iml
+
+# Jetbrains junk
 .gitignore
 .idea/misc.xml
 .idea/modules.xml
