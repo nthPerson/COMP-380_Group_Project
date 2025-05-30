@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home</title>
+  <!--firebase setup-->  
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+  <h1>Home</h1>
+  <p id="userInfo"></p>
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    // config -- REMOVE API KEY BEFORE COMMITTING
+    const firebaseConfig = {
+        //ADD API KEY FROM FIREBASE 
+        apiKey: "FIREBASEAPIKEY",
+        authDomain: "comp380-project.firebaseapp.com",
+        projectId: "comp380-project",
+        storageBucket: "comp380-project.firebasestorage.app",
+        messagingSenderId: "600625641164",
+        appId: "1:600625641164:web:08ae615ac03593930d7469",
+        measurementId: "G-Z4CSFDJFNB"
+    };
+
+    //init auth
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Check auth state
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        if (!user.emailVerified) {
+          alert("Please verify your email first.");
+          auth.signOut();
+          window.location.href = "login.html";
+        } else {
+          const name = user.displayName || "No name set";
+          const email = user.email;
+          document.getElementById("userInfo").innerText = `Welcome ${name} (${email})`;
+        }
+      } else {
+        window.location.href = "login.html"; // not logged in
+      }
+    });
+
+    //logout using firebase
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+</body>
+</html>
