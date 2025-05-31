@@ -4,6 +4,9 @@ __pycache__/
 *.pyo
 *.pyd
 
+# npm packages 
+node_modules/
+
 # Virtual environment
 venv/
 .venv/
