@@ -76,19 +76,7 @@ export default function LoginSignup() {
 
       {/* Inputs */}
       <div className="inputs">
-        {/* Full Name Input */}
-        <div className={`input ${fullNameError ? 'error' : ''}`}>
-          <img src={user_icon} alt="User icon" /> {/* Image for user icon */}
-          <input
-            type="text"
-            placeholder="Full Name" // Grey placeholder text when field is empty
-            value={fullName}  // Comes from the React state variable 'fullName'
-            onChange={(e) => {  // When user types, this function runs
-              setFullName(e.target.value);  // Update 'fullName' state to match what the user typed
-              if (fullNameError) setFullNameError(false);  // Clear specific error once user starts typing
-            }}
-          />
-        </div>
+      
         {/* Show error message under Full Name if empty */}
         {fullNameError && (
           <p className="field-error">Please enter a value for Full Name.</p>
