@@ -1,6 +1,6 @@
 # ─── Python / Backend ────────────────────────────────────────────────────────────
 
-# Byte-compiled / cache files
+# Byte‐compiled / cache files
 backend/__pycache__/
 backend/*.py[cod]
 backend/*.pyo
@@ -28,7 +28,7 @@ backend/firebase_key.b64
 node_modules/
 frontend/node_modules/
 
-# Production build output (adjust if you create these)
+# Production build output (if you ever generate it)
 frontend/dist/
 frontend/build/
 
@@ -51,9 +51,9 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Package lockfiles (uncomment to ignore, otherwise leave commented)
-/# package-lock.json
-/# yarn.lock
+# Optional: ignore lockfiles if you choose not to track them
+#/package-lock.json
+#/yarn.lock
 
-# Optional: ignore base64-encoded key at project root
+# Optional: ignore a base64 key at project root
 firebase_key.b64
