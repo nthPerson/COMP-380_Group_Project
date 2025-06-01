@@ -53,6 +53,8 @@ export default function LoginSignup() {
       hasError = true;
     }
 
+    //BELLA
+    
     if (hasError) {
       // If any field is empty, stop here and show errors
       return;
