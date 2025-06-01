@@ -1,26 +1,59 @@
+# ─── Python / Backend ────────────────────────────────────────────────────────────
+
 # Byte-compiled / cache files
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
+backend/__pycache__/
+backend/*.py[cod]
+backend/*.pyo
+backend/*.pyd
 
-# Virtual environment
-venv/
-.venv/
+# Virtual environment folders
+backend/venv/
+backend/.venv/
 
-# Environment variables
-.env
+# dotenv environment variables
+backend/.env
 
-# VS Code settings (optional)
-.vscode/
+# pytest / mypy / coverage artifacts
+backend/.pytest_cache/
+backend/.mypy_cache/
+coverage.xml
+htmlcov/
 
-# macOS junk
+# Temporary Firebase key file (decoded at runtime)
+backend/firebase_key.b64
+
+# ─── Frontend / Node ─────────────────────────────────────────────────────────────
+
+# Node modules
+node_modules/
+frontend/node_modules/
+
+# Production build output (adjust if you create these)
+frontend/dist/
+frontend/build/
+
+# Frontend environment files (if used)
+frontend/.env
+frontend/*.env.local
+
+# ─── General / OS / IDE ───────────────────────────────────────────────────────────
+
+# Logs
+*.log
+
+# macOS
 .DS_Store
-.idea/COMP-380_Group_Project.iml
 
-# Jetbrains junk
-.gitignore
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/inspectionProfiles/profiles_settings.xml
+# Windows
+Thumbs.db
+
+# IDE folders
+.vscode/
+.idea/
+
+# Package lockfiles (uncomment to ignore, otherwise leave commented)
+/# package-lock.json
+/# yarn.lock
+
+# Optional: ignore base64-encoded key at project root
+firebase_key.b64
