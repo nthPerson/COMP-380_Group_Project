@@ -10,6 +10,8 @@ import password_icon from "../Assets/password_icon.png";
 
 // Import the FontAwesome eye/eye-slash icons
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+// ── NEW: import the circle/check icons for the checklist
+import { FaRegCircle, FaCheckCircle } from "react-icons/fa";
 
 //import firebase methods
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -26,6 +28,14 @@ export default function LoginSignup() {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
+
+  // Regular expressions for validation
+  const emailRegex    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordLengthRegex   = /^.{6,}$/;  // At least 8 characters
+  const passwordNumberRegex   = /[0-9]/;  // At least one digit      
+  const passwordLowercaseRegex= /[a-z]/;  // At least one lowercase letter
+  const passwordUppercaseRegex= /[A-Z]/;  // At least one uppercase letter                   
+  const passwordSpecialRegex  = /[!@#$%^&*(),.?":{}|<>]/; // At least one special symbol
 
   // “Sign Up” button handler
   const handleSignUp = async () => {
@@ -51,10 +61,30 @@ export default function LoginSignup() {
       // Prevents user from moving forward if Password is empty
       setPasswordError(true);
       hasError = true;
+    } else {
+      // Check each requirement one by one
+      if (!passwordLengthRegex.test(password)) {
+        setPasswordError(true);
+        hasError = true;
+      }
+      if (!passwordNumberRegex.test(password)) {
+        setPasswordError(true);
+        hasError = true;
+      }
+      if (!passwordLowercaseRegex.test(password)) {
+        setPasswordError(true);
+        hasError = true;
+      }
+      if (!passwordUppercaseRegex.test(password)) {
+        setPasswordError(true);
+        hasError = true;
+      }
+      if (!passwordSpecialRegex.test(password)) {
+        setPasswordError(true);
+        hasError = true;
+      }
     }
 
-    //BELLA
-    
     if (hasError) {
       // If any field is empty, stop here and show errors
       return;
@@ -79,7 +109,7 @@ export default function LoginSignup() {
       });
 
       console.log("Signed up:", user.email, "| Name:", user.displayName);
-      navigate("/home", { replace: true });
+      navigate("/home");
     } catch (err) {
       console.error("Signup failed:", err.code);
 
@@ -107,6 +137,12 @@ export default function LoginSignup() {
   const handleGoToLogin = () => {
     navigate("/login"); // Takes user to login page when button is clicked
   };
+  // Compute each password‐requirement boolean for the checklist UI
+  const isLongEnough    = passwordLengthRegex.test(password);    
+  const hasNumber       = passwordNumberRegex.test(password);    
+  const hasLowercase    = passwordLowercaseRegex.test(password); 
+  const hasUppercase    = passwordUppercaseRegex.test(password); 
+  const hasSpecialChar  = passwordSpecialRegex.test(password);   
 
   // Render
   return (
@@ -132,10 +168,7 @@ export default function LoginSignup() {
             }}
           />
         </div>
-        {fullNameError && (
-          <p className="field-error">Please enter a value for Full Name.</p>
-        )}
-
+        
         {/* Show error message under Full Name if empty */}
         {fullNameError && (
           <p className="field-error">Please enter a value for Full Name.</p>
@@ -158,7 +191,8 @@ export default function LoginSignup() {
         {/* Show error message under Email if empty */}
         {emailError && (
           <p className="field-error">Please enter a value for Email.</p>
-        )}
+        )
+        }
 
         {/* Password with eye toggle */}
         <div
@@ -196,9 +230,53 @@ export default function LoginSignup() {
         </div>
         {/* Show error message under Password if empty */}
         {passwordError && (
+         !password.trim() ? (
           <p className="field-error">Please enter a value for Password.</p>
+        ) : (
+          <p className="field-error">
+            Password doesn’t meet requirements below.
+          </p>
+        )
         )}
       </div>
+      
+      <div className="password-requirements">
+          <p className="requirements-heading">Password should be</p>
+          <ul className="requirements-list">
+            <li>
+              {isLongEnough 
+                ? <FaCheckCircle className="check-icon valid" /> 
+                : <FaRegCircle className="check-icon" />}
+              <span>At least 6 characters long</span>
+            </li>
+            <li>
+              {hasNumber 
+                ? <FaCheckCircle className="check-icon valid" /> 
+                : <FaRegCircle className="check-icon" />}
+              <span>At least 1 number (0…9)</span>
+            </li>
+            <li>
+              {hasLowercase 
+                ? <FaCheckCircle className="check-icon valid" /> 
+                : <FaRegCircle className="check-icon" />}
+              <span>At least 1 lowercase letter (a…z)</span>
+            </li>
+            <li>
+              {hasSpecialChar 
+                ? <FaCheckCircle className="check-icon valid" /> 
+                : <FaRegCircle className="check-icon" />}
+              <span>At least 1 special symbol (!…$)</span>
+            </li>
+            <li>
+              {hasUppercase 
+                ? <FaCheckCircle className="check-icon valid" /> 
+                : <FaRegCircle className="check-icon" />}
+              <span>At least 1 uppercase letter (A…Z)</span>
+            </li>
+          </ul>
+        </div>
+        {/* ─── END: Password Requirements Checklist UI ───────────────────────────────── */}
+      
 
       {/* Buttons */}
       <div className="submit-container">
