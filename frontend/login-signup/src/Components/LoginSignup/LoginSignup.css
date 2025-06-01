@@ -185,6 +185,7 @@ body {
            /* remove default margin */
 
 }
+/* UI Password Validator */
 .requirements-list li {
   display: flex;
   align-items: center;
@@ -192,6 +193,7 @@ body {
   color: #666;       /* default (unmet) text color */
   margin-bottom: 0.15rem;
 }
+
 .requirements-list li .check-icon.valid + span {
   color: #4CAF50;
 }
