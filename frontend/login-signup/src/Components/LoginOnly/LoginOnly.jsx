@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../LoginSignup/LoginSignup.css';  
 
+//Firebase functionality methods from the firebase.js file 
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase';
+
 import email_icon    from '../Assets/email_icon.png';
 import password_icon from '../Assets/password_icon.png';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -21,7 +25,7 @@ export default function LoginOnly() {
   const navigate = useNavigate();
 
   // “Login” button handler
-  const handleLoginSubmit = () => {
+  const handleLoginSubmit = async () => {
     // Clear previous errors
     setEmailError(false);
     setPasswordError(false);
@@ -35,16 +39,55 @@ export default function LoginOnly() {
       setErrorMsg('Please enter both email and password to log in.');
       return;
     }
+    // error handling for login 
+    try {
+      // call the firebase function
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      //instantiate the user
+      const user = userCredential.user;
+      //for testing
+      console.log("Logged in:", user.email);
+      //navigate to home after login 
+      navigate('/home', { replace: true });
+    } catch (err) {
+      console.error("Login failed:", err.message);
 
-    // Credential check (replace with real logic)
-    if (password !== 'correctpassword') {
-      setPasswordError(true);
-      setErrorMsg('Incorrect password. Try again.');
-      return;
+      // // Basic error handling for wrong password, user not found, etc. for testing 
+      // if (err.code === 'auth/wrong-password') {
+      //   setPasswordError(true);
+      //   setErrorMsg('Incorrect password. Try again.');
+      // } else if (err.code === 'auth/user-not-found') {
+      //   setEmailError(true);
+      //   setErrorMsg('No user found with this email.');
+      // } else {
+      //   setErrorMsg(err.message);
+      // }
+
+      // comprehensive error handling
+      switch (err.code) {
+        case 'auth/invalid-email':
+          setEmailError(true);
+          setErrorMsg('Please enter a valid email address.');
+          break;
+        case 'auth/user-disabled':
+          setEmailError(true);
+          setErrorMsg('This account has been disabled.');
+          break;
+        case 'auth/user-not-found':
+          setEmailError(true);
+          setErrorMsg('No user found with this email.');
+          break;
+        case 'auth/wrong-password':
+          setPasswordError(true);
+          setErrorMsg('Incorrect password. Try again.');
+          break;
+        case 'auth/too-many-requests':
+          setErrorMsg('Too many failed attempts. Try again later.');
+          break;
+        default:
+          setErrorMsg('Login failed. Please try again.');
+      }
     }
-
-    // After successful login, redirect user to /home
-    navigate('/home', { replace: true });
   };
 
   return (
