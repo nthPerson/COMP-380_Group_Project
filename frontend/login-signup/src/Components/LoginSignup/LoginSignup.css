@@ -1,0 +1,171 @@
+body {
+  background: radial-gradient(
+    circle at top left,
+    rgba(127, 127, 213, 0.40) 0%,    /* #7f7fd5 @ 20% opacity */
+    rgba(99, 132, 194, 0.40) 50%,   /* #86a8e7 @ 20% opacity */
+    rgba(145, 234, 228, 0.40) 100%   /* #91eae4 @ 20% opacity */
+  );
+  /* A very faint fallback/base color */
+  background-color: rgba(145, 234, 228, 0.10);
+  margin: 0;            /* Usually remove default body margin */
+  min-height: 100vh;    /* Ensure it covers the full viewport height */
+}
+:root {
+  --primary: #4a90e2;
+  --accent:  #50e3c2;
+  --bg:      #f9fafb;
+  --text:    #333333;
+  --muted:   #777777;
+  --error:   #d9534f;  /* a Bootstrap‐style red */
+}
+
+/* Container styling (unchanged) */
+.container {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+}
+
+/* Header, text, underline (unchanged) */
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.text {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.underline {
+  width: 3rem;
+  height: 0.25rem;
+  background: var(--accent);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* Input container */
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem; /* leave some room for the error message */
+}
+
+/* Base input style */
+.input {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  transition: background 0.2s, border 0.2s;
+  border: 1px solid transparent; /* default, no visible border */
+}
+
+/* When hovering over a correct input, slightly change background */
+.input:hover {
+  background: #e6f0fa;
+}
+.input img {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.75rem;
+}
+.input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: var(--text);
+  background: transparent;
+}
+.input input::placeholder {
+  color: var(--muted);
+}
+
+/* RED BORDER when the .error class is present */
+.input.error {
+  border: 2px solid var(--error);
+  background: #fdecea; /* optional: a very light red tint behind the input */
+}
+
+/* Inline error message below the inputs */
+.error-message {
+  color: var(--error);
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+/* “Forgot Password?” text (unchanged) */
+.forgot-password {
+  font-size: 0.875rem;
+  text-align: right;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+.forgot-password span {
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.toggle-icon {
+  position: absolute;
+  right: 0.75rem;             
+  top: 50%;                   
+  transform: translateY(-50%);
+  cursor: pointer;           
+  font-size: 1rem;         
+  color: var(--muted);      
+}
+
+/* When there’s an error on the password field, color the icon red */
+.toggle-icon.error {
+  color: var(--error);
+}
+
+
+/* Bottom button container (unchanged) */
+.submit-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.submit {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+/* Sign Up button style (unchanged) */
+.submit-container .submit:first-child {
+  background: var(--primary);
+  color: white;
+  border: 2px solid var(--primary);
+}
+.submit-container .submit:first-child:hover {
+  background: white;
+  color: var(--primary);
+}
+
+/* Login button (unchanged) */
+.submit-container .submit:last-child {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+}
+.submit-container .submit:last-child:hover {
+  background: var(--accent);
+  color: white;
+}

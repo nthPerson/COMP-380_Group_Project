@@ -6,6 +6,13 @@ backend/*.py[cod]
 backend/*.pyo
 backend/*.pyd
 
+# npm packages 
+node_modules/
+
+# Virtual environment
+venv/
+.venv/
+
 # Virtual environment folders
 backend/venv/
 backend/.venv/

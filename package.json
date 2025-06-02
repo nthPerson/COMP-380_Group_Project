@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "firebase": "^11.8.1"
+  }
+}
