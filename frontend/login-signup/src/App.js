@@ -9,13 +9,15 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Path “/” shows the signup form */}
-        <Route path="/" element={<LoginSignup />} />
+        <Route path="/" element={<Homepage />} />
 
-        {/* Path “/login” shows your login form (if you built one) */}
+        {/* Path “/login” shows login form*/}
         <Route path="/login" element={<LoginOnly />} />
 
-        {/* After successful sign-up, you do navigate("/home") */}
+        {/* Path “/signup” shows LoginSignup */}
+        <Route path="/signup" element={<LoginSignup />} />
+
+        {/* After successful sign-up, navigate("/home") */}
         <Route path="/home" element={<Homepage />} />
       </Routes>
     </BrowserRouter>
