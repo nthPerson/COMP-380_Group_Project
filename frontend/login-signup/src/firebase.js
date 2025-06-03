@@ -5,13 +5,13 @@ import { getAuth } from "firebase/auth";
 
 // I put the config in the discord for easy setup - REZA
 const firebaseConfig = {
-    apiKey: "REPLACE WITH API KEY",
-    authDomain: "comp380-project.firebaseapp.com",
-    projectId: "comp380-project",
-    storageBucket: "comp380-project.firebasestorage.app",
-    messagingSenderId: "600625641164",
-    appId: "REPLACE WITH APP ID",
-    measurementId: "G-Z4CSFDJFNB"
+  apiKey: "AIzaSyAN1C-3Cvk2uDSZFFPxlYz9REG8vvZGTGE",
+  authDomain: "comp380-project.firebaseapp.com",
+  projectId: "comp380-project",
+  storageBucket: "comp380-project.firebasestorage.app",
+  messagingSenderId: "600625641164",
+  appId: "1:600625641164:web:08ae615ac03593930d7469",
+  measurementId: "G-Z4CSFDJFNB"
 };
 
 const app = initializeApp(firebaseConfig);
