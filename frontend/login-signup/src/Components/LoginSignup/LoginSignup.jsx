@@ -13,9 +13,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 // ── NEW: import the circle/check icons for the checklist
 import { FaRegCircle, FaCheckCircle } from "react-icons/fa";
 
-//import firebase methods
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../firebase";
+import {handleSignup} from "../../services/authHandlers";
 
 export default function LoginSignup() {
   // State for each input + individual error flags + toggle
@@ -89,31 +87,13 @@ export default function LoginSignup() {
       // If any field is empty, stop here and show errors
       return;
     }
-    //test
-    //console.log('(Stub) Signing up with:', { fullName, email, password });
-    // Add real sign-up (Firebase)
-    // Redirect to /home after a successful (stub) sign-up:
-    //navigate('/home', { replace: true });
     try {
-      // use firebase methods to create user
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-
-      // Set the display name
-      await updateProfile(user, {
-        displayName: fullName,
-      });
-
+      const user = await handleSignup(fullName, email, password);
       console.log("Signed up:", user.email, "| Name:", user.displayName);
       navigate("/home");
     } catch (err) {
       console.error("Signup failed:", err.code);
-
-      // comprehensive error handling
+    
       switch (err.code) {
         case "auth/email-already-in-use":
           setEmailError(true);
@@ -126,6 +106,12 @@ export default function LoginSignup() {
         case "auth/weak-password":
           setPasswordError(true);
           alert("Password should be at least 6 characters.");
+          break;
+        case "empty-fields":
+          if (!fullName) setFullNameError(true);
+          if (!email) setEmailError(true);
+          if (!password) setPasswordError(true);
+          alert("Please fill out all fields.");
           break;
         default:
           alert("Signup failed. Please try again.");

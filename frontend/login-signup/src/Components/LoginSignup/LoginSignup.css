@@ -103,6 +103,13 @@ body {
   font-size: 0.875rem;
 }
 
+
+.success-message {
+  color: #2ecc71;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
 /* “Forgot Password?” text (unchanged) */
 .forgot-password {
   font-size: 0.875rem;
