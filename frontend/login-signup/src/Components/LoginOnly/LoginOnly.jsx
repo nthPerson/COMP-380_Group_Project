@@ -89,6 +89,9 @@ export default function LoginOnly() {
       }
     }
   };
+  const handleForgotPassword = () => {
+    navigate("/forgotpassword");
+  };
 
   return (
     <div className="container">
@@ -151,10 +154,10 @@ export default function LoginOnly() {
         Forgot Password?
         <span
           style={{ cursor: 'pointer', color: 'var(--primary)' }}
-          onClick={() => {
-            if (errorMsg) setErrorMsg('');
-            console.log('Forgot Password clicked (stub).');
-          }}>{' '}Click here!</span>
+          onClick={handleForgotPassword}
+        >
+          {' '}Click here!
+        </span>
       </div>
 
       {/* Login button */}

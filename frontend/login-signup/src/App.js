@@ -1,13 +1,14 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+
 import LoginSignup from './Components/LoginSignup/LoginSignup';
-import LoginOnly   from './Components/LoginOnly/LoginOnly';   // if you have a separate LoginOnly.jsx
-import Homepage    from './Components/Homepage/Homepage';     // your “/home” component
+import LoginOnly   from './Components/LoginOnly/LoginOnly';   
+import Homepage    from './Components/Homepage/Homepage';     
+import ForgotPassword    from './Components/ForgotPassword/ForgotPassword';
 
 export default function App() {
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Homepage />} />
 
@@ -17,9 +18,11 @@ export default function App() {
         {/* Path “/signup” shows LoginSignup */}
         <Route path="/signup" element={<LoginSignup />} />
 
+        {/* Path “/forgotpassword” shows LoginSignup */}
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+
         {/* After successful sign-up, navigate("/home") */}
         <Route path="/home" element={<Homepage />} />
       </Routes>
-    </BrowserRouter>
   );
 }

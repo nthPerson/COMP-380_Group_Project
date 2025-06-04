@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { Link } from 'react-router-dom';
+
 import LoginOnly from '../LoginOnly/LoginOnly';           
 import LoginSignup from '../LoginSignup/LoginSignup';
 import './Homepage.css';
@@ -34,7 +35,6 @@ export default function Homepage() {
             <ul>
               <li><Link to="/signup">Sign Up</Link></li>
               <li><Link to="/login">Login</Link></li>
-              <li><a href="/contact">Contact</a></li>
             </ul>
           </nav>
         </div>

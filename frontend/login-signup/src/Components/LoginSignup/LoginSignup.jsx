@@ -56,6 +56,9 @@ export default function LoginSignup() {
       // Prevents user from moving forward if Email is empty
       setEmailError(true);
       hasError = true;
+    } else if (!emailRegex.test(email)){
+      setEmailError(true);
+      hasError = true;
     }
     if (!password.trim()) {
       // Prevents user from moving forward if Password is empty
@@ -171,7 +174,7 @@ export default function LoginSignup() {
         
         {/* Show error message under Full Name if empty */}
         {fullNameError && (
-          <p className="field-error">Please enter a value for Full Name.</p>
+          <p className="field-error">Please enter a Name.</p>
         )}
 
         {/* Email Input */}
@@ -190,9 +193,12 @@ export default function LoginSignup() {
         </div>
         {/* Show error message under Email if empty */}
         {emailError && (
-          <p className="field-error">Please enter a value for Email.</p>
+          !email.trim() ? (
+          <p className="field-error">Please enter an Email address.</p>
+        ) : (
+          <p className="field-error">Enter a valid email address.</p>
         )
-        }
+        )}
 
         {/* Password with eye toggle */}
         <div
@@ -231,7 +237,7 @@ export default function LoginSignup() {
         {/* Show error message under Password if empty */}
         {passwordError && (
          !password.trim() ? (
-          <p className="field-error">Please enter a value for Password.</p>
+          <p className="field-error">Please enter a Password.</p>
         ) : (
           <p className="field-error">
             Password doesn’t meet requirements below.
