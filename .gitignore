@@ -1,5 +1,10 @@
 # ─── Python / Backend ────────────────────────────────────────────────────────────
 
+# Environment files (secret keys, etc.)
+.env
+backend/.env
+frontend/.env
+
 # Byte‐compiled / cache files
 backend/__pycache__/
 backend/*.py[cod]
@@ -8,6 +13,7 @@ backend/*.pyd
 
 # npm packages 
 node_modules/
+/frontend/login-signup/node_modules/
 
 # Virtual environment
 venv/
