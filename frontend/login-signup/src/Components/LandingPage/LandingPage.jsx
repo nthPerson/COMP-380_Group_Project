@@ -6,9 +6,13 @@ import logo_icon    from '../Assets/logo_icon.png';
 export default function LandingPage() {
   return (
     <>
+    <div className="top-line"></div>
       <header className="site-banner">
         <div className="banner-content">
-          <img src={logo_icon} alt="Logo icon" /> {/* Image for email icon */}
+        <div className="banner-left">
+    <img src={logo_icon} alt="Logo icon" className="banner-logo" />
+    <span className="banner-title">RezuMe</span>
+  </div>
           <nav className="banner-nav">
             <ul>
               <li><Link to="/signup">Sign Up</Link></li>

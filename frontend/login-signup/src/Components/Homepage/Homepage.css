@@ -1,29 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed&display=swap');
+
+
 /* ─── Banner / Header Styles ─── */
 .site-banner {
   position: fixed;     
   top: 0;
   left: 0;
   width: 100%;
-  /* Gradient background */
+  /* Gradient background 
   background: radial-gradient(
     circle at top left,
     rgba(127, 127, 213, 0.40) 0%,
     rgba(99, 132, 194, 0.40) 50%,
     rgba(145, 234, 228, 0.40) 100%
-  );
+  );*/
   color: #fff;
   z-index: 1000;        
 }
 
 .banner-content {
-  max-width: 1000px;    
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
 }
-
+.banner-left {
+  display: flex;
+  align-items: center;
+}
 .banner-logo {
   height: 40px;         
 }
@@ -38,7 +42,7 @@
 }
 
 .banner-nav a {
-  color: #fff;
+  color: #4A90E2;
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem;
@@ -49,13 +53,23 @@
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
+.banner-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4A90E2;
+  margin-left: 0.2rem;
+  letter-spacing: 0.5px;
+  font-family: 'Fira Sans Condensed', sans-serif;
+  display: flex;
+  align-items: center;
+}
 
 /* ─── Main content container (push down to avoid banner) ─── */
 .homepage-container {
   max-width: 400px;
   margin: 120px auto 0 auto;  /* top right bottom left */
   text-align: center;
-  font-family: system-ui, sans-serif;
+  font-family: 'Fira Sans Condensed', sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -86,4 +100,11 @@
 .landing-container {
   margin-top: 120px; /* or adjust if your banner is taller/shorter */
   text-align: center;
+}
+.top-line {
+  width: 100%;
+  height: 2px;
+  background-color: #4A90E2; /* or any color you want */
+  margin-top: 50px;       /* push it down from the top if needed */
+  margin-bottom: 40px;    /* space below the line, optional */
 }

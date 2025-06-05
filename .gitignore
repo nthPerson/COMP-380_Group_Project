@@ -35,6 +35,7 @@ frontend/build/
 # Frontend environment files (if used)
 frontend/.env
 frontend/*.env.local
+.env
 
 # ─── General / OS / IDE ───────────────────────────────────────────────────────────
 
