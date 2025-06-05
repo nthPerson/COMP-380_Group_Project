@@ -3,14 +3,15 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import LoginSignup from './Components/LoginSignup/LoginSignup';
-import LoginOnly   from './Components/LoginOnly/LoginOnly';
-import Homepage    from './Components/Homepage/Homepage';
+import LoginOnly   from './Components/LoginOnly/LoginOnly';   
+import Homepage    from './Components/Homepage/Homepage';     
+import ForgotPassword    from './Components/ForgotPassword/ForgotPassword';
+import LandingPage    from './Components/LandingPage/LandingPage';
 
 function App() {
   return (
-    <Routes>
-      {/* 1) If someone goes to “/” exactly, redirect to “/signup” */}
-      <Route path="/" element={<Navigate to="/signup" replace />} />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
 
       {/* 2) Sign-Up page (fields + “Login” button) */}
       <Route path="/signup" element={<LoginSignup />} />
