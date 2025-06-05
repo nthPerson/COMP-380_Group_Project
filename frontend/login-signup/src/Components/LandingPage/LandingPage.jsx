@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//import './LandingPage.css'; // Optional: style as you want
+import logo_icon    from '../Assets/logo_icon.png';
+//import './Homepage.css';
 
 export default function LandingPage() {
   return (
     <>
       <header className="site-banner">
         <div className="banner-content">
-          <img src="/logo.png" alt="Logo" className="banner-logo" />
+          <img src={logo_icon} alt="Logo icon" /> {/* Image for email icon */}
           <nav className="banner-nav">
             <ul>
               <li><Link to="/signup">Sign Up</Link></li>

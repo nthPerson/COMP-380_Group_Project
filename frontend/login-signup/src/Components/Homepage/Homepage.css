@@ -4,7 +4,13 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgb(60, 63, 65);
+  /* Gradient background */
+  background: radial-gradient(
+    circle at top left,
+    rgba(127, 127, 213, 0.40) 0%,
+    rgba(99, 132, 194, 0.40) 50%,
+    rgba(145, 234, 228, 0.40) 100%
+  );
   color: #fff;
   z-index: 1000;        
 }
@@ -47,12 +53,10 @@
 /* ─── Main content container (push down to avoid banner) ─── */
 .homepage-container {
   max-width: 400px;
-  margin: 4rem auto;     /* center content horizontally */
+  margin: 120px auto 0 auto;  /* top right bottom left */
   text-align: center;
   font-family: system-ui, sans-serif;
-  padding-top: 80px;
 }
-
 
 @media (max-width: 768px) {
   /* Hide the nav links until toggled */
@@ -78,4 +82,8 @@
   .site-banner.nav-open .banner-nav {
     display: block;
   }
+}
+.landing-container {
+  margin-top: 120px; /* or adjust if your banner is taller/shorter */
+  text-align: center;
 }

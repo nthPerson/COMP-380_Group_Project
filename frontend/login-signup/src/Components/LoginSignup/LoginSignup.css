@@ -1,14 +1,7 @@
 body {
-  background: radial-gradient(
-    circle at top left,
-    rgba(127, 127, 213, 0.40) 0%,    /* #7f7fd5 @ 20% opacity */
-    rgba(99, 132, 194, 0.40) 50%,   /* #86a8e7 @ 20% opacity */
-    rgba(145, 234, 228, 0.40) 100%   /* #91eae4 @ 20% opacity */
-  );
-  /* A very faint fallback/base color */
-  background-color: rgba(145, 234, 228, 0.10);
-  margin: 0;            /* Usually remove default body margin */
-  min-height: 100vh;    /* Ensure it covers the full viewport height */
+  background: #fff;
+  margin: 0;
+  min-height: 100vh;
 }
 :root {
   --primary: #4a90e2;
