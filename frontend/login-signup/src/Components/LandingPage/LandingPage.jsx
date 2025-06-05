@@ -6,7 +6,6 @@ import logo_icon    from '../Assets/logo_icon.png';
 export default function LandingPage() {
   return (
     <>
-    <div className="top-line"></div>
       <header className="site-banner">
         <div className="banner-content">
         <div className="banner-left">
@@ -21,7 +20,8 @@ export default function LandingPage() {
           </nav>
         </div>
       </header>
-
+      
+      <div className="top-line"></div>
       <div className="landing-container">
         <h1>Welcome to Our App!</h1>
       </div>
