@@ -4,8 +4,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { Link } from 'react-router-dom';
 
-import LoginOnly from '../LoginOnly/LoginOnly';           
-import LoginSignup from '../LoginSignup/LoginSignup';
 import './Homepage.css';
 
 export default function Homepage() {
@@ -24,22 +22,6 @@ export default function Homepage() {
 
   return (
     <>
-      {/* ─── HEADER / BANNER WITH HAMBURGER ─── */}
-      <header className={`site-banner ${navOpen ? 'nav-open' : ''}`}>
-        <div className="banner-content">
-          {/* Logo */}
-          <img src="/logo.png" alt="Logo" className="banner-logo" />
-
-          {/* Navigation links */}
-          <nav className="banner-nav">
-            <ul>
-              <li><Link to="/signup">Sign Up</Link></li>
-              <li><Link to="/login">Login</Link></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
       {/* ─── MAIN CONTENT ─── */}
       <div className="homepage-container">
         {user ? (
