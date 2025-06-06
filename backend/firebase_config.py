@@ -20,8 +20,8 @@ cred = credentials.Certificate(tmp_path) #decoded .json key here, get the fireba
 # firebase_admin.initialize_app(cred) #initalize a firebase admin account with the key 
 firebase_admin.initialize_app(
     cred,
-    {"storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET")} # @nthPerson NOTE: we might need to add FIREBASE_STORAGE_BUCKET to the backend .env
+    {"storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET")} # Associates app with Firebase Cloud Storage bucket
     )
 db = firestore.client() #this gives us access to the firbase database 
-bucket = storage.bucket # this gives us access to Firebase Cloud Storage to save PDFs
+bucket = storage.bucket() # This gives us access to Firebase Cloud Storage to save PDFs
 
