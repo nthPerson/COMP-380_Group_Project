@@ -17,6 +17,9 @@ import axios from "axios";
 // import the JD sending logic from the services
 import { sendJobDescription } from "../../services/jobDescriptionService";
 
+// Import the PDF upload logic from UploadPdf/UploadPdf.jsx
+import UploadPdf from "../UploadPdf/UploadPdf";
+
 import "./Homepage.css";
 
 export default function Homepage() {
@@ -66,6 +69,8 @@ export default function Homepage() {
             <h1>Welcome, {user.displayName || "User"}!</h1>
             <p>You are now logged in and on the Home page.</p>
             <p>Email: {user.email}</p>
+
+            <UploadPdf />  
 
             {/* JD paste area*/}
             <form
