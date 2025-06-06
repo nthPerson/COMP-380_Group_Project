@@ -1,6 +1,6 @@
 import os, base64, tempfile # OS is operating system inteface, base64 is for decoding the API Key, temp file let's u make a new temporary file :))
 import firebase_admin  
-from firebase_admin import credentials, firestore #firebase admin packages 
+from firebase_admin import credentials, firestore, storage #firebase admin packages - @nthPerson testing cloud storage for pdf uploads
 from dotenv import load_dotenv #this is what reads the .env file for the key 
 
 #loads the .env to read the key from it 
@@ -17,6 +17,11 @@ with tempfile.NamedTemporaryFile(delete=False) as tmp: #write the key into a tem
 
 
 cred = credentials.Certificate(tmp_path) #decoded .json key here, get the firebase credentials from that using firebase
-firebase_admin.initialize_app(cred) #initalize a firebase admin account with the key 
+# firebase_admin.initialize_app(cred) #initalize a firebase admin account with the key 
+firebase_admin.initialize_app(
+    cred,
+    {"storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET")} # @nthPerson NOTE: we might need to add FIREBASE_STORAGE_BUCKET to the backend .env
+    )
 db = firestore.client() #this gives us access to the firbase database 
+bucket = storage.bucket # this gives us access to Firebase Cloud Storage to save PDFs
 
