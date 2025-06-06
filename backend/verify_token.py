@@ -1,4 +1,4 @@
-from flask import request, jsonify, g  #requests gives us https headers and g is the flask global object to store the key after verfication 
+from flask import request, jsonify, g, current_app  #requests gives us https headers and g is the flask global object to store the key after verfication 
 from firebase_admin import auth
 from functools import wraps  #what we use to write decorators 
 
@@ -6,6 +6,8 @@ from functools import wraps  #what we use to write decorators
 def verify_firebase_token(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
+        if request.method == "OPTIONS":
+            return current_app.make_default_options_response()  # Allow CORS 'preflight', enables PDF requests from frontend
         auth_header = request.headers.get("Authorization", "")  # Grab the token from the header
 
         if not auth_header.startswith("Bearer "):
