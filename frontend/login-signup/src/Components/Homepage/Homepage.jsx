@@ -6,6 +6,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
 import { Link } from "react-router-dom";
 
+//for navigating
+import { useNavigate } from "react-router-dom";
+
+// for signout functionality: it's in services
+import { handleSignout } from "../../services/authHandlers";
 // axios is what let's us make API calls in React notes on AXIOS is in the project notion
 import axios from "axios";
 
@@ -22,6 +27,9 @@ export default function Homepage() {
   // used for gemini explanation
   const [jdExplanation, setJdExplanation] = useState("");
 
+  //for navigation
+  const navigate = useNavigate();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser); //update the user with the current user with the onAuthStateChanged to change the current user to the current one
@@ -37,6 +45,15 @@ export default function Homepage() {
       setJdExplanation(res.explanation || "No explanation returned");
     } catch (err) {
       console.log("Error sending JD", err);
+    }
+  };
+
+  const handleSignOutOnClick = async () => {
+    try {
+      await handleSignout();
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.log("Sign Out Error", err);
     }
   };
 
@@ -75,6 +92,7 @@ export default function Homepage() {
                 <p>{jdExplanation}</p>
               </div>
             )}
+            <button onClick={handleSignOutOnClick}>Logout</button>
           </>
         ) : (
           <p>Loading user...</p>

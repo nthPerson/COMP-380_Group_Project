@@ -1,7 +1,13 @@
-import { signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, updateProfile, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 
-
+export const handleSignout = async () => {
+  try {
+    await signOut(auth);
+  } catch (err) {
+    throw err;
+  }
+};
 
 //sign up handler with gets called in LoginSignUp.jsx
 //uses default firebase login method from above
