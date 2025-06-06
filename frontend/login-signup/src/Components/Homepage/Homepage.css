@@ -1,28 +1,44 @@
-/* ─── Banner / Header Styles ─── */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed&display=swap');
+
 .site-banner {
   position: fixed;     
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgb(60, 63, 65);
-  color: #fff;
+  color: #ffffff;
   z-index: 1000;        
+  background: #ffffff; /* if you want a white header */
+  box-shadow: 0 2px 16px rgba(0,0,0,0.03);
 }
 
 .banner-content {
-  max-width: 1000px;    
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
 }
-
+.banner-left {
+  display: flex;
+  align-items: center;
+}
 .banner-logo {
   height: 40px;         
 }
+.banner-title {
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  font-family: 'Fira Sans Condensed', sans-serif;
+  letter-spacing: 0.5px;
+}
+.light-blue {
+  color: #91c0f2; 
+}
+.solid-blue {
+  color: #4A90E2;
+}
 
-/* Desktop: show nav links horizontally */
 .banner-nav ul {
   list-style: none;
   display: flex;
@@ -32,7 +48,7 @@
 }
 
 .banner-nav a {
-  color: #fff;
+  color: #4A90E2;
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem;
@@ -44,38 +60,151 @@
   border-radius: 4px;
 }
 
-/* ─── Main content container (push down to avoid banner) ─── */
-.homepage-container {
-  max-width: 400px;
-  margin: 4rem auto;     /* center content horizontally */
-  text-align: center;
-  font-family: system-ui, sans-serif;
-  padding-top: 80px;
+.top-line {
+  position: fixed;
+  width: 100%;
+  height: 2px;
+  background-color: #50e3c2;
+  top: 62px;      /* Set to your header height */
+  left: 0;
+  z-index: 1001;
+  margin: 0;
 }
 
+/* --- Main content section at top --- */
+.landing-main-content {
+  max-width: 800px;
+  margin: 120px auto 48px auto; /* enough space below header/top-line */
+  text-align: center;
+}
 
-@media (max-width: 768px) {
-  /* Hide the nav links until toggled */
-  .banner-nav {
-    display: none;
-    width: 100%;
-    margin-top: 0.5rem; 
-  }
+/* --- Scroll-driven animation section --- */
+.scroll-animate-section {
+  position: relative;
+  min-height: 120vh;   /* must be tall enough for scrolling effect */
+  padding: 120px 0;    /* vertical space above/below, adjust as needed */
+  background: transparent;
+}
 
-  /* Stack the link list vertically */
-  .banner-nav ul {
+.scroll-layout {
+  display: flex;
+  max-width: 1100px;
+  margin: 0 auto;
+  min-height: 80vh;
+  align-items: center;
+}
+
+.left-panel {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 200px;
+  padding: 0;
+  padding-bottom: 300px; /* gives space for scrolling last section */
+}
+
+.left-section {
+  position: relative;
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1;
+  margin-bottom: 30px;
+  overflow: visible;
+}
+
+.section-gradient {
+  position: absolute;
+  left: 50%;  /* center horizontally */
+  top: 50%;   /* center vertically */
+  transform: translate(-50%, -50%);
+  width: 400px;     /* make it much larger than section */
+  height: 400px;
+  background: radial-gradient(circle, #4A90E2 0%, #e3effd 70%, transparent 100%);
+  opacity: 0.32;    /* adjust for subtlety */
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(15px);  /* softens the edge */
+  transition: opacity 0.3s;
+}
+
+.left-section.active .section-gradient {
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.left-section h2 {
+  margin: 0 0 0 32px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #195aa6;
+  letter-spacing: 0.5px;
+}
+
+.right-panel {
+  width: 60%;
+  position: sticky;
+  top: 30%;
+  align-self: flex-start;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 550px;
+  padding: 0 35px;
+  box-sizing: border-box;
+}
+
+.right-content {
+  background: white;
+  border-radius: 24px;
+  padding: 0px 36px;
+  min-width: 320px;
+  max-width: 460px;
+}
+
+.right-content h2 {
+  color: #4A90E2;
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.right-content p {
+  color: #222b;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+.animated-icon {
+  width: 150px;        
+  height: 150px;
+  margin-bottom: 20px;
+  display: block;
+  padding-left: 140px; 
+
+}
+
+@media (max-width: 900px) {
+  .scroll-layout {
     flex-direction: column;
-    gap: 0.5rem;
+    align-items: stretch;
   }
-
-  /* Make each anchor fill the full width */
-  .banner-nav a {
-    display: block;
+  .left-panel,
+  .right-panel {
     width: 100%;
+    min-width: 0;
+    padding: 0 10px 30px 10px;
   }
-
+  .right-panel {
+    position: static;
+    top: unset;
+    min-height: 300px;
+    padding: 0 10px;
+    margin-bottom: 24px;
+  }
+  .left-panel {
+    gap: 60px;
+    padding-bottom: 50px;
+  }
   
-  .site-banner.nav-open .banner-nav {
-    display: block;
-  }
 }
