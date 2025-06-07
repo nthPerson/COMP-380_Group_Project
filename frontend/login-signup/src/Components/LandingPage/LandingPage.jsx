@@ -1,26 +1,25 @@
-import React from "react";
-import "./LandingPage.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+//import './LandingPage.css'; // Optional: style as you want
 
-const LandingPage = () => {
+export default function LandingPage() {
   return (
-    <div className="landing-container">
-      <div className="landing-hero">
-        <h1>Welcome to ReZume</h1>
-        <p>
-          Create AI-enhanced resumes that pass ATS filters and highlight your
-          best skills.
-        </p>
-        <div className="landing-buttons">
-          <a href="/signup" className="btn primary">
-            Get Started
-          </a>
-          <a href="/about" className="btn secondary">
-            Learn More
-          </a>
+    <>
+      <header className="site-banner">
+        <div className="banner-content">
+          <img src="/logo.png" alt="Logo" className="banner-logo" />
+          <nav className="banner-nav">
+            <ul>
+              <li><Link to="/signup">Sign Up</Link></li>
+              <li><Link to="/login">Login</Link></li>
+            </ul>
+          </nav>
         </div>
-      </div>
-    </div>
-  );
-};
+      </header>
 
-export default LandingPage;
+      <div className="landing-container">
+        <h1>Welcome to Our App!</h1>
+      </div>
+    </>
+  );
+}
