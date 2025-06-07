@@ -1,0 +1,58 @@
+.landing-container {
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom right, #e0f7fa, #e1f5fe);
+  text-align: center;
+  padding: 2rem;
+}
+
+.landing-hero h1 {
+  font-size: 2.5rem;
+  color: #222;
+  margin-bottom: 1rem;
+}
+
+.landing-hero p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.landing-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.primary {
+  background-color: #1976d2;
+  color: white;
+}
+
+.primary:hover {
+  background-color: #0d47a1;
+}
+
+.secondary {
+  background-color: transparent;
+  border: 2px solid #1976d2;
+  color: #1976d2;
+}
+
+.secondary:hover {
+  background-color: #e3f2fd;
+}
