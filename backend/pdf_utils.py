@@ -3,6 +3,7 @@
 from flask import jsonify, request, g
 from firebase_admin import firestore # Using to record timestamp of PDF upload
 from firebase_config import db, bucket
+from google.cloud.exceptions import NotFound
 
 def upload_user_pdf():
     if "file" not in request.files:
@@ -55,7 +56,11 @@ def delete_user_pdf():
     # Delete the PDF from Firebase Storage
     if storage_path:
         blob = bucket.blob(storage_path)
-        blob.delete()
+        try:
+            blob.delete()
+        except Exception as e:
+            print(f"Failed to delete storage blob: {e}")
+
 
     # Delete the Firestore document
     doc_ref.delete()
@@ -97,7 +102,7 @@ def get_master_pdf():
     user_id = g.firebase_user["uid"]
     user_doc = db.collection("users").document(user_id).get()
     if user_doc.exists:
-        master_docId = user_doc.to_dict().get("master_resume")
-        return jsonify({"master_docId": master_docId}), 200
+        master_docID = user_doc.to_dict().get("master_resume")
+        return jsonify({"master_docID": master_docID}), 200
     else:
-        return jsonify({"master_docId": None}), 200
+        return jsonify({"master_docID": None}), 200
