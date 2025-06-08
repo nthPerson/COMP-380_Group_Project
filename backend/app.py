@@ -3,7 +3,8 @@ from flask_cors import CORS #this enables us to make cross origin requests
 from firebase_config import db, bucket  # this initializes Firebase & gives us the ... - @nthPerson testing cloud storage for PDF uploads
 from firebase_admin import firestore # Using to record timestamp of PDF upload
 from verify_token import verify_firebase_token #what we use to verify the token we made this file 
-from gemini_utils import explain_jd_with_gemini #use geminiiiiiiiiiiii
+from gemini_utils import explain_jd_with_gemini, explain_jd_with_url #use geminiiiiiiiiiiii
+from jd_utils import get_jd_from_url
 
 
 app = Flask(__name__) #makes an instance of the flask app 
@@ -19,6 +20,23 @@ def receive_jd():
         return jsonify({"message": "JD received", "explanation": explanation}), 200
     except Exception as e:
         return jsonify({"error": f"Gemini failed: {e}"}), 500 
+
+@app.route("/api/jd_from_url", methods=["POST"])
+@verify_firebase_token
+def receive_jd_url():
+    url = request.get_json().get("url", "")
+    print(f"url recieved: {url}")
+    jd = get_jd_from_url(url)
+    if jd:
+        try:
+            explanation = explain_jd_with_url(jd) 
+            return jsonify({"message": "JD received", "explanation": explanation}), 200
+        except Exception as e:
+            return jsonify({"error": f"Gemini failed: {e}"}), 500
+    else:
+        return jsonify({"error": "Failed to fetch JD from URL"}), 400
+    
+        
     
 
 @app.route("/api/upload_pdf", methods=["POST"])

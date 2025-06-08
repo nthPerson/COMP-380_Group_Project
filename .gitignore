@@ -70,3 +70,9 @@ Thumbs.db
 
 # Optional: ignore a base64 key at project root
 firebase_key.b64
+
+
+#conda environment
+conda-meta/
+.conda/
+envs/
