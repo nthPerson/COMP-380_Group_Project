@@ -20,6 +20,9 @@ import { sendJobDescription } from "../../services/jobDescriptionService";
 // Import the PDF upload logic from UploadPdf/UploadPdf.jsx
 import UploadPdf from "../UploadPdf/UploadPdf";
 
+// Import Resume Library and PDF manipulation functionality (view, delete, set master)
+import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
+
 import "./Homepage.css";
 
 export default function Homepage() {
@@ -71,6 +74,7 @@ export default function Homepage() {
             <p>Email: {user.email}</p>
 
             <UploadPdf />  
+            <ResumeLibrary />
 
             {/* JD paste area*/}
             <form
