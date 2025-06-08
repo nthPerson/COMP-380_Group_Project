@@ -4,7 +4,7 @@ from firebase_config import db  # this initializes Firebase & gives us the
 from verify_token import verify_firebase_token #what we use to verify the token we made this file 
 from gemini_utils import explain_jd_with_gemini #use geminiiiiiiiiiiii
 
-from pdf_utils import upload_user_pdf, list_user_pdfs, delete_user_pdf, set_master_pdf
+from pdf_utils import upload_user_pdf, list_user_pdfs, delete_user_pdf, set_master_pdf, get_master_pdf
 
 
 app = Flask(__name__) #makes an instance of the flask app 
@@ -44,6 +44,12 @@ def api_delete_pdf():
 @verify_firebase_token
 def api_set_master_pdf():
     return set_master_pdf()
+
+# Get master PDF
+@app.route("/api/get_master_pdf", methods=["GET"])
+@verify_firebase_token
+def api_get_master_pdf():
+    return get_master_pdf()
 
 #  start the server
 if __name__ == "__main__":

@@ -81,3 +81,13 @@ def set_master_pdf():
         merge=True
     )
     return jsonify({"message": "Master resume set", "master_docID": doc_id}), 200
+
+
+def get_master_pdf():
+    user_id = g.firebase_user["uid"]
+    user_doc = db.collection("users").document(user_id).get()
+    if user_doc.exists:
+        master_docId = user_doc.to_dict().get("master_resume")
+        return jsonify({"master_docId": master_docId}), 200
+    else:
+        return jsonify({"master_docId": None}), 200
