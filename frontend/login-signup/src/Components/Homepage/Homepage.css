@@ -13,7 +13,7 @@
   left: 0;
   width: 100%;
   z-index: 1000;        
-  background: transparent; /* if you want a white header */
+  background: transparent; 
   transition: background 0.33s, box-shadow 0.28s;
   box-shadow: none;
 }
@@ -21,8 +21,6 @@
 .site-banner.banner-active {
   background: #fff;
   box-shadow: 0 2px 16px rgba(20,32,64,0.10);
-  /* Optionally for a frosted look: */
-  /* backdrop-filter: blur(16px); */
 }
 
 .banner-content {
@@ -80,14 +78,14 @@
   z-index: 1001;
   margin: 0;
 }
-.dream-highlight {
+.tagline-highlight {
   color: #6fd0df;
   font-weight: 700;
 }
 /* --- Main content section at top --- */
 .landing-main-content {
   font-family: 'Fira Sans Condensed', sans-serif;
-  background: #f3f6fa;        /* or any color you like! */
+  background: #f3f6fa;       
   box-shadow: 0 8px 40px rgba(44, 61, 143, 0.11);
   max-width: 1400px;
   margin: 0px auto 0px auto;
@@ -145,15 +143,15 @@
 
 .timeline-row {
   display: flex;
-  justify-content: flex-end;    /* <--- add this */
+  justify-content: flex-end;   
   align-items: flex-start;
-  max-width: 1400px;            /* Match .landing-main-content if desired */
+  max-width: 1400px;       
   margin: 0 auto;
 }
 
 .timeline-side {
   position: relative;
-  width: 120px;         /* Just wide enough for the line and marker */
+  width: 120px;       
   min-width: 90px;
   margin-left: 24px;
 }
@@ -231,5 +229,5 @@
   color: #4A90E2;
   letter-spacing: 1px;
   margin-bottom: 100;
-  font-family: 'Fira Sans Condensed', sans-serif; /* optional for consistency */
+  font-family: 'Fira Sans Condensed', sans-serif; 
 }
