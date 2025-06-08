@@ -21,3 +21,63 @@ def upload_user_pdf():
         "uploadedAt": firestore.SERVER_TIMESTAMP  # Stores the upload time, set by Firestore's server
     })
     return jsonify({"message": "File uploaded"}), 200  # If everything worked, returns message and success code
+
+""" Return a list of all uploaded PDFs (metadata only) for the logged-in user """
+def list_user_pdfs():
+    user_id = g.firebase_user["uid"]  # Get Firebase user ID
+    docs_ref = db.collection("users").document(user_id).collection("documents") # Reference all user files
+    docs = docs_ref.stream()  # Get all user files
+    
+    pdf_list = []
+    for doc in docs:
+        data = doc.to_dict()
+        data["docID"] = doc.id  # Include Firestore document ID for later deletion/tagging
+        pdf_list.append(data)
+
+    return jsonify(pdf_list)  # Return list of all uploaded PDFs for current user
+
+""" Delete a selected PDF (both metadata and actual file) for the logged-in user """
+def delete_user_pdf():
+    user_id = g.firebase_user["uid"]  # Get Firebase user ID
+    data = request.get_json()  # Create JSON from request data
+    doc_id = data.get("docID")  # Get document ID from request data
+    if not doc_id:
+        return jsonify({"error": "Missing docID"}), 400  # Error if request does not include a document ID
+    
+    doc_ref = db.collection("users").document(user_id).collection("documents").document(doc_id) # Reference file to delete
+    doc = doc_ref.get()  # Get document using reference created above
+    if not doc.exists:
+        return jsonify({"error": "Document not found"}), 404  # Error if document cannot be found at referenced location
+    
+    doc_data = doc.to_dict()
+    storage_path = doc_data.get("storagePath")  # Get the storage path from Firebase user data
+    
+    # Delete the PDF from Firebase Storage
+    if storage_path:
+        blob = bucket.blob(storage_path)
+        blob.delete()
+
+    # Delete the Firestore document
+    doc_ref.delete()
+    return jsonify({"message": "PDF deleted"}), 200 
+
+
+def set_master_pdf():
+    user_id = g.firebase_user["uid"]  # Get Firebase user ID
+    data = request.get_json()  # Create JSON from request data
+    doc_id = data.get("docID")  # Get document ID from request data
+    if not doc_id:
+        return jsonify({"error": "Missing docID"}), 400  # Error if request does not include a document ID
+    
+    # Verify the document exists for this user
+    doc_ref = db.collection("users").document(user_id).collection("documents").document(doc_id)
+    doc = doc_ref.get()
+    if not doc.exists:
+        return jsonify({"error": "Document not found"}), 404
+    
+    # Set the user's master resume in their root user document
+    db.collection("users").document(user_id).set(
+        {"master_resume": doc_id},
+        merge=True
+    )
+    return jsonify({"message": "Master resume set", "master_docID": doc_id}), 200
