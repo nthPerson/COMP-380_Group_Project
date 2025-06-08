@@ -15,6 +15,9 @@ import JdFromText from "../JdForm/JdFromText";
 // Import the PDF upload logic from UploadPdf/UploadPdf.jsx
 import UploadPdf from "../UploadPdf/UploadPdf";
 
+// Import Resume Library and PDF manipulation functionality (view, delete, set master)
+import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
+
 import "./Homepage.css";
 
 export default function Homepage() {
@@ -55,7 +58,8 @@ export default function Homepage() {
             <p>You are now logged in and on the Home page.</p>
             <p>Email: {user.email}</p>
 
-            <UploadPdf />
+            <UploadPdf />  
+            <ResumeLibrary />
 
             <JdFromUrl 
               user={user} 
