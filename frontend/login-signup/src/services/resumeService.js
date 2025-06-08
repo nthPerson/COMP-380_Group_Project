@@ -42,3 +42,6 @@ export const setMasterPdf = async (docId) => {
     if (!res.ok) throw new Error("Failed to set master resume");
     return await res.json();
 };
+
+// Need to implement a frontend function for the get_master_pdf function
+
