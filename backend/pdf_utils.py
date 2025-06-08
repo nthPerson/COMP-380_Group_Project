@@ -59,6 +59,16 @@ def delete_user_pdf():
 
     # Delete the Firestore document
     doc_ref.delete()
+
+    # Check if the deleted PDF was the user's master resume
+    user_doc_ref = db.collection("users").document(user_id)
+    user_doc = user_doc_ref.get()
+    if user_doc.exists:
+        master_doc_id = user_doc.to_dict().get("master_resume")
+        if master_doc_id == doc_id:
+            # Set master_resume to None to prevent deleted file from being used as master resume
+            user_doc_ref.update({"master_resume": firestore.DELETE_FIELD})  # This removes the field, effectively nullifying the master_resume reference
+
     return jsonify({"message": "PDF deleted"}), 200 
 
 
