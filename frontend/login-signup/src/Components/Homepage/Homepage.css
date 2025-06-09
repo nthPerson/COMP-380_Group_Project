@@ -231,3 +231,124 @@
   margin-bottom: 100;
   font-family: 'Fira Sans Condensed', sans-serif; 
 }
+
+
+/* FOR DEMO ONLY*/
+/* Homepage.css */
+
+.homepage-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+  min-height: 100vh;
+  color: #2c3e50;
+}
+
+.homepage-container h1 {
+  color: #3498db;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: 300;
+}
+
+.homepage-container p {
+  color: #5a6c7d;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Component spacing */
+.homepage-container > * {
+  margin-bottom: 2rem;
+}
+
+/* Divider styling */
+.homepage-container div[style*="margin: '20px 0'"] {
+  margin: 2rem 0 !important;
+  padding: 1rem;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.homepage-container div[style*="margin: '20px 0'"] strong {
+  color: #3498db;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+/* Explanation section */
+.jd-explanation {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(52, 152, 219, 0.1);
+  border: 1px solid #e1f0ff;
+}
+
+.jd-explanation h3 {
+  color: #2980b9;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.jd-explanation p {
+  color: #34495e;
+  line-height: 1.6;
+  text-align: left;
+  margin: 0;
+}
+
+/* Logout button */
+.homepage-container button {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 2rem auto 0;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+.homepage-container button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(135deg, #2980b9, #1f639a);
+}
+
+.homepage-container button:active {
+  transform: translateY(0);
+}
+
+/* Loading state */
+.homepage-container p:only-child {
+  font-size: 1.2rem;
+  color: #7fb3d3;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .homepage-container {
+    padding: 1rem;
+  }
+  
+  .homepage-container h1 {
+    font-size: 2rem;
+  }
+  
+  .homepage-container p {
+    font-size: 1rem;
+  }
+}
