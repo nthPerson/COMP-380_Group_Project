@@ -52,19 +52,14 @@ export default function LoginOnly() {
           setErrorMsg("Please enter a valid email address.");
           break;
 
-        case "auth/user-disabled":
-          setEmailError(true);
-          setErrorMsg("This account has been disabled.");
-          break;
-
         case "auth/user-not-found":
           setEmailError(true);
           setErrorMsg("No user found with this email.");
           break;
 
-        case "auth/wrong-password":
+        case "auth/invalid-credential":
           setPasswordError(true);
-          setErrorMsg("Incorrect password.");
+          setErrorMsg("Incorrect password or Email.");
           break;
 
         case "auth/too-many-requests":

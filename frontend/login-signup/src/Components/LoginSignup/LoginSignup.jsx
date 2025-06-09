@@ -95,7 +95,7 @@ export default function LoginSignup() {
       console.error("Signup failed:", err.code);
     
       switch (err.code) {
-        case "auth/email-already-in-use":
+        case "auth/email-already-exists":
           setEmailError(true);
           alert("An account with this email already exists.");
           break;
@@ -103,7 +103,7 @@ export default function LoginSignup() {
           setEmailError(true);
           alert("Please enter a valid email address.");
           break;
-        case "auth/weak-password":
+        case "auth/invalid-password":
           setPasswordError(true);
           alert("Password should be at least 6 characters.");
           break;
