@@ -20,6 +20,7 @@ function ResumeLibrary() {
     const fetchPdfsAndMaster = async () => {
         setLoading(true);
         try {
+            // Fetch list of uploaded pdfs
             const pdfList = await listUserPdfs();
             setPdfs(pdfList);
 
