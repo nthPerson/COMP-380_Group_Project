@@ -11,7 +11,7 @@ import { useInRouterContext } from "react-router-dom";
 const PdfContext = createContext();
 
 // Custom hook for consuming the context from other compnonents
-export function userPdf() {
+export function usePdf() {
     return useContext(PdfContext);
 }
 
