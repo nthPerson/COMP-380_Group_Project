@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { sendJobDescription } from "../../services/jobDescriptionService";
 
-export default function JdFromText({ user, onExplanationReceived }) {
+// export default function JdFromText({ user, onExplanationReceived }) {
+export default function JdFromText({ user, onExplanationReceived, onKeywordsReceived }) {
   const [jdText, setJdText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,7 +18,9 @@ export default function JdFromText({ user, onExplanationReceived }) {
     try {
       const res = await sendJobDescription(jdText, idToken);
       const explanation = res.explanation || "No explanation returned";
+      const keywords = res.keywords || [];
       onExplanationReceived(explanation); // Pass explanation back to parent
+      if (onKeywordsReceived) onExplanationReceived(keywords);
       setJdText(""); // Clear the text area after successful submission
     } catch (err) {
       console.log("Error sending JD", err);

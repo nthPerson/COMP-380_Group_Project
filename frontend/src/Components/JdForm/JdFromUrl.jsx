@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { sendJobDescriptionUrl } from "../../services/jobDescriptionService";
 
 
-export default function JdFromUrl({ user, onExplanationReceived }) {
+// export default function JdFromUrl({ user, onExplanationReceived }) {
+export default function JdFromUrl({ user, onExplanationReceived, onKeywordsReceived }) {
   const [jdUrl, setJdUrl] = useState("");
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
 
@@ -18,7 +19,9 @@ export default function JdFromUrl({ user, onExplanationReceived }) {
     try {
       const res = await sendJobDescriptionUrl(jdUrl, idToken);
       const explanation = res.explanation || "No explanation returned";
+      const keywords = res.keywords || [];
       onExplanationReceived(explanation); // pass explanation back to parent
+      if (onKeywordsReceived) onKeywordsReceived(keywords);
       console.log("Scraped content:", res.jd_content);
       setJdUrl(""); // clear the URL input after successful submission
     } catch (err) {
