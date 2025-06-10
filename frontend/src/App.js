@@ -1,11 +1,10 @@
-// src/App.js
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 import LoginSignup from './Components/LoginSignup/LoginSignup';
 import LoginOnly   from './Components/LoginOnly/LoginOnly';   
 import Homepage    from './Components/Homepage/Homepage';     
-// import ForgotPassword    from './Components/ForgotPassword/ForgotPassword';
+// import ForgotPassword    from './Components/ForgotPassword/ForgotPassword';  // Not currently being used
 import LandingPage    from './Components/LandingPage/LandingPage';
 import { PdfProvider } from './Components/PdfContext';
 
