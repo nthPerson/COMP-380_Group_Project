@@ -5,6 +5,8 @@ from firebase_admin import firestore # Using to record timestamp of PDF upload
 from firebase_config import db, bucket
 from google.cloud.exceptions import NotFound
 
+from keyword_utils import extract_keywords_from_pdf_bytes
+
 def upload_user_pdf():
     if "file" not in request.files:
         return jsonify({"error": "No file part"}), 400 # If the file component is missing from request, return fail code
@@ -106,3 +108,37 @@ def get_master_pdf():
         return jsonify({"masterDocID": masterDocID}), 200
     else:
         return jsonify({"masterDocID": None}), 200
+
+
+def get_master_pdf_bytes(user_id: str):
+    user_doc = db.collection("users").document(user_id).get()  # Get master pdf file from Firestore
+    if not user_doc.exists:
+        return None
+    
+    master_doc_id = user_doc.to_dict().get("master_resume")  # Get master resume doc ID from Firebase
+    if not master_doc_id:
+        return None
+    
+    doc_ref = db.collection("users").document(user_id).collection("documents").document(master_doc_id) 
+    doc = doc_ref.get()  # Get master resume file reference (line above shows path to document)
+    if not doc.exists:
+        return None
+    
+    storage_path = doc.to_dict().get("storagePath")
+    if not storage_path:
+        return None
+    blob = bucket.blob(storage_path)  # Gets database location of master resume
+
+    try:
+        return blob.download_as_bytes()
+    except NotFound:  # Error handling for requests for files that are not found
+        return None
+
+
+def get_master_pdf_keywords():
+    user_id = g.firebase_user["uid"]
+    pdf_bytes = get_master_pdf_bytes(user_id)
+    if not pdf_bytes:
+        return jsonify({"error": "Master resume not found"}), 404
+    keywords = extract_keywords_from_pdf_bytes(pdf_bytes)
+    return jsonify({"keywords": keywords}), 200
