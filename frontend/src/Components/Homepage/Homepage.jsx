@@ -6,6 +6,9 @@ import { auth } from "../../firebase";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+//Import sidebar for nav
+import Sidebar from "../Sidebar/Sidebar";
+
 import { handleSignout } from "../../services/authHandlers";
 
 
@@ -19,6 +22,7 @@ import UploadPdf from "../UploadPdf/UploadPdf";
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 
 import "./Homepage.css";
+import "../Sidebar/Sidebar.css";
 
 export default function Homepage() {
   // local state to store the current Firebase user
@@ -47,13 +51,18 @@ export default function Homepage() {
       console.log("Sign Out Error", err);
     }
   };
+  const [headerActive, setHeaderActive] = useState(false);
 
   return (
     <>
-      {/* ─── MAIN CONTENT ─── */}
       <div className="homepage-container">
         {user ? (
           <>
+            <div>
+            {user && <Sidebar user={user} />}
+            </div>
+            {/* ─── MAIN CONTENT ─── */}
+
             <h1>Welcome, {user.displayName || "User"}!</h1>
             <p>You are now logged in and on the Home page.</p>
             <p>Email: {user.email}</p>

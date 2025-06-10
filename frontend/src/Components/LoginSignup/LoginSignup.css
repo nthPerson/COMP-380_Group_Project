@@ -174,22 +174,22 @@ body {
   color: #4CAF50;        /* green for “met” */
 }
 /* When the icon has class “valid”, color its text green*/
-.requirements-list {
+.password-requirements .requirements-list {
   list-style: none;    /* removes the default bullet dots */
   padding-left: 0;     /* remove any left padding */
-           /* remove default margin */
+  margin: 0;
 
 }
 /* UI Password Validator */
-.requirements-list li {
+.password-requirements .requirements-list li {
   display: flex;
   align-items: center;
   font-size: 0.85rem;
   color: #666;       /* default (unmet) text color */
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.25rem;
 }
 
-.requirements-list li .check-icon.valid + span {
+.password-requirements .requirements-list li .check-icon.valid + span {
   color: #4CAF50;
 }
 
