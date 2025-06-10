@@ -1,3 +1,8 @@
+"""
+This file contains helper functions to extract keywords from text 
+and PDF files (bytes, cuz PDFs are bytes, not text)
+"""
+
 import re
 from collections import Counter
 from io import BytesIO
