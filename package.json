@@ -6,6 +6,6 @@
     "concurrently": "^9.1.2"
   },
   "scripts": {
-    "dev": "concurrently \"python backend/app.py\" \"npm start --prefix frontend/login-signup\""
+    "dev": "concurrently \"python backend/app.py\" \"npm start --prefix frontend\""
   }
 }
