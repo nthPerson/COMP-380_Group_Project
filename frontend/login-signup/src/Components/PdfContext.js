@@ -43,6 +43,12 @@ export function PdfProvider({ children }) {
         fetchPdfsAndMaster();
     }, [fetchPdfsAndMaster]);
 
+    //   useEffect(() => {
+    //     axios.get('/api/list_pdfs')
+    //     .then(res => setResumes(res.data))
+    //     .catch(err => console.error(err));
+    // }, []); // empty dependency array = run on page load (mount)
+
     // Just fetch the PDF list
     const fetchPdfs = async () => {
         setLoading(true);
