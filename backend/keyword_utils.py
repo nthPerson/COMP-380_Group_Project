@@ -21,6 +21,7 @@ STOPWORDS = {
 
 def _tokenize(text: str):
     words = re.findall(r"\b[a-zA-Z]{3,}\b", text.lower())
+    print(f'DEBUG (_tokenize): Extracted words: {words}')
     return [w for w in words if w not in STOPWORDS]
 
 def extract_keywords_from_text(text: str, top_n: int = 10):
@@ -31,7 +32,7 @@ def extract_keywords_from_text(text: str, top_n: int = 10):
 def extract_keywords_from_pdf_bytes(pdf_bytes: bytes, top_n: int = 10):
     reader = PyPDF2.PdfReader(BytesIO(pdf_bytes))
     text = ""
-    for page in reader.pages:
+    for page in reader.pages:  # Reads all pages and extracts text
         page_text = page.extract_text()
         if page_text:
             text += " " + page_text
