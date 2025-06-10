@@ -12,10 +12,14 @@ import asyncio
 
 # this class handles jd parsing with fallback for generic websites or if we get blocked
 class JobDescriptionScraper:
+    """
+    DEPRECATED: This scraper is slow and outdated.
+    Use `ScraplingScraper` instead.
+    """
     #python initializer 
     def __init__(self):
         # These are fake browser identities to pretend our app is a real user when accessing the job descriptions 
-        # these make the request look like a real human :))
+        # these make the request look like a real human 
         self.user_agents = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -216,7 +220,7 @@ class JobDescriptionScraper:
             return None
         
         except Exception as e:
-            print(f"Simple scraping failed: {e}")
+            #print(f"Simple scraping failed: {e}")
             return None 
         
     # this is more advanced scraping it reueses cookie and header and auth and proxies, we try this second because it takes more time 
@@ -321,19 +325,19 @@ class JobDescriptionScraper:
             }
         
         #simple scraping
-        print("attempting simple scrape")
+        #print("attempting simple scrape")
         content = self.scrape_simple(url)
         if content:
             return {'success': True, 'content': content, 'method' : 'simple'}
         
         #session scraping
-        print("attempting sesson scraping")
+        #print("attempting sesson scraping")
         content = self.scrape_with_session(url)
         if content:
             return {'success': True, 'content': content, 'method' : 'session'}
         
         # playwright scraping 
-        print("attempting playwright")
+        #print("attempting playwright")
         content = self.scrape_with_playwright(url)
         if content:
             return {'success': True, 'content': content, 'method' : 'playwright'}

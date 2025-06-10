@@ -1,23 +1,91 @@
-from JobDescriptionScraper import JobDescriptionScraper
-from typing import Optional
+from typing import Optional, Dict, Any
+from ScraplingScraper import scrape 
+import json
+from gemini_utils import explain_jd_with_gemini, explain_jd_with_url
+from flask import jsonify
+from typing import Tuple
+
+def handle_jd_text(jd_text: str) -> Tuple:
+    """Process JD text and return Flask response"""
+    try:
+        explanation = explain_jd_with_gemini(jd_text)
+        return jsonify({
+            "message": "JD processed",
+            "explanation": explanation
+        }), 200
+    except Exception as e:
+        return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
+        
+
+def scrape_jd(url:str)-> Optional[str]:
+    """Scrape the web for the JD using Link"""
+    jd = scrape(url)
+    return jd if jd else None
 
 
-scraper = JobDescriptionScraper()
-
-#For testing
-# urls = ["https://www.glassdoor.com/job-listing/associate-product-strategist-blackrock-investments-JV_IC1147401_KO0,28_KE29,50.htm?jl=1009637498969&cs=1_d6dc23e4&s=21&t=ESR&pos=102&src=GD_JOB_AD&guid=000001974bb7bb7fa40daa38de986702&uido=7B32804F4273685C4376BA30F908E1E8&jobListingId=1009637498969&ao=1136043&vt=w&jrtk=5-yul1-0-1it5rfff2ia64800-d17fe6f099571d0d&cb=1749322022583&ctt=1749322026894&srs=EI_JOBS",
-#         "https://www.indeed.com/cmp/Arkham-Technology-Ltd./jobs?jk=626d22ef1573ea24&start=0&clearPrefilter=1",
-#         "https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4233980732",
-#         "https://www.google.com/about/careers/applications/jobs/results/110690555461018310-software-engineer-iii-infrastructure-core",
-#         "https://jobs.apple.com/en-us/details/200588629/applications-software-engineeer-app-store-client?team=SFTWR"
-#         ]
-
-def get_jd_from_url(url:str) -> Optional[str]:
-    response =  scraper.job_description_scraper(url)
-    status = response["success"]
-    if status == True:
-        return response["content"]
-    elif status == False:
-        return None 
+def handle_jd_from_url(url: str) -> Tuple:
+    """Scrape JD from URL and return Flask response"""
+    jd = scrape(url)
+    if not jd:
+        return jsonify({"error": "Failed to fetch JD from URL"}), 400
     
-    
+    try:
+        explanation = explain_jd_with_url(jd)
+        return jsonify({
+            "message": "JD received",
+            "explanation": explanation,
+            "job_description": jd
+        }), 200
+    except Exception as e:
+        return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
+
+#--------------------------------- Tests ----------------------------------------
+# from JobDescriptionScraper import JobDescriptionScraper
+# old_scraper = JobDescriptionScraper()
+# import time 
+# import logging
+# import io
+# from contextlib import redirect_stdout
+# f = io.StringIO()
+# urls = ["https://www.linkedin.com/jobs/view/4232548077/?alternateChannel=search&refId=HVrFn9OfqHQYgRv1nhxcqQ%3D%3D&trackingId=tlCfiGkWGuG5C5FtuqbfFQ%3D%3D",
+#         "https://www.indeed.com/cmp/Arkham-Technology-Ltd./jobs?jk=626d22ef1573ea24&start=0&clearPrefilter=1#cmp-skip-header-desktop",
+#         "https://www.google.com/about/careers/applications/jobs/results/107778149931983558-staff-software-engineer-pixel-software-human-interfaces?location=United%20States&q=sof",
+#         "https://careers.qualcomm.com/careers?pid=446706161558&domain=qualcomm.com&sort_by=relevance",
+#         "http://jobs.apple.com/en-us/details/114438148/us-business-expert?team=SLDEV"]
+# def new_scrape(url:str) -> Optional[str]:
+#     content = scrape(url)
+#     if content != "":
+#         return content
+
+# def old_scrape(url:str) -> Optional[str]:
+#     response = old_scraper.job_description_scraper(url)
+#     status = response["success"]
+#     if status == True:
+#         return response["content"]
+#     elif status == False:
+#         return None 
+# def silence_logging(fn, *args, **kwargs):
+#     logging.disable(logging.INFO)
+#     f = io.StringIO()
+#     with redirect_stdout(f):  # also mutes print()
+#         result = fn(*args, **kwargs)
+#     logging.disable(logging.NOTSET)  # re-enable logging
+#     return result
+# print("=== Testing Old Scraper ===")
+# with redirect_stdout(f):
+#     start = time.time()
+#     for url in urls:
+#         old_scrape(url)
+#     old_duration = time.time() - start
+# print(f"Old Scraper time: {old_duration:.4f} seconds")
+
+# print("=== Testing New Scraper ===")
+# with redirect_stdout(f):
+#     start = time.time()
+#     for url in urls:
+#         silence_logging(new_scrape, url)
+#     new_duration = time.time() - start
+# print(f"New Scraper time: {new_duration:.4f} seconds")
+
+
+
