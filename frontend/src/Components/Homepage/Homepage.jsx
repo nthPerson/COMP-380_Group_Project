@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";  // Not currently being used
 import { useNavigate } from "react-router-dom";
 
 import { handleSignout } from "../../services/authHandlers";
@@ -112,7 +112,7 @@ export default function Homepage() {
                   {jdKeywords.map((kw) => (
                     <li key={kw} style={{ marginBottom: 4 }}>
                       {kw}{" "}
-                      <button onClick={() => removeJdKeyword(kw)}>x</button>
+                      
                     </li>
                   ))}
                 </ul>
@@ -121,6 +121,7 @@ export default function Homepage() {
 
             <div style={{ marginTop: 20 }}>
                 <button onClick={fetchResumeKeywords}>Load Resume Keywords</button>
+                <h3>Resume Keywords</h3>
                 {resumeKeywords.length > 0 && (
                   <ul style={{ listStyle: "none", padding: 0, marginTop: 10 }}>
                     {resumeKeywords.map((kw) => (

@@ -11,7 +11,8 @@ from pdf_utils import (
     list_user_pdfs, 
     delete_user_pdf,
     set_master_pdf, 
-    get_master_pdf
+    get_master_pdf,
+    get_master_pdf_keywords
 )
 
 
@@ -81,6 +82,12 @@ def api_set_master_pdf():
 @verify_firebase_token
 def api_get_master_pdf():
     return get_master_pdf()
+
+# Extract keywords from the user's master resume
+@app.route("/api/master_resume_keywords", methods=["GET"])
+@verify_firebase_token
+def api_master_resume_keywords():
+    return get_master_pdf_keywords()
 
 #  start the server
 if __name__ == "__main__":
