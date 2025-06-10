@@ -102,7 +102,7 @@ def get_master_pdf():
     user_id = g.firebase_user["uid"]
     user_doc = db.collection("users").document(user_id).get()
     if user_doc.exists:
-        master_docID = user_doc.to_dict().get("master_resume")
-        return jsonify({"master_docID": master_docID}), 200
+        masterDocID = user_doc.to_dict().get("master_resume")
+        return jsonify({"masterDocID": masterDocID}), 200
     else:
-        return jsonify({"master_docID": None}), 200
+        return jsonify({"masterDocID": None}), 200
