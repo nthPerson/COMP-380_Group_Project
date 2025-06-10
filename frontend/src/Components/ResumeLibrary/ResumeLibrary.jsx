@@ -7,7 +7,7 @@ import { usePdf } from "../PdfContext";
 
 // import { use, useEffect, useState } from "react";
 // import { deleteUserPdf, listUserPdfs, setMasterPdf, getMasterPdf } from "../../services/resumeService";
-import { auth } from "../../firebase";
+// import { auth } from "../../firebase";
 
 function ResumeLibrary() {
   const {

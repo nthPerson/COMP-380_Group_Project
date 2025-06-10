@@ -5,8 +5,9 @@ import {
     setMasterPdf,
     getMasterPdf,
 } from "../services/resumeService";
-import { useInRouterContext } from "react-router-dom";
+// import { useInRouterContext } from "react-router-dom";
 import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 // PdfContext (fancy React approach to making commonly-used functions available to multiple compontents)
 const PdfContext = createContext();
@@ -38,16 +39,29 @@ export function PdfProvider({ children }) {
         setLoading(false);
     }, []);
 
-    // Fetch PDFs and master on initial load
-    useEffect(() => {
-        fetchPdfsAndMaster();
-    }, [fetchPdfsAndMaster]);
+    // // Fetch PDFs and master on initial load
+    // useEffect(() => {
+    //     fetchPdfsAndMaster();
+    // }, [fetchPdfsAndMaster]);
 
-    //   useEffect(() => {
-    //     axios.get('/api/list_pdfs')
-    //     .then(res => setResumes(res.data))
-    //     .catch(err => console.error(err));
-    // }, []); // empty dependency array = run on page load (mount)
+    // "Subscribe" to auth changes to enable PDF list fetch on first load.
+    // Since the PdfProvider (the PdfContext wrapper that provides all components access to PDF functions) 
+    // currently wraps the entire app (and starts when the app first loads), and this useEffect() 
+    // function runs as soon as it's loaded (right when the app launches), the list was not being populated 
+    // because the user was not authenticated at the time that the fetchPdfsAndMaster() function inside runs (which 
+    // requres the user's authentication ID to communicate with the backend API). The fix is to have the PdfProvider 
+    // subscribe to an auth state listener to refresh the PDFs and master when a user logs in and clear them on logout.
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                fetchPdfsAndMaster();
+            } else {
+                setPdfs([]);
+                setMasterDocID(null);
+            }
+        });
+        return () => unsubscribe();
+    }, [fetchPdfsAndMaster]);
 
     // Just fetch the PDF list
     const fetchPdfs = async () => {
