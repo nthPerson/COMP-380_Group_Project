@@ -12,6 +12,10 @@ import asyncio
 
 # this class handles jd parsing with fallback for generic websites or if we get blocked
 class JobDescriptionScraper:
+    """
+    DEPRECATED: This scraper is slow and outdated.
+    Use `ScraplingScraper` instead.
+    """
     #python initializer 
     def __init__(self):
         # These are fake browser identities to pretend our app is a real user when accessing the job descriptions 
@@ -216,7 +220,7 @@ class JobDescriptionScraper:
             return None
         
         except Exception as e:
-            print(f"Simple scraping failed: {e}")
+            #print(f"Simple scraping failed: {e}")
             return None 
         
     # this is more advanced scraping it reueses cookie and header and auth and proxies, we try this second because it takes more time 
@@ -321,19 +325,19 @@ class JobDescriptionScraper:
             }
         
         #simple scraping
-        print("attempting simple scrape")
+        #print("attempting simple scrape")
         content = self.scrape_simple(url)
         if content:
             return {'success': True, 'content': content, 'method' : 'simple'}
         
         #session scraping
-        print("attempting sesson scraping")
+        #print("attempting sesson scraping")
         content = self.scrape_with_session(url)
         if content:
             return {'success': True, 'content': content, 'method' : 'session'}
         
         # playwright scraping 
-        print("attempting playwright")
+        #print("attempting playwright")
         content = self.scrape_with_playwright(url)
         if content:
             return {'success': True, 'content': content, 'method' : 'playwright'}

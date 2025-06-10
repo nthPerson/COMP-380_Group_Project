@@ -2,8 +2,8 @@ from flask import Flask, jsonify, request, g
 from flask_cors import CORS #this enables us to make cross origin requests 
 from firebase_config import db  # this initializes Firebase & gives us the
 from verify_token import verify_firebase_token #what we use to verify the token we made this file 
-from gemini_utils import explain_jd_with_gemini, explain_jd_with_url #use geminiiiiiiiiiiii
-from jd_utils import get_jd_from_url
+from gemini_utils import explain_jd_with_gemini, explain_jd_with_url #use gemini
+from jd_utils import scrape_jd
 
 from pdf_utils import upload_user_pdf, list_user_pdfs, delete_user_pdf, set_master_pdf, get_master_pdf
 
@@ -22,16 +22,20 @@ def receive_jd():
     except Exception as e:
         return jsonify({"error": f"Gemini failed: {e}"}), 500 
 
+#get jd and return Gemini, explanation 
 @app.route("/api/jd_from_url", methods=["POST"])
 @verify_firebase_token
 def receive_jd_url():
     url = request.get_json().get("url", "")
-    print(f"url recieved: {url}")
-    jd = get_jd_from_url(url)
+    jd = scrape_jd(url)
     if jd:
         try:
             explanation = explain_jd_with_url(jd) 
-            return jsonify({"message": "JD received", "explanation": explanation}), 200
+            return jsonify({
+                "message": "JD received", 
+                "explanation": explanation,
+                "job_description": jd  
+            }), 200
         except Exception as e:
             return jsonify({"error": f"Gemini failed: {e}"}), 500
     else:
