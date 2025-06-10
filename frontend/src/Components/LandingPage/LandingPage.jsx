@@ -5,6 +5,8 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import logo_icon from '../Assets/logo_icon.png';
 import aiGif from '../Assets/AI.gif';
 import resumeGif from '../Assets/resume.gif';
+import "./LandingPage.css";
+
 
 // Steps for our web app 
 const sections = [
