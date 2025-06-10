@@ -19,7 +19,7 @@ class JobDescriptionScraper:
     #python initializer 
     def __init__(self):
         # These are fake browser identities to pretend our app is a real user when accessing the job descriptions 
-        # these make the request look like a real human :))
+        # these make the request look like a real human 
         self.user_agents = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',

@@ -1,47 +1,25 @@
 from flask import Flask, jsonify, request, g
-from flask_cors import CORS #this enables us to make cross origin requests 
-from firebase_config import db  # this initializes Firebase & gives us the
-from verify_token import verify_firebase_token #what we use to verify the token we made this file 
-from gemini_utils import explain_jd_with_gemini, explain_jd_with_url #use gemini
-from jd_utils import scrape_jd
-
+from flask_cors import CORS 
+from firebase_config import db 
+from verify_token import verify_firebase_token 
+from jd_utils import handle_jd_text, handle_jd_from_url
 from pdf_utils import upload_user_pdf, list_user_pdfs, delete_user_pdf, set_master_pdf, get_master_pdf
 
 
-app = Flask(__name__) #makes an instance of the flask app 
+app = Flask(__name__) 
 CORS(app)
 
+# Get Gimini Explanation from Text
 @app.route("/api/jd", methods =["POST"])
 @verify_firebase_token
 def receive_jd():
-    jd = request.get_json().get("jd", "")
-    print("Received JD:\n", jd)
-    try:
-        explanation = explain_jd_with_gemini(jd)
-        return jsonify({"message": "JD received", "explanation": explanation}), 200
-    except Exception as e:
-        return jsonify({"error": f"Gemini failed: {e}"}), 500 
+    return handle_jd_text(request.get_json().get("jd", ""))
 
-#get jd and return Gemini, explanation 
+# Get Gimini Explanation from URL
 @app.route("/api/jd_from_url", methods=["POST"])
 @verify_firebase_token
 def receive_jd_url():
-    url = request.get_json().get("url", "")
-    jd = scrape_jd(url)
-    if jd:
-        try:
-            explanation = explain_jd_with_url(jd) 
-            return jsonify({
-                "message": "JD received", 
-                "explanation": explanation,
-                "job_description": jd  
-            }), 200
-        except Exception as e:
-            return jsonify({"error": f"Gemini failed: {e}"}), 500
-    else:
-        return jsonify({"error": "Failed to fetch JD from URL"}), 400
-    
-        
+    return handle_jd_from_url(request.get_json().get("url", ""))
     
 # Upload user PDF
 @app.route("/api/upload_pdf", methods=["POST"])
