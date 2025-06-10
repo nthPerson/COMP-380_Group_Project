@@ -17,6 +17,7 @@ import UploadPdf from "../UploadPdf/UploadPdf";
 
 // Import Resume Library and PDF manipulation functionality (view, delete, set master)
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
+import { getMasterResumeKeywords } from "../../services/resumeService";
 
 import "./Homepage.css";
 
@@ -26,6 +27,9 @@ export default function Homepage() {
   // used for gemini explanation
   const [jdExplanation, setJdExplanation] = useState("");
   const navigate = useNavigate();
+  // Used for keyword extraction from JD and master resume
+  const [jdKeywords, setJdKeywords] = useState([]);
+  const [resumeKeywords, setResumeKeywords] = useState([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -37,6 +41,23 @@ export default function Homepage() {
 
   const handleExplanationReceived = (explanation) => {
     setJdExplanation(explanation);
+  };
+
+  const handleKeywordsReceived = (keywords) => {
+    setJdKeywords(keywords);
+  };
+
+  const removeJdKeyword = (kw) => {
+    setJdKeywords((prev) => prev.filter((k) => k !== kw));
+  }
+
+  const fetchResumeKeywords = async () => {
+    try {
+      const res = await getMasterResumeKeywords();
+      setResumeKeywords(res.keywords || []);
+    } catch {
+      alert("Failed to fetch resume keywords");
+    }
   };
 
   const handleSignOutOnClick = async () => {
@@ -64,6 +85,7 @@ export default function Homepage() {
             <JdFromUrl 
               user={user} 
               onExplanationReceived={handleExplanationReceived} 
+              onKeywordsReceived={handleKeywordsReceived}
             />
 
             <div style={{ margin: '20px 0', textAlign: 'center' }}>
@@ -72,7 +94,8 @@ export default function Homepage() {
 
             <JdFromText 
               user={user} 
-              onExplanationReceived={handleExplanationReceived} 
+              onExplanationReceived={handleExplanationReceived}
+              onKeywordsReceived={handleKeywordsReceived}
             />
 
             {jdExplanation && (
@@ -81,6 +104,31 @@ export default function Homepage() {
                 <p>{jdExplanation}</p>
               </div>
             )}
+
+            {jdKeywords.length > 0 && (
+              <div style={{ marginTop: 20 }}>
+                <h3>JD Keywords</h3>
+                <ul style={{ listStyle: "none", padding: 0 }}>
+                  {jdKeywords.map((kw) => (
+                    <li key={kw} style={{ marginBottom: 4 }}>
+                      {kw}{" "}
+                      <button onClick={() => removeJdKeyword(kw)}>x</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div style={{ marginTop: 20 }}>
+                <button onClick={fetchResumeKeywords}>Load Resume Keywords</button>
+                {resumeKeywords.length > 0 && (
+                  <ul style={{ listStyle: "none", padding: 0, marginTop: 10 }}>
+                    {resumeKeywords.map((kw) => (
+                      <li key={kw}>{kw}</li>
+                    ))}
+                  </ul>
+                )}
+            </div>
 
             <button onClick={handleSignOutOnClick}>Logout</button>
           </>
