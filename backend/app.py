@@ -3,9 +3,16 @@ from flask_cors import CORS #this enables us to make cross origin requests
 from firebase_config import db  # this initializes Firebase & gives us the
 from verify_token import verify_firebase_token #what we use to verify the token we made this file 
 from gemini_utils import explain_jd_with_gemini, explain_jd_with_url #use geminiiiiiiiiiiii
-from jd_utils import get_jd_from_url
 
-from pdf_utils import upload_user_pdf, list_user_pdfs, delete_user_pdf, set_master_pdf, get_master_pdf
+from jd_utils import get_jd_from_url
+from keyword_utils import extract_keywords_from_text
+from pdf_utils import (
+    upload_user_pdf, 
+    list_user_pdfs, 
+    delete_user_pdf,
+    set_master_pdf, 
+    get_master_pdf
+)
 
 
 app = Flask(__name__) #makes an instance of the flask app 
@@ -18,9 +25,12 @@ def receive_jd():
     print("Received JD:\n", jd)
     try:
         explanation = explain_jd_with_gemini(jd)
-        return jsonify({"message": "JD received", "explanation": explanation}), 200
+        # return jsonify({"message": "JD received", "explanation": explanation}), 200
+        keywords = extract_keywords_from_text(jd)
+        return jsonify({"message": "JD received", "explanation": explanation, "keywords": keywords}), 200
     except Exception as e:
-        return jsonify({"error": f"Gemini failed: {e}"}), 500 
+        # return jsonify({"error": f"Gemini failed: {e}"}), 500 
+        return jsonify({"error": f"Gemini or keyword extraction failed: {e}"}), 500 
 
 @app.route("/api/jd_from_url", methods=["POST"])
 @verify_firebase_token
@@ -31,9 +41,12 @@ def receive_jd_url():
     if jd:
         try:
             explanation = explain_jd_with_url(jd) 
-            return jsonify({"message": "JD received", "explanation": explanation}), 200
+            # return jsonify({"message": "JD received", "explanation": explanation}), 200
+            keywords = extract_keywords_from_text(jd)
+            return jsonify({"message": "JD received", "explanation": explanation, "keywords": keywords}), 200
         except Exception as e:
-            return jsonify({"error": f"Gemini failed: {e}"}), 500
+            # return jsonify({"error": f"Gemini failed: {e}"}), 500
+            return jsonify({"error": f"Gemini or keyword extraction failed: {e}"}), 500
     else:
         return jsonify({"error": "Failed to fetch JD from URL"}), 400
     
