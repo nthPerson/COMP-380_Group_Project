@@ -52,3 +52,13 @@ export const getMasterPdf = async () => {
     if (!res.ok) throw new Error("Failed to get master resume");
     return await res.json(); // should return { master_docId: ... }
 };
+
+// Fetch keywords extracted from the user's master resume
+export const getMasterResumeKeywords = async () => {
+    const idToken = await auth.currentUser.getIdToken();
+    const res = await fetch("http://localhost:5001/api/master_resume_keywords", {
+        headers: { Authorization: `Bearer ${idToken}`},
+    });
+    if (!res.ok) throw new Error("Failed to get master resume keywords");
+    return await res.json();
+}
