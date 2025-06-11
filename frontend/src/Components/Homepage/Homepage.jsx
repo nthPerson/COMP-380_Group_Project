@@ -25,6 +25,8 @@ export default function Homepage() {
   const [user, setUser] = useState(null);
   // used for gemini explanation
   const [jdExplanation, setJdExplanation] = useState("");
+  // State for skill extraction
+  const [jdSkills, setJdSkills] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,8 +37,9 @@ export default function Homepage() {
     return () => unsubscribe();
   }, []);
 
-  const handleExplanationReceived = (explanation) => {
+  const handleExplanationReceived = (explanation, skills) => {
     setJdExplanation(explanation);
+    setJdSkills(skills);
   };
 
   const handleSignOutOnClick = async () => {
