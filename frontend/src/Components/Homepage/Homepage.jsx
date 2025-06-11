@@ -13,7 +13,10 @@ import JdFromUrl from "../JdForm/JdFromUrl";
 import JdFromText from "../JdForm/JdFromText";
 
 // Import the PDF upload logic from UploadPdf/UploadPdf.jsx
-import UploadPdf from "../UploadPdf/UploadPdf";
+import UploadPdf from "../UploadPdf/UploadPdf";  // Moved PDF upload logic to PdfContext.js, but UploadPdf.jsx uses PdfContext
+
+// Access PDF helper functions
+import { usePdf } from "../PdfContext";
 
 // Import Resume Library and PDF manipulation functionality (view, delete, set master)
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
@@ -30,8 +33,12 @@ export default function Homepage() {
   const [jdExplanation, setJdExplanation] = useState("");
   // State for skill extraction
   const [jdSkills, setJdSkills] = useState([]);
+  // State to enable fetching PDF list and master resume on page load
+  const { fetchPdfsAndMaster } = usePdf();
+
   const navigate = useNavigate();
 
+  // Uses a listener to keep the user state in sync with Firebase
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser); //update the user with the current user with the onAuthStateChanged to change the current user to the current one
@@ -39,6 +46,13 @@ export default function Homepage() {
     // clean up the listener when the component clears
     return () => unsubscribe();
   }, []);
+
+    // Fetch the user's PDFs once we're certain they are logged in
+  useEffect(() => {
+      if (user) {
+        fetchPdfsAndMaster();
+      }
+  }, [user, fetchPdfsAndMaster]);
 
   const handleExplanationReceived = (explanation, skills) => {
     setJdExplanation(explanation);
