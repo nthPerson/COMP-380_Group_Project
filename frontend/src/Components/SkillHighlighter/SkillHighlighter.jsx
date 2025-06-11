@@ -20,6 +20,11 @@ export default function SkillHighlighter({ jobSkills }) {
         setLoadingResume(false);
   };
 
+  // Auto-run resume skill extraction when the master resume is set by the user
+  useEffect(() => {
+    if (masterDocID) loadResumeSkills();
+  }, [masterDocID]);
+
   return (
     <div style={{ margin: "20px 0", padding: "10px", border: "1px solid #ddd" }}>
       <h3>Job Description Skills:</h3>
