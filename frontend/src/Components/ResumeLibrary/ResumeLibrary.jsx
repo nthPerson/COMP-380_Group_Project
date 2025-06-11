@@ -2,81 +2,20 @@
 Main UI for listing, deleting, and setting master resumes
 */
 
-import { use, useEffect, useState } from "react";
-import { deleteUserPdf, listUserPdfs, setMasterPdf, getMasterPdf } from "../../services/resumeService";
-import { auth } from "../../firebase";
+import React from "react";
+import { usePdf } from "../PdfContext";
 
+// Import PDF manipulation methods from PdfContext.js (made available by the PdfProvider)
 function ResumeLibrary() {
-    const [pdfs, setPdfs] = useState([]);
-    const [masterDocID, setMasterdocID] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [statusMessage, setStatusMessage] = useState("");
+  const {
+    pdfs,
+    masterDocID,
+    loading,
+    statusMessage,
+    handleDelete,
+    handleSetMaster,
+  } = usePdf();
 
-        useEffect(() => {
-        fetchPdfsAndMaster();
-        // eslint-disable-next-line
-    }, []);
-
-    const fetchPdfsAndMaster = async () => {
-        setLoading(true);
-        try {
-            const pdfList = await listUserPdfs();
-            setPdfs(pdfList);
-
-            // Fetch master docID after fetching pdfs
-            const data = await getMasterPdf();
-            setMasterdocID(data.master_docID);
-        } catch {
-            alert("Error loading resumes or master resume.");
-        }
-        setLoading(false);
-    };
-
-    const fetchPdfs = async () => {
-        setLoading(true);
-        try {
-            const pdfList = await listUserPdfs();
-            setPdfs(pdfList);
-        } catch (e) {
-            alert("Error loading resumes");
-        }
-        setLoading(false);
-    };
-
-    const fetchMasterdocID = async () => {
-        const idToken = await auth.currentUser.getIdToken();
-        const res = await fetch(`http://localhost:5001/api/get_master_pdf`, // This avoids adding the master_docID to every document
-        { headers: { Authorization: `Bearer ${idToken}` } }
-        );
-        if (res.ok) {
-        const data = await res.json();
-        setMasterdocID(data.master_docID);
-        }
-    };
-
-    const handleDelete = async (docID, fileName) => {
-        if (window.confirm("Delete this resume?")) {
-            try {
-                await deleteUserPdf(docID); // Clears master_resume if user chooses to delete their master resume
-                setStatusMessage(`Deleted file ${fileName}`);
-                fetchPdfsAndMaster(); 
-            } catch (e) {
-                setStatusMessage("Failed to delete file");
-            }
-        }
-    };
-
-    const handleSetMaster = async (docID, fileName) => {
-        try {
-            await setMasterPdf(docID);
-            setStatusMessage(`Master resume set to ${fileName}`);
-            fetchPdfsAndMaster();
-        } catch (e) {
-            setStatusMessage("Failed to set master resume");
-        }
-    };
-
-    // For testing, we're just going to highlight the master resume visually in the list
       return (
         <div>
         <h2>Your Uploaded Resumes</h2>
