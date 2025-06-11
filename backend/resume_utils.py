@@ -15,7 +15,7 @@ def extract_skills_from_pdf():
     
     # Lookup Firestore metadata for this docID
     user_id = g.firebase_user["uid"]
-    doc_ref = db.collection("users").document(user_id).collection("documents").docuement(doc_id)
+    doc_ref = db.collection("users").document(user_id).collection("documents").document(doc_id)
     doc = doc_ref.get()
     if not doc.exists:
         return jsonify({"error": "Document not found"}), 400
