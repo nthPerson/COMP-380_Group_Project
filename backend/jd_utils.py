@@ -5,39 +5,80 @@ from gemini_utils import explain_jd_with_gemini, explain_jd_with_url
 from flask import jsonify
 from typing import Tuple
 
-def handle_jd_text(jd_text: str) -> Tuple:
-    """Process JD text and return Flask response"""
-    try:
-        explanation = explain_jd_with_gemini(jd_text)
-        return jsonify({
-            "message": "JD processed",
-            "explanation": explanation
-        }), 200
-    except Exception as e:
-        return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
-        
+from skill_utils import extract_skills
+
+# def handle_jd_text(jd_text: str) -> Tuple:
+#     """Process JD text and return Flask response"""
+#     try:
+#         explanation = explain_jd_with_gemini(jd_text)
+#         return jsonify({
+#             "message": "JD processed",
+#             "explanation": explanation
+#         }), 200
+#     except Exception as e:
+#         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
 
 def scrape_jd(url:str)-> Optional[str]:
     """Scrape the web for the JD using Link"""
     jd = scrape(url)
     return jd if jd else None
 
+def handle_jd_text(jd_text: str) -> Tuple:
+    # Generate explanation
+    try:
+        explanation = explain_jd_with_gemini(jd_text)
+    except Exception as e:
+        return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
+    
+    # Extract skills from job description
+    skills = extract_skills(jd_text)
+
+    # Return the explantion and the extracted skills
+    return jsonify({
+        "message": "JD processed from plain text",
+        "job_description": jd_text,
+        "explanation": explanation,
+        "skills": skills
+    }), 200
+
+
+# def handle_jd_from_url(url: str) -> Tuple:
+#     """Scrape JD from URL and return Flask response"""
+#     jd = scrape(url)
+#     if not jd:
+#         return jsonify({"error": "Failed to fetch JD from URL"}), 400
+    
+#     try:
+#         explanation = explain_jd_with_url(jd)
+#         return jsonify({
+#             "message": "JD received",
+#             "explanation": explanation,
+#             "job_description": jd
+#         }), 200
+#     except Exception as e:
+#         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
 
 def handle_jd_from_url(url: str) -> Tuple:
-    """Scrape JD from URL and return Flask response"""
-    jd = scrape(url)
+    # Scrape job description
+    jd_text = scrape(url)
     if not jd:
         return jsonify({"error": "Failed to fetch JD from URL"}), 400
     
+    # Generate explanation
     try:
         explanation = explain_jd_with_url(jd)
-        return jsonify({
-            "message": "JD received",
-            "explanation": explanation,
-            "job_description": jd
-        }), 200
     except Exception as e:
         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
+    
+    # Extract skills from job description
+    skills = extract_skills(jd_text)
+
+    return jsonify({
+        "message": "JD processed from URL",
+        "job_description": jd_text,
+        "explanation": explanation,
+        "skills": skills
+    }), 200
 
 #--------------------------------- Tests ----------------------------------------
 # from JobDescriptionScraper import JobDescriptionScraper
