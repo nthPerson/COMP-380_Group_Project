@@ -16,10 +16,9 @@ export default function JdFromUrl({ user, onExplanationReceived }) {
     setIsLoadingUrl(true);
 
     try {
-      const res = await sendJobDescriptionUrl(jdUrl, idToken);
-      const explanation = res.explanation || "No explanation returned";
-      onExplanationReceived(explanation); // pass explanation back to parent
-      console.log("Scraped content:", res.jd_content);
+      const { explanation, skills } = await sendJobDescriptionUrl(jdUrl, idToken);
+      onExplanationReceived(explanation, skills); // pass explanation back to parent
+      // console.log("Scraped content:", res.jd_content);
       setJdUrl(""); // clear the URL input after successful submission
     } catch (err) {
       console.log("Error sending URL", err);
@@ -29,6 +28,21 @@ export default function JdFromUrl({ user, onExplanationReceived }) {
     } finally {
       setIsLoadingUrl(false);
     }
+
+    // try {
+    //   const res = await sendJobDescriptionUrl(jdUrl, idToken);
+    //   const explanation = res.explanation || "No explanation returned";
+    //   onExplanationReceived(explanation); // pass explanation back to parent
+    //   console.log("Scraped content:", res.jd_content);
+    //   setJdUrl(""); // clear the URL input after successful submission
+    // } catch (err) {
+    //   console.log("Error sending URL", err);
+    //   alert(
+    //     "Error scraping job description from URL. Please try copying and pasting the job description instead."
+    //   );
+    // } finally {
+    //   setIsLoadingUrl(false);
+    // }
   };
 
   return (
