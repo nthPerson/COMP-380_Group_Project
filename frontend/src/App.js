@@ -8,7 +8,7 @@ import Homepage    from './Components/Homepage/Homepage';
 import ForgotPassword    from './Components/ForgotPassword/ForgotPassword';
 import LandingPage    from './Components/LandingPage/LandingPage';
 import UserProfile    from './Components/UserProfile/UserProfile';
-//import TailorResume   from './Components/TailorResume/TailorResume';
+import TailorResume   from './Components/TailorResume/TailorResume';
 
 function App() {
   return (
@@ -31,6 +31,7 @@ function App() {
       <Route path="/userProfile" element={<UserProfile />} />
 
       {/* 7) Tailor Resume */}
+      <Route path="/tailorResume" element={<TailorResume />} />
     
       {/* 5) Anything else → redirect to “/signup” */}
       <Route path="*" element={<Navigate to="/signup" replace />} />

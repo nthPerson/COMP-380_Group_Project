@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo_icon from '../Assets/logo_icon.png';
 import profile_icon from "../Assets/profile_icon.png";
-import library_icon from '../Assets/library_icon.png';
+import archive_icon from '../Assets/library_icon.png';
 import magicwand_icon from "../Assets/magic-wand_icon.png";
 
 const Sidebar = ({ user }) => (
@@ -34,9 +34,9 @@ const Sidebar = ({ user }) => (
             </Link>
         </li>
         <li>
-          <Link to="/resumeLibrary" className="library-link">
-            <img src= {library_icon} alt="File icon" />
-            <span>Resume Library</span>
+          <Link to="/resumeArchive" className="archive-link">
+            <img src= {archive_icon} alt="File icon" />
+            <span>Resume Archive</span>
             </Link>
         </li>
       </ul>
