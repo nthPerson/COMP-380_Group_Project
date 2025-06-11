@@ -18,6 +18,9 @@ import UploadPdf from "../UploadPdf/UploadPdf";
 // Import Resume Library and PDF manipulation functionality (view, delete, set master)
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 
+// Import SkillHighlighter (what we're currently using to test skill extraction behavior)
+import SkillHighlighter from "../SkillHighlighter/SkillHighlighter";
+
 import "./Homepage.css";
 
 export default function Homepage() {
@@ -79,10 +82,13 @@ export default function Homepage() {
             />
 
             {jdExplanation && (
-              <div className="jd-explanation">
-                <h3>Gemini's Explanation</h3>
-                <p>{jdExplanation}</p>
-              </div>
+              <>
+                <div className="jd-explanation">
+                  <h3>Gemini's Explanation</h3>
+                  <p>{jdExplanation}</p>
+                </div>
+                <SkillHighlighter jobSkills={jdSkills} />
+              </>
             )}
 
             <button onClick={handleSignOutOnClick}>Logout</button>
