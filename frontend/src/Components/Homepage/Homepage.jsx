@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";  // Not currently using
 import { useNavigate } from "react-router-dom";
 
 import { handleSignout } from "../../services/authHandlers";

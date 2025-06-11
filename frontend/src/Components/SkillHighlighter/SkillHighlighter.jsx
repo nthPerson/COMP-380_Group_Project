@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { usePdf } from "../PdfContext";
 import { extractResumeSkills } from "../../services/resumeService";
 
@@ -8,22 +8,33 @@ export default function SkillHighlighter({ jobSkills }) {
     const [loadingResume, setLoadingResume] = useState(false);
 
   // Handler to fetch resume skills on demand
-  const loadResumeSkills = async () => {
+    const loadResumeSkills = useCallback(async () => {
         if (!masterDocID) return;
         setLoadingResume(true);
         try {
-        const skills = await extractResumeSkills(masterDocID);
-        setResumeSkills(skills);
+            const skills = await extractResumeSkills(masterDocID);
+            setResumeSkills(skills);
         } catch {
-        setResumeSkills([]);
+            setResumeSkills([]);
         }
         setLoadingResume(false);
-  };
+    }, [masterDocID]);
+//   const loadResumeSkills = async () => {
+//         if (!masterDocID) return;
+//         setLoadingResume(true);
+//         try {
+//         const skills = await extractResumeSkills(masterDocID);
+//         setResumeSkills(skills);
+//         } catch {
+//         setResumeSkills([]);
+//         }
+//         setLoadingResume(false);
+//   };
 
   // Auto-run resume skill extraction when the master resume is set by the user
   useEffect(() => {
     if (masterDocID) loadResumeSkills();
-  }, [masterDocID]);
+  }, [masterDocID, loadResumeSkills]);
 
   return (
     <div style={{ margin: "20px 0", padding: "10px", border: "1px solid #ddd" }}>
