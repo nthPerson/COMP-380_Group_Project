@@ -61,12 +61,12 @@ def handle_jd_text(jd_text: str) -> Tuple:
 def handle_jd_from_url(url: str) -> Tuple:
     # Scrape job description
     jd_text = scrape(url)
-    if not jd:
+    if not jd_text:
         return jsonify({"error": "Failed to fetch JD from URL"}), 400
     
     # Generate explanation
     try:
-        explanation = explain_jd_with_url(jd)
+        explanation = explain_jd_with_url(jd_text)
     except Exception as e:
         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
     
