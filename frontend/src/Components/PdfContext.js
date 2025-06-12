@@ -39,6 +39,34 @@ export function PdfProvider({ children }) {
         setLoading(false);
     }, []);
 
+        // 🔹 NEW: Extract keywords from the master resume
+        const extractKeywordsFromMaster = useCallback(async () => {
+            try {
+                const idToken = await auth.currentUser.getIdToken();
+                const res = await fetch("http://localhost:5001/api/extract_keywords", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${idToken}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ masterDocID }), // Send masterDocID to backend
+                });
+    
+                if (res.ok) {
+                    const data = await res.json();
+                    console.log("✅ Extracted Keywords:", data.keywords);
+                    setStatusMessage("✅ Keywords extracted successfully.");
+                } else {
+                    setStatusMessage("⚠️ Keyword extraction failed.");
+                }
+            } catch (error) {
+                console.error("❌ Keyword Extraction Error:", error);
+                setStatusMessage("Error extracting keywords.");
+            }
+        }, [masterDocID]);
+    
+
+    
     // const fetchPdfsAndMaster = useCallback(async () => {
     //     let attempts = 0;  // Used to improve dynamic stability on first Homepage load
     //     const maxAttempts = 3;
@@ -150,16 +178,17 @@ export function PdfProvider({ children }) {
         }
     }, [fetchPdfsAndMaster]);
 
-    // Set master PDF (and refresh list when complete)
-    const handleSetMaster = useCallback(async (docID, fileName) => {
+     // 🔹 UPDATED: Now triggers keyword extraction when master is set
+     const handleSetMaster = useCallback(async (docID, fileName) => {
         try {
-            await setMasterPdf(docID); // Set 
+            await setMasterPdf(docID); // Set the master resume
             setStatusMessage(`Master resume set to ${fileName}`);
-            fetchPdfsAndMaster();
+            fetchPdfsAndMaster(); // Refresh the list of PDFs
+            await extractKeywordsFromMaster(); // 🔥 Trigger keyword extraction
         } catch {
             setStatusMessage("Failed to set master resume");
         }
-    }, [fetchPdfsAndMaster]);
+    }, [fetchPdfsAndMaster, extractKeywordsFromMaster]);
 
     // Expose values and handlers to components nested within this context in App.js
     const value = {
@@ -174,6 +203,7 @@ export function PdfProvider({ children }) {
         uploadPdf,
         handleDelete,
         handleSetMaster,
+        extractKeywordsFromMaster, // Optional, in case it's needed elsewhere
     };
 
     return (
