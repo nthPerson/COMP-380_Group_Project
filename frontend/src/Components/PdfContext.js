@@ -39,6 +39,34 @@ export function PdfProvider({ children }) {
         setLoading(false);
     }, []);
 
+    // const fetchPdfsAndMaster = useCallback(async () => {
+    //     let attempts = 0;  // Used to improve dynamic stability on first Homepage load
+    //     const maxAttempts = 3;
+
+    //     while (attempts < maxAttempts) {
+    //         setLoading(true);
+    //         try {
+    //             const pdfList = await listUserPdfs();
+    //             setPdfs(pdfList);
+
+    //             const data = await getMasterPdf();
+    //             setMasterDocID(data.masterDocID);
+    //             setStatusMessage("");
+    //             break;
+    //         } catch {
+    //             attempts += 1;
+    //             if (attempts >= maxAttempts) {
+    //                 setStatusMessage("Error loading resumes or master resume :(");
+    //             } else {
+    //                 // Pause for a moment to give the backend time to respond in case it's just starting or busy
+    //                 await new Promise((res) => setTimeout(res, 1000));
+    //             }
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     }
+    // }, []);
+
     // // Fetch PDFs and master on initial load
     // useEffect(() => {
     //     fetchPdfsAndMaster();

@@ -48,6 +48,7 @@ export default function Homepage() {
   }, []);
 
     // Fetch the user's PDFs once we're certain they are logged in
+    // Multiple useEffect definitions is apparently a thing....
   useEffect(() => {
       if (user) {
         fetchPdfsAndMaster();
@@ -101,9 +102,11 @@ export default function Homepage() {
                   <h3>Gemini's Explanation</h3>
                   <p>{jdExplanation}</p>
                 </div>
-                <SkillHighlighter jobSkills={jdSkills} />
+                
               </>
             )}
+
+            <SkillHighlighter jobSkills={jdSkills} />
 
             <button onClick={handleSignOutOnClick}>Logout</button>
           </>

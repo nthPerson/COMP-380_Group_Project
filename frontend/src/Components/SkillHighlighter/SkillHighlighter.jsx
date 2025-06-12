@@ -19,17 +19,18 @@ export default function SkillHighlighter({ jobSkills }) {
         }
         setLoadingResume(false);
     }, [masterDocID]);
-//   const loadResumeSkills = async () => {
-//         if (!masterDocID) return;
-//         setLoadingResume(true);
-//         try {
-//         const skills = await extractResumeSkills(masterDocID);
-//         setResumeSkills(skills);
-//         } catch {
-//         setResumeSkills([]);
-//         }
-//         setLoadingResume(false);
-//   };
+  
+  //   const loadResumeSkills = async () => {
+  //       if (!masterDocID) return;
+  //       setLoadingResume(true);
+  //       try {
+  //       const skills = await extractResumeSkills(masterDocID);
+  //       setResumeSkills(skills);
+  //       } catch {
+  //       setResumeSkills([]);
+  //       }
+  //       setLoadingResume(false);
+  // };
 
   // Auto-run resume skill extraction when the master resume is set by the user
   useEffect(() => {
@@ -53,7 +54,7 @@ export default function SkillHighlighter({ jobSkills }) {
 
       <h3 style={{ marginTop: 16 }}>Resume Skills:</h3>
 
-     {/* NEW BUTTON */}
+     {/* Extract Resume Skills Button */}
      {masterDocID && (
        <button
          onClick={loadResumeSkills}
