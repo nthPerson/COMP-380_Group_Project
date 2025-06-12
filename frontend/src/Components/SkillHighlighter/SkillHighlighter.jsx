@@ -20,6 +20,12 @@ export default function SkillHighlighter({ jobSkills }) {
         setLoadingResume(false);
     }, [masterDocID]);
   
+
+  /* Commented code below can be used to extract skills from resume each time the 
+  master resume is tagged. Had a few problems with the pdf list not loading on 
+  Homepage load, and this was removed in the process, but it might work because a 
+  solution (lazy loading of backend nlp for skills extraction) was found and this 
+  functionality was not reintroduced and tested */
   //   const loadResumeSkills = async () => {
   //       if (!masterDocID) return;
   //       setLoadingResume(true);

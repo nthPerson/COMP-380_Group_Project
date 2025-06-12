@@ -53,7 +53,8 @@ export const getMasterPdf = async () => {
     return await res.json(); // should return { master_docId: ... }
 };
 
-// Extract skills from user's master resume
+// Extract skills from user's master resume (not yet implemented in Homepage, 
+// but could be helpful in isolating scraping and skill extraction behavior)
 export const extractResumeSkills = async (docID) => {
     const idToken = await auth.currentUser.getIdToken();
     const res = await fetch("http://localhost:5001/api/extract_resume_skills", {

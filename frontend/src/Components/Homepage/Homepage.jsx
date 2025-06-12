@@ -1,5 +1,3 @@
-// src/Components/Homepage/Homepage.jsx
-
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -14,9 +12,6 @@ import JdFromText from "../JdForm/JdFromText";
 
 // Import the PDF upload logic from UploadPdf/UploadPdf.jsx
 import UploadPdf from "../UploadPdf/UploadPdf";  // Moved PDF upload logic to PdfContext.js, but UploadPdf.jsx uses PdfContext
-
-// Access PDF helper functions
-import { usePdf } from "../PdfContext";
 
 // Import Resume Library and PDF manipulation functionality (view, delete, set master)
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
@@ -33,8 +28,6 @@ export default function Homepage() {
   const [jdExplanation, setJdExplanation] = useState("");
   // State for skill extraction
   const [jdSkills, setJdSkills] = useState([]);
-  // State to enable fetching PDF list and master resume on page load
-  const { fetchPdfsAndMaster } = usePdf();
 
   const navigate = useNavigate();
 
@@ -46,14 +39,6 @@ export default function Homepage() {
     // clean up the listener when the component clears
     return () => unsubscribe();
   }, []);
-
-  //   // Fetch the user's PDFs once we're certain they are logged in
-  //   // Multiple useEffect definitions is apparently a thing....
-  // useEffect(() => {
-  //     if (user) {
-  //       fetchPdfsAndMaster();
-  //     }
-  // }, [user, fetchPdfsAndMaster]);
 
   const handleExplanationReceived = (explanation, skills) => {
     setJdExplanation(explanation);

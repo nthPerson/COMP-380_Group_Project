@@ -39,40 +39,6 @@ export function PdfProvider({ children }) {
         setLoading(false);
     }, []);
 
-    // const fetchPdfsAndMaster = useCallback(async () => {
-    //     if (!auth.currentUser) return;
-    //     let attempts = 0;  // Used to improve dynamic stability on first Homepage load
-    //     const maxAttempts = 3;
-
-    //     while (attempts < maxAttempts) {
-    //         setLoading(true);
-    //         try {
-    //             const pdfList = await listUserPdfs();
-    //             setPdfs(pdfList);
-
-    //             const data = await getMasterPdf();
-    //             setMasterDocID(data.masterDocID);
-    //             setStatusMessage("");
-    //             break;
-    //         } catch {
-    //             attempts += 1;
-    //             if (attempts >= maxAttempts) {
-    //                 setStatusMessage("Error loading resumes or master resume :(");
-    //             } else {
-    //                 // Pause for a moment to give the backend time to respond in case it's just starting or busy
-    //                 await new Promise((res) => setTimeout(res, 1000));
-    //             }
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     }
-    // }, []);
-
-    // // Fetch PDFs and master on initial load
-    // useEffect(() => {
-    //     fetchPdfsAndMaster();
-    // }, [fetchPdfsAndMaster]);
-
     // "Subscribe" to auth changes to enable PDF list fetch on first load.
     // Since the PdfProvider (the PdfContext wrapper that provides all components access to PDF functions) 
     // currently wraps the entire app (and starts when the app first loads), and this useEffect() 
@@ -82,7 +48,7 @@ export function PdfProvider({ children }) {
     // subscribe to an auth state listener to refresh the PDFs and master when a user logs in and clear them on logout.
     useEffect(() => {
         // const unsubscribe = onAuthStateChanged(auth, (user) => {
-        const unsubscribe = onIdTokenChanged(auth, (user) => {
+        const unsubscribe = onIdTokenChanged(auth, (user) => {  // Changed from auth state change to IdToken change (both might work)
             if (user) {
                 fetchPdfsAndMaster();
             } else {

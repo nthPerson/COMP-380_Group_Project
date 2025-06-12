@@ -16,7 +16,7 @@ export default function JdFromText({ user, onExplanationReceived }) {
 
     try {
       const { explanation, skills } = await sendJobDescription(jdText, idToken);
-      onExplanationReceived(explanation, skills); // Pass explanation back to parent
+      onExplanationReceived(explanation, skills); // Pass explanation and extracted skills back to parent
       setJdText(""); // Clear the text area after successful submission
     } catch (err) {
       console.log("Error sending JD or extracting keywords", err);

@@ -47,7 +47,7 @@ export async function sendJobDescription(jdText, idToken) {
         body: JSON.stringify({ url: url }),
       });
       
-      // if the response is not ok we throw an error, erros in this case relate to network issues - IMPORTANT
+      // if the response is not ok we throw an error, errors in this case relate to network issues - IMPORTANT
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to send url: ${response.status} ${errorText}`);
