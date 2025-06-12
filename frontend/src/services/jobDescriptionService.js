@@ -19,7 +19,13 @@ export async function sendJobDescription(jdText, idToken) {
         throw new Error(`Failed to send JD: ${response.status} ${errorText}`);
       }
   
-      return await response.json();
+      const responseData = await response.json();
+      // return await response.json();
+      return { // API receive_jd() function returns a bunch of handy stuff (see below):
+        job_description: responseData.job_description, // Job description text (might be helpful later when we display highlighted keywords)
+        explanation: responseData.explanation,         // Gemini explanation of job description
+        skills: responseData.skills,                   // Skills extracted from job description
+      };  
     } catch (err) {
 
       console.error('Error sending JD to backend:', err);
@@ -41,13 +47,20 @@ export async function sendJobDescription(jdText, idToken) {
         body: JSON.stringify({ url: url }),
       });
       
-      // if the response is not ok we throw an error, erros in this case relate to network issues - IMPORTANT
+      // if the response is not ok we throw an error, errors in this case relate to network issues - IMPORTANT
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to send url: ${response.status} ${errorText}`);
       }
   
-      return await response.json();
+      const responseData = await response.json();
+      // return await response.json();
+      return { // API receive_jd() function returns a bunch of handy stuff (see below):
+        job_description: responseData.job_description, // Job description text (might be helpful later when we display highlighted keywords)
+        explanation: responseData.explanation,         // Gemini explanation of job description
+        skills: responseData.skills,                   // Skills extracted from job description
+      };  
+
     } catch (err) {
 
       console.error('Error sending url to backend:', err);

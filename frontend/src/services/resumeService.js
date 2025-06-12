@@ -5,7 +5,7 @@ import { auth } from "../firebase";
 
 // Get all PDFs for the current user
 export const listUserPdfs = async () => {
-    const idToken = await auth.currentUser.getIdToken();
+    const idToken = await auth.currentUser.getIdToken(); 
     const res = await fetch("http://localhost:5001/api/list_pdfs", {  // Calls the backend API
     headers: { Authorization: `Bearer ${idToken}` },
   });
@@ -51,4 +51,21 @@ export const getMasterPdf = async () => {
     });
     if (!res.ok) throw new Error("Failed to get master resume");
     return await res.json(); // should return { master_docId: ... }
+};
+
+// Extract skills from user's master resume (not yet implemented in Homepage, 
+// but could be helpful in isolating scraping and skill extraction behavior)
+export const extractResumeSkills = async (docID) => {
+    const idToken = await auth.currentUser.getIdToken();
+    const res = await fetch("http://localhost:5001/api/extract_resume_skills", {
+        method: "POST",
+        headers: {
+        Authorization: `Bearer ${idToken}`,
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ docID }),
+    });
+    if (!res.ok) throw new Error("Failed to extract resume skills");
+    const data = await res.json();
+    return data.skills;  // Array of extracted skills
 };

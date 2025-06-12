@@ -15,16 +15,27 @@ export default function JdFromText({ user, onExplanationReceived }) {
     setIsLoading(true);
 
     try {
-      const res = await sendJobDescription(jdText, idToken);
-      const explanation = res.explanation || "No explanation returned";
-      onExplanationReceived(explanation); // Pass explanation back to parent
+      const { explanation, skills } = await sendJobDescription(jdText, idToken);
+      onExplanationReceived(explanation, skills); // Pass explanation and extracted skills back to parent
       setJdText(""); // Clear the text area after successful submission
     } catch (err) {
-      console.log("Error sending JD", err);
+      console.log("Error sending JD or extracting keywords", err);
       alert("Error processing job description. Please try again.");
     } finally {
       setIsLoading(false);
     }
+
+    // try {
+    //   const res = await sendJobDescription(jdText, idToken);
+    //   const explanation = res.explanation || "No explanation returned";
+    //   onExplanationReceived(explanation); // Pass explanation back to parent
+    //   setJdText(""); // Clear the text area after successful submission
+    // } catch (err) {
+    //   console.log("Error sending JD", err);
+    //   alert("Error processing job description. Please try again.");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (

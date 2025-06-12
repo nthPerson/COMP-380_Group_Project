@@ -7,7 +7,7 @@ import {
 } from "../services/resumeService";
 // import { useInRouterContext } from "react-router-dom";
 import { auth } from "../firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, onIdTokenChanged } from "firebase/auth";
 
 // PdfContext (fancy React approach to making commonly-used functions available to multiple compontents)
 const PdfContext = createContext();
@@ -39,11 +39,6 @@ export function PdfProvider({ children }) {
         setLoading(false);
     }, []);
 
-    // // Fetch PDFs and master on initial load
-    // useEffect(() => {
-    //     fetchPdfsAndMaster();
-    // }, [fetchPdfsAndMaster]);
-
     // "Subscribe" to auth changes to enable PDF list fetch on first load.
     // Since the PdfProvider (the PdfContext wrapper that provides all components access to PDF functions) 
     // currently wraps the entire app (and starts when the app first loads), and this useEffect() 
@@ -52,7 +47,8 @@ export function PdfProvider({ children }) {
     // requres the user's authentication ID to communicate with the backend API). The fix is to have the PdfProvider 
     // subscribe to an auth state listener to refresh the PDFs and master when a user logs in and clear them on logout.
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        // const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onIdTokenChanged(auth, (user) => {  // Changed from auth state change to IdToken change (both might work)
             if (user) {
                 fetchPdfsAndMaster();
             } else {
@@ -133,6 +129,32 @@ export function PdfProvider({ children }) {
         }
     }, [fetchPdfsAndMaster]);
 
+            // Extract keywords from the master resume
+    const extractKeywordsFromMaster = useCallback(async () => {
+        try {
+            const idToken = await auth.currentUser.getIdToken();
+            const res = await fetch("http://localhost:5001/api/extract_keywords", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${idToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ masterDocID }), // Send masterDocID to backend
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                console.log("✅ Extracted Keywords:", data.keywords);
+                setStatusMessage("✅ Keywords extracted successfully.");
+            } else {
+                setStatusMessage("⚠️ Keyword extraction failed.");
+            }
+        } catch (error) {
+            console.error("Keyword Extraction Error:", error);
+            setStatusMessage("Error extracting keywords.");
+        }
+    }, [masterDocID]);
+
     // Expose values and handlers to components nested within this context in App.js
     const value = {
         pdfs,
@@ -146,6 +168,7 @@ export function PdfProvider({ children }) {
         uploadPdf,
         handleDelete,
         handleSetMaster,
+        extractKeywordsFromMaster,
     };
 
     return (
