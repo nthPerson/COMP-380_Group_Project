@@ -47,13 +47,13 @@ export default function Homepage() {
     return () => unsubscribe();
   }, []);
 
-    // Fetch the user's PDFs once we're certain they are logged in
-    // Multiple useEffect definitions is apparently a thing....
-  useEffect(() => {
-      if (user) {
-        fetchPdfsAndMaster();
-      }
-  }, [user, fetchPdfsAndMaster]);
+  //   // Fetch the user's PDFs once we're certain they are logged in
+  //   // Multiple useEffect definitions is apparently a thing....
+  // useEffect(() => {
+  //     if (user) {
+  //       fetchPdfsAndMaster();
+  //     }
+  // }, [user, fetchPdfsAndMaster]);
 
   const handleExplanationReceived = (explanation, skills) => {
     setJdExplanation(explanation);

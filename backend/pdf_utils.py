@@ -26,7 +26,6 @@ def upload_user_pdf():
 """ Return a list of all uploaded PDFs (metadata only) for the logged-in user """
 def list_user_pdfs():
     user_id = g.firebase_user["uid"]  # Get Firebase user ID
-    print(f'DEBUG (list_user_pdfs): user_id: {user_id}')
     docs_ref = db.collection("users").document(user_id).collection("documents") # Reference all user files
     docs = docs_ref.stream()  # Get all user files
     
