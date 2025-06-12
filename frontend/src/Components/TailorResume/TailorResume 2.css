@@ -1,0 +1,20 @@
+
+.tailor-container{
+  padding: 5rem;
+  display: flex;     /* Keeps it in place while scrolling */
+  flex-direction: column; 
+  align-items: center;
+}
+.uploadpdf-box{
+    border: 0.2rem dotted #b7c6cb;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    width: 40vw;
+    height: 25vh;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+.uploadpdf-box:hover{
+    border: 0.2rem dotted #4d727e;
+
+}
