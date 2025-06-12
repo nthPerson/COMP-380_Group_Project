@@ -5,11 +5,17 @@ import { auth } from "../firebase";
 
 // Get all PDFs for the current user
 export const listUserPdfs = async () => {
-    const idToken = await auth.currentUser.getIdToken();
+    const idToken = await auth.currentUser.getIdToken(); 
+    console.log("DEBUG: User ID Token in listUserPdfs:\n");
+    console.log(idToken);
     const res = await fetch("http://localhost:5001/api/list_pdfs", {  // Calls the backend API
     headers: { Authorization: `Bearer ${idToken}` },
   });
-    if (!res.ok) throw new Error("Failed to fetch PDF list");
+    // if (!res.ok) throw new Error("Failed to fetch PDF list");
+    if (!res.ok) {
+        console.log("DEBUG: listUserPdfs failed...");
+        throw new Error("Failed to fetch PDF list");
+    }
     return await res.json();
 };
 
@@ -49,7 +55,11 @@ export const getMasterPdf = async () => {
     const res = await fetch("http://localhost:5001/api/get_master_pdf", {
         headers: { Authorization: `Bearer ${idToken}` },
     });
-    if (!res.ok) throw new Error("Failed to get master resume");
+    // if (!res.ok) throw new Error("Failed to get master resume");
+    if (!res.ok) {
+        console.log("DEBUG: getMasterPdf failed....");
+        throw new Error("Failed to get master resume");
+    }
     return await res.json(); // should return { master_docId: ... }
 };
 
