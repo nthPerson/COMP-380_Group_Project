@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { usePdf } from "../PdfContext";
 import { extractResumeSkills } from "../../services/resumeService";
 
@@ -32,10 +32,10 @@ export default function SkillHighlighter({ jobSkills }) {
   //       setLoadingResume(false);
   // };
 
-  // Auto-run resume skill extraction when the master resume is set by the user
-  useEffect(() => {
-    if (masterDocID) loadResumeSkills();
-  }, [masterDocID, loadResumeSkills]);
+  // // Auto-run resume skill extraction when the master resume is set by the user
+  // useEffect(() => {
+  //   if (masterDocID) loadResumeSkills();
+  // }, [masterDocID, loadResumeSkills]);
 
   return (
     <div style={{ margin: "20px 0", padding: "10px", border: "1px solid #ddd" }}>
