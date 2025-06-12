@@ -69,3 +69,18 @@ export const extractResumeSkills = async (docID) => {
     const data = await res.json();
     return data.skills;  // Array of extracted skills
 };
+
+export const extractResumeSkillsLLM = async (docID) => {
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch("http://localhost:5001/api/extract_resume_skills_llm", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ docID }),
+  });
+  if (!res.ok) throw new Error("LLM resume skill extraction failed");
+  const data = await res.json();
+  return data.skills;
+};

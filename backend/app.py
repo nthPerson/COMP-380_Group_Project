@@ -5,7 +5,7 @@ from firebase_config import db
 from verify_token import verify_firebase_token 
 from jd_utils import handle_jd_text, handle_jd_from_url
 from pdf_utils import upload_user_pdf, list_user_pdfs, delete_user_pdf, set_master_pdf, get_master_pdf
-from resume_utils import extract_skills_from_pdf
+from resume_utils import extract_skills_from_pdf, extract_skills_from_pdf_llm
 
 
 app = Flask(__name__) 
@@ -53,11 +53,17 @@ def api_set_master_pdf():
 def api_get_master_pdf():
     return get_master_pdf()
 
-# Extract skills from master PDf
+# Extract skills from master PDf using local NLP
 @app.route("/api/extract_resume_skills", methods=["POST"])
 @verify_firebase_token
 def api_extract_resume_skills():
     return extract_skills_from_pdf()
+
+# Extract skills from master pdf using OpenAI API
+@app.route("/api/extract_resume_skills_llm", methods=["POST"])
+@verify_firebase_token
+def api_extract_resume_skills_llm():
+    return extract_skills_from_pdf_llm()
 
 #  start the server
 if __name__ == "__main__":
