@@ -24,18 +24,6 @@ export default function JdFromText({ user, onExplanationReceived }) {
     } finally {
       setIsLoading(false);
     }
-
-    // try {
-    //   const res = await sendJobDescription(jdText, idToken);
-    //   const explanation = res.explanation || "No explanation returned";
-    //   onExplanationReceived(explanation); // Pass explanation back to parent
-    //   setJdText(""); // Clear the text area after successful submission
-    // } catch (err) {
-    //   console.log("Error sending JD", err);
-    //   alert("Error processing job description. Please try again.");
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
 
   return (

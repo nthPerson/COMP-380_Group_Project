@@ -60,20 +60,46 @@ def _download_pdf_as_text(user_id: str, doc_id: str) -> str:
 
 # Extract skills using OpenAI api and output as JSON array
 def llm_extract_skills(text: str) -> list[str]:
-    # Call GPT-4o-mini with a constrained JSON-array schema (makes LLM output structured data)
-    response = openai.chat.completions.create(
+    # Call GPT-4o-mini with a constrained JSON-array schema (makes LLM output structured data)    
+    prompt = (  # Just like any other promopt we would give to ChatGPT 
+    "Extract all job-related skills, technologies, or domain-specific phrases that *literally appear* in the following text. "
+    "Return a JSON object with a single field 'skills' containing an array of strings. "
+    "Example: {\"skills\": [\"Python\", \"Data Analysis\", \"Machine Learning\"]}\n\n"
+    f"Text:\n{text}"
+    )
+
+    schema = {  # What we want the shape of the data to be in the response
+    "type": "object",
+    "properties": {
+        "skills": {
+            "type": "array",
+            "items": {"type": "string"}
+        }
+    },
+    "required": ["skills"],
+    "additionalProperties": False
+    }
+
+
+    response = openai.chat.completions.create(  # How we set what kind of GPT model we want to use and how it should respond
         model="gpt-4o-mini",
         messages=[
-            {"role":"system","content":"You are a resume-parsing service."},
-            {"role":"user","content":
-             "Extract up to 30 unique skills, technologies, or domain-specific phrases "
-             "that *literally appear* in the text below. Preserve the original casing. "
-             "Return a JSON array only.\n\nTEXT:\n\"\"\"\n" + text + "\n\"\"\""}
-        ],
-        response_format={"type": "json_array"}
+            {"role": "system", "content": "You are a resume-parsing service."},
+            {"role": "user", "content": prompt}],
+            response_format={
+                "type": "json_schema", 
+                "json_schema": {
+                    "name": "skills",
+                    "schema": schema
+                }
+            },
+            max_tokens=512,
+            temperature=0
     )
     
-    return json.loads(response.choices[0].message.content)
+    api_response = json.loads(response.choices[0].message.content)  # Not actually sure why we have to specify the first element of the response (maybe it returns multiple options?)
+
+    return api_response["skills"]
 
 
 # Flask endopoint used in our app's API

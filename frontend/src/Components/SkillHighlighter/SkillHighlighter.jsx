@@ -9,18 +9,18 @@ export default function SkillHighlighter({ jobSkills }) {
     const [useLLM, setUseLLM] = useState(false);
 
   // Handler to fetch resume skills on demand
-      const loadResumeSkills = useCallback(async () => {
-        if (!masterDocID) return;
-        setLoadingResume(true);
-        try {
-            const skills = useLLM
-              ? await extractResumeSkillsLLM(masterDocID)
-              : await extractResumeSkills(masterDocID);
-            setResumeSkills(skills);
-        } catch {
-            setResumeSkills([]);
-        }
-        setLoadingResume(false);
+    const loadResumeSkills = useCallback(async () => {
+      if (!masterDocID) return;
+      setLoadingResume(true);
+      try {
+          const skills = useLLM
+            ? await extractResumeSkillsLLM(masterDocID)
+            : await extractResumeSkills(masterDocID);
+          setResumeSkills(skills);
+      } catch {
+          setResumeSkills([]);
+      }
+      setLoadingResume(false);
     }, [masterDocID, useLLM]);
     // const loadResumeSkills = useCallback(async () => {
     //     if (!masterDocID) return;
