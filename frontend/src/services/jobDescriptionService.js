@@ -83,7 +83,10 @@ export async function explainJdText(jdText, idToken) {
 export async function explainJdUrl(url, idToken) {
   const res = await fetch("http://localhost:5001/api/jd_from_url", {
     method: "POST",
-    headers: { /*…*/ },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${idToken}`
+     },
     body: JSON.stringify({ url })
   });
   if (!res.ok) throw new Error(await res.text());
@@ -108,7 +111,10 @@ export async function extractJdSkillsUrl(url, idToken, useLLM) {
   const path = useLLM ? "jd_skills_url_llm" : "jd_skills_url";
   const res = await fetch(`http://localhost:5001/api/${path}`, {
     method: "POST",
-    headers: { /*…*/ },
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${idToken}`
+    },
     body: JSON.stringify({ url })
   });
   if (!res.ok) throw new Error(await res.text());
