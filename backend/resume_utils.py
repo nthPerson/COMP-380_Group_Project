@@ -93,16 +93,16 @@ def llm_extract_skills(text: str) -> list[str]:
                     "schema": schema
                 }
             },
-            max_tokens=512,
-            temperature=0
+            max_tokens=512,  # How we limit the size of the response (to save the $)
+            temperature=0  # How creative we want the model to be (0 = not creative, 100 = max creativity)
     )
     
     api_response = json.loads(response.choices[0].message.content)  # Not actually sure why we have to specify the first element of the response (maybe it returns multiple options?)
 
-    return api_response["skills"]
+    return api_response["skills"]  # Select the "skills" list that is returned by the OpenAI API and return it to the calling function
 
 
-# Flask endopoint used in our app's API
+# Extract skills from a PDF using llm_extract_skills() (Flask endpoint)
 def extract_skills_from_pdf_llm():
     doc_id = request.json.get("docID")
     if not doc_id:

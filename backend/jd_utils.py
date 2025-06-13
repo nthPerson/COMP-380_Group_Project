@@ -27,23 +27,6 @@ def handle_jd_text(jd_text: str) -> Tuple:
         "explanation": explanation,
     }), 200
 
-# def handle_jd_text(jd_text: str) -> Tuple:
-#     # Generate explanation
-#     try:
-#         explanation = explain_jd_with_gemini(jd_text)
-#     except Exception as e:
-#         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
-    
-#     # Extract skills from job description
-#     skills = extract_skills(jd_text)
-
-#     # Return the explantion and the extracted skills
-#     return jsonify({
-#         "message": "JD processed from plain text",
-#         "job_description": jd_text,
-#         "explanation": explanation,
-#         "skills": skills
-#     }), 200
 
 def handle_jd_from_url(url: str) -> Tuple:
     # Scrape job description
@@ -63,27 +46,6 @@ def handle_jd_from_url(url: str) -> Tuple:
         "explanation": explanation,
     }), 200
 
-# def handle_jd_from_url(url: str) -> Tuple:
-#     # Scrape job description
-#     jd_text = scrape(url)
-#     if not jd_text:
-#         return jsonify({"error": "Failed to fetch JD from URL"}), 400
-    
-#     # Generate explanation
-#     try:
-#         explanation = explain_jd_with_url(jd_text)
-#     except Exception as e:
-#         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
-    
-#     # Extract skills from job description
-#     skills = extract_skills(jd_text)
-
-#     return jsonify({
-#         "message": "JD processed from URL",
-#         "job_description": jd_text,
-#         "explanation": explanation,
-#         "skills": skills
-#     }), 200
 
 # Local NLP skill extraction on free text JD
 def extract_skills_from_jd_text(jd_text: str):

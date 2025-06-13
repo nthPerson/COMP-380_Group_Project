@@ -85,25 +85,29 @@ def api_extract_resume_skills_llm():
 @app.route("/api/jd_skills_text", methods=["POST"])
 @verify_firebase_token
 def api_jd_skills_text():
-    return extract_skills_from_jd_text(request.get_json().get("jd", ""))
+    jd = request.get_json().get("jd", "")
+    return extract_skills_from_jd_text(jd)
 
 # Extract skills from JD URL
 @app.route("/api/jd_skills_url", methods=["POST"])
 @verify_firebase_token
 def api_jd_skills_url():
-    return extract_skills_from_jd_url(request.get_json().get("url", ""))
+    url = request.get_json().get("url", "")
+    return extract_skills_from_jd_url(url)
 
 # Extract skills from JD text using LLM (OpenAI API)
 @app.route("/api/jd_skills_text_llm", methods=["POST"])
 @verify_firebase_token
 def api_jd_skills_text_llm():
-    return extract_skills_from_jd_text_llm(request.get_json().get("jd", ""))
+    jd = request.get_json().get("jd", "")
+    return extract_skills_from_jd_text_llm(jd)
 
 # Extract skills from JD URL using LLM (OpenAI API)
 @app.route("/api/jd_skills_url_llm", methods=["POST"])
 @verify_firebase_token
 def api_jd_skills_url_llm():
-    return extract_skills_from_jd_url_llm(request.get_json().get("url", ""))
+    url = request.get_json().get("url", "")
+    return extract_skills_from_jd_url_llm(url)
 
 #  start the server
 if __name__ == "__main__":

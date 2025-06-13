@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 // import { sendJobDescription } from "../../services/jobDescriptionService";
-
 import {
   explainJdText,
   extractJdSkillsText
 } from "../../services/jobDescriptionService";
+
 
 export default function JdFromText({ user, onExplanationReceived }) {
   const [jdText, setJdText] = useState("");
