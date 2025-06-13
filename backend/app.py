@@ -3,21 +3,37 @@ from flask_cors import CORS
 
 from firebase_config import db 
 from verify_token import verify_firebase_token 
-from jd_utils import handle_jd_text, handle_jd_from_url
-from pdf_utils import upload_user_pdf, list_user_pdfs, delete_user_pdf, set_master_pdf, get_master_pdf
-from resume_utils import extract_skills_from_pdf, extract_skills_from_pdf_llm
+from jd_utils import (
+    handle_jd_text, 
+    handle_jd_from_url,
+    extract_skills_from_jd_text,
+    extract_skills_from_jd_url,
+    extract_skills_from_jd_text_llm,
+    extract_skills_from_jd_url_llm
+)
+from pdf_utils import (
+    upload_user_pdf, 
+    list_user_pdfs, 
+    delete_user_pdf, 
+    set_master_pdf, 
+    get_master_pdf
+)
+from resume_utils import (
+    extract_skills_from_pdf, 
+    extract_skills_from_pdf_llm
+)
 
 
 app = Flask(__name__) 
 CORS(app)
 
-# Get Gemini explanation from text and extract skills
+# Get Gemini explanation from text
 @app.route("/api/jd", methods =["POST"])
 @verify_firebase_token
 def receive_jd():
     return handle_jd_text(request.get_json().get("jd", ""))
 
-# Get Gemini explanation from URL and extract skills
+# Get Gemini explanation from URL
 @app.route("/api/jd_from_url", methods=["POST"])
 @verify_firebase_token
 def receive_jd_url():
@@ -59,11 +75,35 @@ def api_get_master_pdf():
 def api_extract_resume_skills():
     return extract_skills_from_pdf()
 
-# Extract skills from master pdf using OpenAI API
+# Extract skills from master pdf using LLM (OpenAI API)
 @app.route("/api/extract_resume_skills_llm", methods=["POST"])
 @verify_firebase_token
 def api_extract_resume_skills_llm():
     return extract_skills_from_pdf_llm()
+
+# Extract skills from JD text
+@app.route("/api/jd_skills_text", methods=["POST"])
+@verify_firebase_token
+def api_jd_skills_text():
+    return extract_skills_from_jd_text(request.get_json().get("jd", ""))
+
+# Extract skills from JD URL
+@app.route("/api/jd_skills_url", methods=["POST"])
+@verify_firebase_token
+def api_jd_skills_url():
+    return extract_skills_from_jd_url(request.get_json().get("url", ""))
+
+# Extract skills from JD text using LLM (OpenAI API)
+@app.route("/api/jd_skills_text_llm", methods=["POST"])
+@verify_firebase_token
+def api_jd_skills_text_llm():
+    return extract_skills_from_jd_text_llm(request.get_json().get("jd", ""))
+
+# Extract skills from JD URL using LLM (OpenAI API)
+@app.route("/api/jd_skills_url_llm", methods=["POST"])
+@verify_firebase_token
+def api_jd_skills_url_llm():
+    return extract_skills_from_jd_url_llm(request.get_json().get("url", ""))
 
 #  start the server
 if __name__ == "__main__":
