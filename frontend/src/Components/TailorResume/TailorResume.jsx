@@ -1,7 +1,8 @@
-// src/Components/Homepage/Homepage.jsx
 
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
+import { AiOutlineCheckCircle, AiOutlineCloudUpload } from "react-icons/ai";
+import { MdClear } from "react-icons/md";
 import { auth } from "../../firebase";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -21,10 +22,10 @@ import UploadPdf from "../UploadPdf/UploadPdf";
 // Import Resume Library and PDF manipulation functionality (view, delete, set master)
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 
-import "./Homepage.css";
+import "./TailorResume.css";
 import "../Sidebar/Sidebar.css";
 
-export default function Homepage() {
+export default function TailorResume() {
   // local state to store the current Firebase user
   const [user, setUser] = useState(null);
   // used for gemini explanation
@@ -55,20 +56,15 @@ export default function Homepage() {
 
   return (
     <>
-      <div className="homepage-container">
+      <div className="tailor-container">
         {user ? (
           <>
             <div>
             {user && <Sidebar user={user} />}
             </div>
-            {/* ─── MAIN CONTENT ─── */}
-
-            <h1>Welcome, {user.displayName || "User"}!</h1>
-            <p>You are now logged in and on the Home page.</p>
-            <p>Email: {user.email}</p>
-
-            <UploadPdf />  
-            <ResumeLibrary />
+            <div className="uploadpdf-box"><UploadPdf /></div>
+            
+            <div><ResumeLibrary /></div>
 
             <JdFromUrl 
               user={user} 

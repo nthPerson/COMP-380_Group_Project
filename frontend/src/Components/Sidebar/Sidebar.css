@@ -1,0 +1,106 @@
+
+.sidebar {
+  position: fixed;
+  display: flex;     /* Keeps it in place while scrolling */
+  flex-direction: column; 
+  align-items: center;
+  top: 0;             
+  left: 0;         
+  height: 100vh;       /* Full viewport height */
+  width: 12rem;        
+  background:#e6f3ff;    /* Sidebar color */
+  color: #050404;
+  padding-top: 20px;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  z-index: 1002;
+  transition: width 0.3s;
+}
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* keeps icon and text together, centered */
+  gap: 0.75rem;            /* space between icon and text */
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style-type: none; /* Removes bullets */
+  padding-left: 0; 
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  margin: 8rem 0;
+  text-align: center;
+   
+}
+.sidebar ul li a{
+  text-decoration: none;
+  color: #5a6c7d;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s, background 0.2s;
+}
+@media (max-width: 800px) {
+  .sidebar {
+    width: 70vw;            /* Sidebar gets narrower */
+    min-width: 120px;
+    padding-top: 12px;
+  }
+  .sidebar ul {
+    gap: 2rem;
+    margin: 3.5rem 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .sidebar {
+    position: static;      
+    width: 100vw;           /* Take full width on small screens */
+    height: auto;           /* Don't force full viewport height */
+    box-shadow: none;
+    padding-top: 0.5rem;
+  }
+  .sidebar ul {
+    flex-direction: row;    /* Stack links horizontally */
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+    justify-content: center;
+  }
+}
+.profile-link img {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: 0.5rem; /* space between icon and text */
+}
+.profile-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+.tailor-link img{
+  width:1.8rem;
+  height: 1.8rem;
+  margin-bottom: 0.5rem; /* space between icon and text */
+}
+.tailor-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+.archive-link img{
+  width:1.8rem;
+  height: 1.8rem;
+  margin-bottom: 0.5rem; /* space between icon and text */
+}
+.archive-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
