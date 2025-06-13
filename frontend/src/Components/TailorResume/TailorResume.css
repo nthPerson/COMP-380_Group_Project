@@ -5,12 +5,24 @@
   flex-direction: column; 
   align-items: center;
 }
+.outsidepdf-box{
+  border: 0.2rem solid #b7c6cb;
+  border-radius: 0.5rem;
+  width: 40vw;
+  height: 45vh;
+  
+}
+.outsidepdf-box title {
+  align-items: center;
+}
 .uploadpdf-box{
     border: 0.2rem dotted #b7c6cb;
     border-radius: 0.5rem;
-    padding: 1.5rem;
-    width: 40vw;
-    height: 25vh;
+    margin-top: 4rem;
+    margin-left: 2rem ;
+    padding: 0 0 0 0;
+    width: 35vw;
+    height: 30vh;
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
 }

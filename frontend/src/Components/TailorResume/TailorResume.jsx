@@ -62,7 +62,10 @@ export default function TailorResume() {
             <div>
             {user && <Sidebar user={user} />}
             </div>
-            <div className="uploadpdf-box"><UploadPdf /></div>
+
+            <div className="outsidepdf-box"> Upload Resume
+              <div className="uploadpdf-box"><UploadPdf /></div>
+            </div>
             
             <div><ResumeLibrary /></div>
 
