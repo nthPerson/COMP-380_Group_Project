@@ -57,7 +57,7 @@
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem 1.2rem;
-  border-radius: 15px;
+  border-radius: 1rem;
   transition: background-color 0.2s, box-shadow 0.22s;
   box-shadow: none;
 
@@ -72,8 +72,8 @@
   position: fixed;
   width: 100%;
   height: 0.1rem;
-  background-color: #6fd0df;
-  top: 3.4rem;   
+  background-color: #91c0f2;
+  top: 3.9rem;   
   left: 0;
   z-index: 1001;
   margin: 0;
@@ -209,12 +209,11 @@
 }
 .vertical-connector {
   position: absolute;
-  right: 215px;      
-  top: -318px;         /* lines up with button bottom */
-  width: 10px;         /* Thin vertical line */
-  height: 350px;       /* How far down to reach the timeline line*/
+  right: 13.43rem;      
+  top: -21.6rem;         /* lines up with button bottom */
+  width: 0.64rem;         /* Thin vertical line */
+  height: 24rem;       /* How far down to reach the timeline line*/
   background: #c3d0e8;
-  border-radius: 4px;
   z-index: 10;
 }
 .how-it-works-title {
