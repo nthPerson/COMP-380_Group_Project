@@ -6,6 +6,7 @@ from flask import jsonify
 from typing import Tuple
 
 from skill_utils import extract_skills
+from resume_utils import llm_extract_skills  # reuse resume text skill extraction function for jd text extraction
 
 def scrape_jd(url:str)-> Optional[str]:
     """Scrape the web for the JD using Link"""
@@ -18,17 +19,31 @@ def handle_jd_text(jd_text: str) -> Tuple:
         explanation = explain_jd_with_gemini(jd_text)
     except Exception as e:
         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
-    
-    # Extract skills from job description
-    skills = extract_skills(jd_text)
 
     # Return the explantion and the extracted skills
     return jsonify({
         "message": "JD processed from plain text",
         "job_description": jd_text,
         "explanation": explanation,
-        "skills": skills
     }), 200
+
+# def handle_jd_text(jd_text: str) -> Tuple:
+#     # Generate explanation
+#     try:
+#         explanation = explain_jd_with_gemini(jd_text)
+#     except Exception as e:
+#         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
+    
+#     # Extract skills from job description
+#     skills = extract_skills(jd_text)
+
+#     # Return the explantion and the extracted skills
+#     return jsonify({
+#         "message": "JD processed from plain text",
+#         "job_description": jd_text,
+#         "explanation": explanation,
+#         "skills": skills
+#     }), 200
 
 def handle_jd_from_url(url: str) -> Tuple:
     # Scrape job description
@@ -41,16 +56,77 @@ def handle_jd_from_url(url: str) -> Tuple:
         explanation = explain_jd_with_url(jd_text)
     except Exception as e:
         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
-    
-    # Extract skills from job description
-    skills = extract_skills(jd_text)
 
     return jsonify({
         "message": "JD processed from URL",
         "job_description": jd_text,
         "explanation": explanation,
-        "skills": skills
     }), 200
+
+# def handle_jd_from_url(url: str) -> Tuple:
+#     # Scrape job description
+#     jd_text = scrape(url)
+#     if not jd_text:
+#         return jsonify({"error": "Failed to fetch JD from URL"}), 400
+    
+#     # Generate explanation
+#     try:
+#         explanation = explain_jd_with_url(jd_text)
+#     except Exception as e:
+#         return jsonify({"error": f"Gemini failed: {str(e)}"}), 500
+    
+#     # Extract skills from job description
+#     skills = extract_skills(jd_text)
+
+#     return jsonify({
+#         "message": "JD processed from URL",
+#         "job_description": jd_text,
+#         "explanation": explanation,
+#         "skills": skills
+#     }), 200
+
+# Local NLP skill extraction on free text JD
+def extract_skills_from_jd_text(jd_text: str):
+    try:
+        skills = extract_skills(jd_text)
+        return jsonify({"skills": skills}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to extract skills from JD text: {e}"}), 501
+    
+
+# Local NLP skill extraction on URL JD
+def extract_skills_from_jd_url(url: str):
+    jd_text = scrape_jd(url)
+    if not jd_text:
+        return jsonify({"error": "Failed to fetch JD from URL"}), 400
+    try:
+        skills = extract_skills(jd_text)
+        return jsonify({"skills": skills}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to extract skills from JD URL: {e}"}), 501
+    
+
+# LLM API skill extraction from free text
+def extract_skills_from_jd_text_llm(jd_text: str):
+    try:
+        skills = llm_extract_skills(jd_text)
+        return jsonify({"skills": skills}), 200
+    except Exception as e:
+        return jsonify({"error": f"LLM skill extraction failed: {e}"}), 501
+    
+
+# LLM API skill extraction after scraping JD URL
+def extract_skills_from_jd_url_llm(url: str):
+    jd_text = scrape_jd(url)
+    if not jd_text:
+        return jsonify({"error": "Failed to fetch JD from URL"}), 400
+    try:
+        skills = llm_extract_skills(jd_text)
+        return jsonify({"skills": skills}), 200
+    except Exception as e:
+        return jsonify({"error": f"LLM skill extraction failed: {e}"}), 501
+
+
 
 #--------------------------------- Tests ----------------------------------------
 # from JobDescriptionScraper import JobDescriptionScraper
