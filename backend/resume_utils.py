@@ -10,7 +10,8 @@ from firebase_config import db, bucket
 from skill_utils import extract_skills
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_PERSONAL_KEY")
+# openai.api_key = os.getenv("OPENAI_PERSONAL_KEY")
+openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
 
 # Extract skills using local NLP
 def extract_skills_from_pdf():
