@@ -3,34 +3,33 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
 // import { Link } from "react-router-dom";  // Not currently using
 import { useNavigate } from "react-router-dom";
-
 import { handleSignout } from "../../services/authHandlers";
-
-
 import JdFromUrl from "../JdForm/JdFromUrl";
 import JdFromText from "../JdForm/JdFromText";
-
 // Import the PDF upload logic from UploadPdf/UploadPdf.jsx
 import UploadPdf from "../UploadPdf/UploadPdf";  // Moved PDF upload logic to PdfContext.js, but UploadPdf.jsx uses PdfContext
-
 // Import Resume Library and PDF manipulation functionality (view, delete, set master)
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
-
-// Import SkillHighlighter (what we're currently using to test skill extraction behavior)
-import SkillHighlighter from "../SkillHighlighter/SkillHighlighter";
+// // Import SkillHighlighter (what we're currently using to test skill extraction behavior)
+// import SkillHighlighter from "../SkillHighlighter/SkillHighlighter";
+import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
+import { usePdf } from "../PdfContext";
 
 import "./Homepage.css";
 
 export default function Homepage() {
+  const navigate = useNavigate();
   // local state to store the current Firebase user
   const [user, setUser] = useState(null);
   // used for gemini explanation
   const [jdExplanation, setJdExplanation] = useState("");
-  // State for skill extraction
-  const [jdSkills, setJdSkills] = useState([]);
-
-  const navigate = useNavigate();
-
+  // Get masterDocID (identifier for master resume) from PdfContext
+  const { masterDocID } = usePdf();
+  
+  // State for JD and resume profile extraction (like skill extraction but all important stuff gets extracted instead of only skills)
+  const [jdContent, setJdContent] = useState("");
+  const [jdIsUrl, setJdIsUrl] = useState(false);
+  
   // Uses a listener to keep the user state in sync with Firebase
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -40,10 +39,11 @@ export default function Homepage() {
     return () => unsubscribe();
   }, []);
 
-  const handleExplanationReceived = (explanation, skills) => {
-    setJdExplanation(explanation);
-    setJdSkills(skills);
-  };
+  // const handleExplanationReceived = (explanation) => {
+  //   setJdExplanation(explanation);
+  //   // setJdSkills(skills);
+  //   // JdContent and jdIsUrl will be set in the child forms (aka the HTML returned below)
+  // };
 
   const handleSignOutOnClick = async () => {
     try {
@@ -69,7 +69,11 @@ export default function Homepage() {
 
             <JdFromUrl 
               user={user} 
-              onExplanationReceived={handleExplanationReceived} 
+              onExplanationReceived={(exp, rawText) => {
+                setJdExplanation(exp);
+                setJdContent(rawText);
+                setJdIsUrl(true);
+              }}
             />
 
             <div style={{ margin: '20px 0', textAlign: 'center' }}>
@@ -78,7 +82,11 @@ export default function Homepage() {
 
             <JdFromText 
               user={user} 
-              onExplanationReceived={handleExplanationReceived} 
+              onExplanationReceived={(exp, rawText) => {
+                setJdExplanation(exp);
+                setJdContent(rawText);
+                setJdIsUrl(false);
+              }}
             />
 
             {jdExplanation && (
@@ -91,7 +99,16 @@ export default function Homepage() {
               </>
             )}
 
-            <SkillHighlighter jobSkills={jdSkills} />
+            {/* Full-featured extractor (must first have both masterDocID and JD content) */}
+            { masterDocID && jdContent && (
+              <ProfileExtractor
+              masterDocID={masterDocID}
+              jdText={ jdIsUrl ? "" : jdContent }
+              jdUrl={ jdIsUrl ? jdContent : "" }
+              />
+            )}
+
+            {/* <SkillHighlighter jobSkills={jdSkills} /> */}
 
             <button onClick={handleSignOutOnClick}>Logout</button>
           </>
@@ -102,3 +119,14 @@ export default function Homepage() {
     </>
   );
 }
+
+// old JdFromUrl and JdFromText tags
+// <JdFromUrl 
+//   user={user} 
+//   onExplanationReceived={handleExplanationReceived} 
+// />
+
+// <JdFromText 
+//   user={user} 
+//   onExplanationReceived={handleExplanationReceived} 
+// />
