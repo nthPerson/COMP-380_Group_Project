@@ -43,7 +43,7 @@ export const setMasterPdf = async (docID) => {
     return await res.json();
 };
 
-// Need to implement a frontend function for the get_master_pdf function
+// Fetch user's master resume master_docID
 export const getMasterPdf = async () => {
     const idToken = await auth.currentUser.getIdToken();
     const res = await fetch("http://localhost:5001/api/get_master_pdf", {
@@ -53,27 +53,10 @@ export const getMasterPdf = async () => {
     return await res.json(); // should return { master_docId: ... }
 };
 
-// Extract skills from user's master resume (not yet implemented, 
-// but could be helpful in isolating scraping and skill extraction behavior)
-export const extractResumeSkills = async (docID) => {
-    const idToken = await auth.currentUser.getIdToken();
-    const res = await fetch("http://localhost:5001/api/extract_resume_skills", {
-        method: "POST",
-        headers: {
-        Authorization: `Bearer ${idToken}`,
-        "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ docID }),
-    });
-    if (!res.ok) throw new Error("Failed to extract resume skills");
-    const data = await res.json();
-    return data.skills;  // Array of extracted skills
-};
-
-// Extract skills from the user's resume using LLM API (OpenAI API)
-export const extractResumeSkillsLLM = async (docID) => {
+// Extract resume profile (skills, education, professional experience) from user's master resume (OpenAI API)
+export async function extractResumeProfileLLM(docID) {
   const idToken = await auth.currentUser.getIdToken();
-  const res = await fetch("http://localhost:5001/api/extract_resume_skills_llm", {
+  const res = await fetch("http://localhost:5001/api/extract_resume_profile_llm", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${idToken}`,
@@ -81,7 +64,6 @@ export const extractResumeSkillsLLM = async (docID) => {
     },
     body: JSON.stringify({ docID }),
   });
-  if (!res.ok) throw new Error("LLM resume skill extraction failed");
-  const data = await res.json();
-  return data.skills;
-};
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json();  // Returns JSON: { skills: [...], education: [...], experience: [...] }
+}

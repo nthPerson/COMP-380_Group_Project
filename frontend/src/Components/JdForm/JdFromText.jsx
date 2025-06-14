@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 // import { sendJobDescription } from "../../services/jobDescriptionService";
-import {
-  explainJdText,
-  extractJdSkillsText
-} from "../../services/jobDescriptionService";
+import { explainJdText } from "../../services/jobDescriptionService";
 
 
 export default function JdFromText({ user, onExplanationReceived }) {
@@ -21,18 +18,20 @@ export default function JdFromText({ user, onExplanationReceived }) {
     const idToken = await user.getIdToken();
 
     try {
+      // Now only fetch explanation and raw JD
+      const { explanation, job_description } = await explainJdText(jdText, idToken);
       // Just get the Gemini explanation (JD handling and keyword extraction behavior is separated now)
-      const { explanation } = await explainJdText(jdText, idToken); // Note: this was changed from sendJobDescription(jdText, idToken) to isolate JD handling and extraction behavior
+      // const { explanation } = await explainJdText(jdText, idToken); // Note: this was changed from sendJobDescription(jdText, idToken) to isolate JD handling and extraction behavior
 
       // Then extract the skills using toggle (Local NLP / LLM)
-      const skills = await extractJdSkillsText(jdText, idToken, useLLM);
+      // const skills = await extractJdSkillsText(jdText, idToken, useLLM);
 
-      // Send the explantion and extracted skills back to the Homepage
-      onExplanationReceived(explanation, skills); // Pass explanation and extracted skills back to parent
+      // Send the explantion and job description back to the Homepage
+      onExplanationReceived(explanation, job_description); // Pass explanation and extracted skills back to parent
 
       setJdText(""); // Clear the text area after successful submission
     } catch (err) {
-      console.log("Error sending JD or extracting keywords", err);
+      console.log("Error processing JD text", err);
       alert("Error processing job description. Please try again.");
     } finally {
       setIsLoading(false);

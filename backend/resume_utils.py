@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from verify_token import verify_firebase_token
 from firebase_config import db, bucket
 from skill_utils import extract_skills
+from llm_utils import llm_parse_text
 
 load_dotenv()
 # openai.api_key = os.getenv("OPENAI_PERSONAL_KEY")
@@ -59,62 +60,17 @@ def _download_pdf_as_text(user_id: str, doc_id: str) -> str:
     
     return text
 
-# Extract skills using OpenAI api and output as JSON array
-def llm_extract_skills(text: str) -> list[str]:
-    # Call GPT-4o-mini with a constrained JSON-array schema (makes LLM output structured data)    
-    prompt = (  # Just like any other promopt we would give to ChatGPT 
-    "Extract all job-related skills, technologies, or domain-specific phrases that *literally appear* in the following text. "
-    "Return a JSON object with a single field 'skills' containing an array of strings. "
-    "Example: {\"skills\": [\"Python\", \"Data Analysis\", \"Machine Learning\"]}\n\n"
-    f"Text:\n{text}"
-    )
 
-    schema = {  # What we want the shape of the data to be in the response
-    "type": "object",
-    "properties": {
-        "skills": {
-            "type": "array",
-            "items": {"type": "string"}
-        }
-    },
-    "required": ["skills"],
-    "additionalProperties": False
-    }
-
-
-    response = openai.chat.completions.create(  # How we set what kind of GPT model we want to use and how it should respond
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are a resume-parsing service."},
-            {"role": "user", "content": prompt}],
-            response_format={
-                "type": "json_schema", 
-                "json_schema": {
-                    "name": "skills",
-                    "schema": schema
-                }
-            },
-            max_tokens=512,  # How we limit the size of the response (to save the $)
-            temperature=0  # How creative we want the model to be (0 = not creative, 100 = max creativity)
-    )
-    
-    api_response = json.loads(response.choices[0].message.content)  # Not actually sure why we have to specify the first element of the response (maybe it returns multiple options?)
-
-    return api_response["skills"]  # Select the "skills" list that is returned by the OpenAI API and return it to the calling function
-
-
-# Extract skills from a PDF using llm_extract_skills() (Flask endpoint)
-def extract_skills_from_pdf_llm():
+# LLM (OpenAI API) resume parsing API endpoint
+def extract_resume_profile_llm():
     doc_id = request.json.get("docID")
     if not doc_id:
         return jsonify({"error":"Missing docID"}), 400
     
-    raw_text = _download_pdf_as_text(g.firebase_user["uid"], doc_id)
-    if not raw_text:
+    raw = _download_pdf_as_text(g.firebase_user["uid"], doc_id)
+    if not raw:
         return jsonify({"error":"Could not retrieve PDF"}), 404
     
-    skills = llm_extract_skills(raw_text)
-
-    return jsonify({"skills": skills}), 200
-
+    profile = llm_parse_text(text=raw, mode="resume")
+    return jsonify(profile), 200
 

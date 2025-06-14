@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 // import { sendJobDescriptionUrl } from "../../services/jobDescriptionService";
-import {
-  explainJdUrl,
-  extractJdSkillsUrl
-} from "../../services/jobDescriptionService";
+import { explainJdUrl } from "../../services/jobDescriptionService";
 
 
 export default function JdFromUrl({ user, onExplanationReceived }) {
@@ -21,14 +18,17 @@ export default function JdFromUrl({ user, onExplanationReceived }) {
     const idToken = await user.getIdToken();
 
     try {
+      // Fetch scraped JD and explanation
+      const { explanation, job_description } = await explainJdUrl(jdUrl, idToken);
+
       // Scrape URL and explain
-      const { explanation } = await explainJdUrl(jdUrl, idToken);  // Note: this was changed from sendJobDescriptionUrl to separate JD scrape and explanation behavior
+      // const { explanation } = await explainJdUrl(jdUrl, idToken);  // Note: this was changed from sendJobDescriptionUrl to separate JD scrape and explanation behavior
 
       // Then extract skills
-      const skills = await extractJdSkillsUrl(jdUrl, idToken, useLLM);
+      // const skills = await extractJdSkillsUrl(jdUrl, idToken, useLLM);
 
-      // Send the explantion and extracted skills back to the Homepage
-      onExplanationReceived(explanation, skills); // pass explanation and extracted skills back to parent
+      // Send the explantion and job description back to the Homepage
+      onExplanationReceived(explanation, job_description); // pass explanation and extracted skills back to parent
 
       // console.log("Scraped content:", res.jd_content);
       setJdUrl(""); // clear the URL input after successful submission

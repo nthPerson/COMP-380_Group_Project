@@ -1,3 +1,8 @@
+/*
+SOON TO BE DEPRECATED. BEING REPLACED BY ProfileExtractor.jsx
+*/
+
+
 import React, { useState, useCallback } from "react";
 import { usePdf } from "../PdfContext";
 import { extractResumeSkills, extractResumeSkillsLLM } from "../../services/resumeService";

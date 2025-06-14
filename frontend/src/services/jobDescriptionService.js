@@ -24,7 +24,6 @@ export async function sendJobDescription(jdText, idToken) {
       return { // API receive_jd() function returns a bunch of handy stuff (see below):
         job_description: responseData.job_description, // Job description text (might be helpful later when we display highlighted keywords)
         explanation: responseData.explanation,         // Gemini explanation of job description
-        skills: responseData.skills,                   // Skills extracted from job description
       };  
     } catch (err) {
 
@@ -58,7 +57,6 @@ export async function sendJobDescriptionUrl(url, idToken) {
     return { // API receive_jd() function returns a bunch of handy stuff (see below):
       job_description: responseData.job_description, // Job description text (might be helpful later when we display highlighted keywords)
       explanation: responseData.explanation,         // Gemini explanation of job description
-      skills: responseData.skills,                   // Skills extracted from job description
     };  
 
   } catch (err) {
@@ -93,9 +91,10 @@ export async function explainJdUrl(url, idToken) {
   return await res.json();
 }
 
-export async function extractJdSkillsText(jdText, idToken, useLLM) {
-  const path = useLLM ? "jd_skills_text_llm" : "jd_skills_text";
-  const res = await fetch(`http://localhost:5001/api/${path}`, {
+// Extract job description profile (required_skills, required_education, 
+// required_experience, responsibilities) from JD as text (OpenAI API)
+export async function extractJdProfileText(jdText, idToken, useLLM) {
+  const res = await fetch(`http://localhost:5001/api/jd_profile_text_llm`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -104,19 +103,20 @@ export async function extractJdSkillsText(jdText, idToken, useLLM) {
     body: JSON.stringify({ jd: jdText })
   });
   if (!res.ok) throw new Error(await res.text());
-  return (await res.json()).skills;
+  return await res.json(); // LLM text : { required_skills: [...], required_education: [...], ... }
 }
 
-export async function extractJdSkillsUrl(url, idToken, useLLM) {
-  const path = useLLM ? "jd_skills_url_llm" : "jd_skills_url";
-  const res = await fetch(`http://localhost:5001/api/${path}`, {
+// Extract job description profile (required_skills, required_education, 
+// required_experience, responsibilities) from JD as URL (OpenAI API)
+export async function extractJdProfileUrl(jdUrl, idToken, useLLM) {
+  const res = await fetch(`http://localhost:5001/api/jd_profile_url_llm`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${idToken}`
     },
-    body: JSON.stringify({ url })
+    body: JSON.stringify({ url: jdUrl })
   });
   if (!res.ok) throw new Error(await res.text());
-  return (await res.json()).skills;
+  return await res.json(); // LLM text : { required_skills: [...], required_education: [...], ... }
 }
