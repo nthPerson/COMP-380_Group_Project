@@ -69,6 +69,7 @@ def extract_skills_from_jd_url(url: str):
     
 
 # LLM (OpenAI API) job description text parsing API endpoint
+# DO NOT WANT TO USE THIS FUNCTION BECAUSE IT DUPLICATES THE URL SCRAPE OPERATION
 def extract_jd_profile_url_llm(url: str):
     jd = scrape(url)
     if not jd:

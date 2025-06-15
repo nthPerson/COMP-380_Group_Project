@@ -1,36 +1,26 @@
 import React, { useState } from "react";
 // import { sendJobDescriptionUrl } from "../../services/jobDescriptionService";
-import { explainJdUrl, extractJdProfileUrl } from "../../services/jobDescriptionService";
+// import { explainJdUrl, extractJdProfileUrl } from "../../services/jobDescriptionService";
+import { explainJdUrl } from "../../services/jobDescriptionService";
 
 
 export default function JdFromUrl({ user, onExplanationReceived }) {
   const [jdUrl, setJdUrl] = useState("");
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
-  const [useLLM, setUseLLM] = useState(false);
+  // const [useLLM, setUseLLM] = useState(false);
 
-  const handleSendJDUrl = async () => {
+    const handleSendJDUrl = async () => {
     if (!jdUrl.trim()) {
       alert("Please enter a valid URL");
       return;
     }
 
     setIsLoadingUrl(true);
-    const idToken = await user.getIdToken();
-
+    
     try {
-      // Fetch scraped JD and explanation
-      const { explanation, job_description } = await explainJdUrl(jdUrl, idToken);
-
-      // Scrape URL and explain
-      // const { explanation } = await explainJdUrl(jdUrl, idToken);  // Note: this was changed from sendJobDescriptionUrl to separate JD scrape and explanation behavior
-
-      // Then extract skills
-      // const skills = await extractJdSkillsUrl(jdUrl, idToken, useLLM);
-
-      // Send the explantion and job description back to the Homepage
+      const idToken = await user.getIdToken();      
+      const { explanation, job_description } = await explainJdUrl(jdUrl, idToken); // Fetch scraped JD and explanation
       onExplanationReceived(explanation, job_description); // pass explanation and extracted skills back to parent
-
-      // console.log("Scraped content:", res.jd_content);
       setJdUrl(""); // clear the URL input after successful submission
     } catch (err) {
       console.log("Error sending URL", err);
@@ -42,34 +32,18 @@ export default function JdFromUrl({ user, onExplanationReceived }) {
     }
   };
 
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSendJDUrl();
-      }}
-      className="jd-form"
-    >
+    return (
+    <form onSubmit={e => { e.preventDefault(); handleSendJDUrl(); }}>
       <h3>Enter Job Posting URL</h3>
-      <div style={{ display: "inline-block", marginRight: "10px" }}>
-        <label>
-          <input
-            type="checkbox"
-            checked={useLLM}
-            onChange={(e) => setUseLLM(e.target.checked)}
-          />{" "}
-          Use LLM extractor
-        </label>
-      </div>
       <input
         type="url"
         value={jdUrl}
-        onChange={(e) => setJdUrl(e.target.value)}
-        placeholder="https://example.com/job-posting"
-        style={{ width: "400px", padding: "8px", marginRight: "10px" }}
+        onChange={e => setJdUrl(e.target.value)}
+        placeholder="https://…"
+        style={{ width: 400, padding: 8, marginRight: 10 }}
       />
       <button type="submit" disabled={isLoadingUrl}>
-        {isLoadingUrl ? "Scraping..." : "Get JD from URL"}
+        {isLoadingUrl ? "Fetching…" : "Get JD from URL"}
       </button>
     </form>
   );
