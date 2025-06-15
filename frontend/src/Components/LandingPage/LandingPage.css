@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;700&display=swap');
+
+.light-blue {
+  color: #91c0f2; 
+}
+.solid-blue {
+  color: #4A90E2;
+}
+.site-banner {
+  position: fixed;     
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;        
+  background: transparent; 
+  transition: background 0.33s, box-shadow 0.28s;
+  box-shadow: none;
+}
+
+.site-banner.banner-active {
+  background: #fff;
+  box-shadow: 0 2px 16px rgba(20,32,64,0.10);
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+.banner-left {
+  display: flex;
+  align-items: center;
+}
+.banner-logo {
+  height: 2.5rem;         
+}
+.banner-title {
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  font-family: 'Fira Sans Condensed', sans-serif;
+  letter-spacing: 0.05rem;
+}
+.banner-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;            
+  padding: 0;
+}
+
+.banner-nav a {
+  color: #4A90E2;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1.2rem;
+  border-radius: 1rem;
+  transition: background-color 0.2s, box-shadow 0.22s;
+  box-shadow: none;
+
+}
+
+.banner-nav a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 18px 0 rgba(74, 144, 226, 0.18), 0 1.5px 8px 0 rgba(44, 61, 143, 0.08);
+}
+
+.top-line {
+  position: fixed;
+  width: 100%;
+  height: 0.1rem;
+  background-color: #91c0f2;
+  top: 3.9rem;   
+  left: 0;
+  z-index: 1001;
+  margin: 0;
+}
+.tagline-highlight {
+  color: #6fd0df;
+  font-weight: 700;
+}
+/* --- Main content section at top --- */
+.landing-main-content {
+  font-family: 'Fira Sans Condensed', sans-serif;
+  background: #f3f6fa;       
+  box-shadow: 0 8px 40px rgba(44, 61, 143, 0.11);
+  max-width: 1400px;
+  margin: 0px auto 0px auto;
+  padding: 10vw 2vw 6vw 2vw;
+  position: relative;
+
+}
+
+.hero-columns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.hero-right {
+  flex: 0 0 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+
+.hero-left {
+  flex: 1;
+  min-width: 260px;
+  max-width: 500px; 
+  display: flex;
+  justify-content: center;
+  
+}
+
+.resume-svg {
+  width: 400px;
+  height: 480px;
+  max-width: 95vw;
+  max-height: 70vh;
+  display: block;
+}
+@media (max-width: 900px) {
+  .hero-columns {
+    flex-direction: column-reverse;
+    gap: 24px;
+  }
+  .hero-right {
+    justify-content: flex-start;
+  }
+  .resume-svg {
+    width: 90vw;
+    height: auto;
+  
+  }
+}
+
+.timeline-row {
+  display: flex;
+  justify-content: flex-end;   
+  align-items: flex-start;
+  max-width: 1400px;       
+  margin: 0 auto;
+}
+
+.timeline-side {
+  position: relative;
+  width: 120px;       
+  min-width: 90px;
+  margin-left: 24px;
+}
+.timeline-line {
+  position: absolute;
+  left: -244px;       
+  width: 10px;
+  height: 100%;
+  background: #c3d0e8;
+  transform: translateX(-50%);
+  z-index: 0;
+
+}
+.timeline-step {
+  position: relative;
+  min-height: 120px;
+  margin-bottom: 80px;
+
+}
+.step-marker {
+  position: absolute;
+  left: -244px;               
+  top: 70px;             
+  transform: translate(-50%, 0);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #4A90E2;
+  color: #fff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(74,144,226,0.18);
+  z-index: 2;
+}
+.step-content {
+  position: relative;
+  margin-left: -900px;  
+  margin-right:400px;    /* Push card left so marker sits on right side */
+  background: #f3f6fa;
+  box-shadow: 0 2px 16px rgba(44,61,143,0.10);
+  border-radius: 16px;
+  padding: 32px 40px;
+  width: 480px;   
+  min-width: 320px;
+  min-height: 100px;
+  opacity: 1;
+  transition: opacity 0.3s;
+
+}
+.timeline-step:not(.active) .step-content {
+  pointer-events: none;
+}
+.vertical-connector {
+  position: absolute;
+  right: 13.43rem;      
+  top: -21.6rem;         /* lines up with button bottom */
+  width: 0.64rem;         /* Thin vertical line */
+  height: 24rem;       /* How far down to reach the timeline line*/
+  background: #c3d0e8;
+  z-index: 10;
+}
+.how-it-works-title {
+  width: 100%;
+  text-align: center;
+  margin: -40px 0 150px 0;
+}
+
+.how-it-works-title h2 {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #4A90E2;
+  letter-spacing: 1px;
+  margin-bottom: 100;
+  font-family: 'Fira Sans Condensed', sans-serif; 
+}
