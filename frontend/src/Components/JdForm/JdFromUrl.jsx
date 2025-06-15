@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // import { sendJobDescriptionUrl } from "../../services/jobDescriptionService";
-import { explainJdUrl } from "../../services/jobDescriptionService";
+import { explainJdUrl, extractJdProfileUrl } from "../../services/jobDescriptionService";
 
 
 export default function JdFromUrl({ user, onExplanationReceived }) {
