@@ -30,6 +30,10 @@ export default function TailorResume() {
   const [user, setUser] = useState(null);
   // used for gemini explanation
   const [jdExplanation, setJdExplanation] = useState("");
+
+  // State variables for the error handling
+  const [urlError, setUrlError] = useState("");
+  const [highlightTextInput, setHighlightTextInput] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,8 +44,30 @@ export default function TailorResume() {
     return () => unsubscribe();
   }, []);
 
-  const handleExplanationReceived = (explanation) => {
+  //if it works clean the error
+  const handleExplanationReceived = (explanation, skills) => {
     setJdExplanation(explanation);
+    // clear error if successful 
+    setUrlError("");
+    setHighlightTextInput(false);
+    // You can handle skills here if needed, or just ignore the parameter
+  };
+
+  // funciton for handling the errors 
+  const handleUrlError = (errorMessage) => {
+    setUrlError(errorMessage);
+    setHighlightTextInput(true);
+    setJdExplanation("");
+
+    // stop after 5 seconds 
+    setTimeout(() => {
+      setHighlightTextInput(false);
+    }, 5000); // 5000ms = 5 seconds
+  };
+
+  const handleTextInputFocus = () => {
+    setUrlError("");
+    setHighlightTextInput(false);
   };
 
   const handleSignOutOnClick = async () => {
@@ -71,17 +97,29 @@ export default function TailorResume() {
 
             <JdFromUrl 
               user={user} 
-              onExplanationReceived={handleExplanationReceived} 
+              onExplanationReceived={handleExplanationReceived}
+              onError={handleUrlError}
             />
+
+            
+            {urlError && (
+                <div className="url-error-message">
+              {urlError}
+              </div>
+            )}
 
             <div style={{ margin: '20px 0', textAlign: 'center' }}>
               <strong>--- OR ---</strong>
             </div>
 
+            <div className={highlightTextInput ? 'text-input-highlight' : ''}>
+
             <JdFromText 
               user={user} 
-              onExplanationReceived={handleExplanationReceived} 
+              onExplanationReceived={handleExplanationReceived}
+              onFocus={handleTextInputFocus}
             />
+            </div>
 
             {jdExplanation && (
               <div className="jd-explanation">

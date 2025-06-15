@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { sendJobDescriptionUrl } from "../../services/jobDescriptionService";
 
 
-export default function JdFromUrl({ user, onExplanationReceived }) {
+export default function JdFromUrl({ user, onExplanationReceived, onError }) {
+
   const [jdUrl, setJdUrl] = useState("");
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
 
@@ -21,10 +22,16 @@ export default function JdFromUrl({ user, onExplanationReceived }) {
       // console.log("Scraped content:", res.jd_content);
       setJdUrl(""); // clear the URL input after successful submission
     } catch (err) {
-      console.log("Error sending URL", err);
+    console.log("Error sending URL", err);
+    // Call the error handler passed from parent instead of alert
+    if (onError) {
+      onError("Failed to fetch job description from URL. Please try copying and pasting the text instead.");
+    } else {
+      // Fallback to alert 
       alert(
-        "Error scraping job description from URL. Please try copying and pasting the job description instead."
-      );
+      "Error scraping job description from URL. Please try copying and pasting the job description instead."
+    );
+    }
     } finally {
       setIsLoadingUrl(false);
     }
