@@ -1,53 +1,49 @@
 import React, { useState } from "react";
-import { sendJobDescriptionUrl } from "../../services/jobDescriptionService";
+// import { sendJobDescriptionUrl } from "../../services/jobDescriptionService";
+// import { explainJdUrl, extractJdProfileUrl } from "../../services/jobDescriptionService";
+import { explainJdUrl } from "../../services/jobDescriptionService";
 
 
 export default function JdFromUrl({ user, onExplanationReceived }) {
   const [jdUrl, setJdUrl] = useState("");
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
+  // const [useLLM, setUseLLM] = useState(false);
 
-  const handleSendJDUrl = async () => {
+    const handleSendJDUrl = async () => {
     if (!jdUrl.trim()) {
       alert("Please enter a valid URL");
       return;
     }
 
-    const idToken = await user.getIdToken();
     setIsLoadingUrl(true);
-
+    
     try {
-      const { explanation, skills } = await sendJobDescriptionUrl(jdUrl, idToken);
-      onExplanationReceived(explanation, skills); // pass explanation and extracted skills back to parent
-      // console.log("Scraped content:", res.jd_content);
+      const idToken = await user.getIdToken();      
+      const { explanation, job_description } = await explainJdUrl(jdUrl, idToken); // Fetch scraped JD and explanation
+      onExplanationReceived(explanation, job_description); // pass explanation and extracted skills back to parent
       setJdUrl(""); // clear the URL input after successful submission
     } catch (err) {
       console.log("Error sending URL", err);
       alert(
-        "Error scraping job description from URL. Please try copying and pasting the job description instead."
+        "Error fetching or processing the job description. Please try to copy/paste the job description instead."
       );
     } finally {
       setIsLoadingUrl(false);
     }
   };
 
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSendJDUrl();
-      }}
-      className="jd-form"
-    >
+    return (
+    <form onSubmit={e => { e.preventDefault(); handleSendJDUrl(); }}>
       <h3>Enter Job Posting URL</h3>
       <input
         type="url"
         value={jdUrl}
-        onChange={(e) => setJdUrl(e.target.value)}
-        placeholder="https://example.com/job-posting"
-        style={{ width: "400px", padding: "8px", marginRight: "10px" }}
+        onChange={e => setJdUrl(e.target.value)}
+        placeholder="https://…"
+        style={{ width: 400, padding: 8, marginRight: 10 }}
       />
       <button type="submit" disabled={isLoadingUrl}>
-        {isLoadingUrl ? "Scraping..." : "Get JD from URL"}
+        {isLoadingUrl ? "Fetching…" : "Get JD from URL"}
       </button>
     </form>
   );
