@@ -18,21 +18,62 @@ def llm_parse_text(text: str, mode: str) -> dict:
         system = "You are a resume analysis service."
         user = (
             "Extract from this resume:\n"
-            "  • skills\n"
-            "  • education (degrees, institutions, years)\n"
-            "  • professional experience (job titles, companies, dates)\n"
+            "  • skills (as an array of strings)\n"
+            "  • education (as an array of objects with fields 'degree', 'institution', and 'year')\n"
+            "  • professional experience (as an array of objects with fields 'job_title', 'company', and 'dates')\n"
             "Return a JSON object with exactly these fields."
         )
+        # user = (
+        #     "Extract from this resume:\n"
+        #     "  • skills\n"
+        #     "  • education (degrees, institutions, years)\n"
+        #     "  • professional experience (job titles, companies, dates)\n"
+        #     "Return a JSON object with exactly these fields."
+        # )
         schema = {
             "type": "object",
             "properties": {
                 "skills": {"type": "array", "items": {"type": "string"}},
-                "education": {"type": "array", "items": {"type": "string"}},
-                "experience": {"type": "array", "items": {"type": "string"}},
+                "education": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "degree": {"type": "string"},
+                            "institution": {"type": "string"},
+                            "year": {"type": "string"}
+                        },
+                        "required": ["degree", "institution", "year"],
+                        "additionalProperties": False
+                    }
+                },
+                "experience": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "job_title": {"type": "string"},
+                            "company": {"type": "string"},
+                            "dates": {"type": "string"}
+                        },
+                        "required": ["job_title", "company", "dates"],
+                        "additionalProperties": False
+                    }
+                },
             },
             "required": ["skills", "education", "experience"],
             "additionalProperties": False
         }
+        # schema = {
+        #     "type": "object",
+        #     "properties": {
+        #         "skills": {"type": "array", "items": {"type": "string"}},
+        #         "education": {"type": "array", "items": {"type": "string"}},
+        #         "experience": {"type": "array", "items": {"type": "string"}},
+        #     },
+        #     "required": ["skills", "education", "experience"],
+        #     "additionalProperties": False
+        # }
         name = "ResumeProfile"
 
     # OpenAI prompt details for parsing job descriptions

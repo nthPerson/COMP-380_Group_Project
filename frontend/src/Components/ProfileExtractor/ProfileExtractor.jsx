@@ -14,13 +14,21 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
 
   // Fetch the resume profile (skills, education, professional experience) from master resume
   useEffect(() => {
-    if (!masterDocID) return;
+    if (!masterDocID || !jdText) return;
     setLoading(l => ({ ...l, resume: true }));
     extractResumeProfileLLM(masterDocID)
         .then(profile => setResumeProfile(profile))
         .catch(err => setError(err.toString()))
         .finally(() => setLoading(l => ({ ...l, resume: false })));
-  }, [masterDocID]);
+  }, [masterDocID, jdText]);
+  // useEffect(() => {
+  //   if (!masterDocID) return;
+  //   setLoading(l => ({ ...l, resume: true }));
+  //   extractResumeProfileLLM(masterDocID)
+  //       .then(profile => setResumeProfile(profile))
+  //       .catch(err => setError(err.toString()))
+  //       .finally(() => setLoading(l => ({ ...l, resume: false })));
+  // }, [masterDocID]);
 
     // Fetch the job description profile via the text-LLM extractor only
   useEffect(() => {
