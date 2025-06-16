@@ -1,23 +1,34 @@
-from flask import Flask, jsonify, request, g
+from flask import Flask, request
 from flask_cors import CORS 
 
-from firebase_config import db 
 from verify_token import verify_firebase_token 
-from jd_utils import handle_jd_text, handle_jd_from_url
-from pdf_utils import upload_user_pdf, list_user_pdfs, delete_user_pdf, set_master_pdf, get_master_pdf
-from resume_utils import extract_skills_from_pdf
+from jd_utils import (
+    handle_jd_text, 
+    handle_jd_from_url,
+    extract_jd_profile_llm
+)
+from pdf_utils import (
+    upload_user_pdf, 
+    list_user_pdfs, 
+    delete_user_pdf, 
+    set_master_pdf, 
+    get_master_pdf
+)
+from resume_utils import (
+    extract_resume_profile_llm
+)
 
 
 app = Flask(__name__) 
 CORS(app)
 
-# Get Gemini explanation from text and extract skills
+# Get Gemini explanation from text
 @app.route("/api/jd", methods =["POST"])
 @verify_firebase_token
 def receive_jd():
     return handle_jd_text(request.get_json().get("jd", ""))
 
-# Get Gemini explanation from URL and extract skills
+# Get Gemini explanation from URL
 @app.route("/api/jd_from_url", methods=["POST"])
 @verify_firebase_token
 def receive_jd_url():
@@ -53,11 +64,17 @@ def api_set_master_pdf():
 def api_get_master_pdf():
     return get_master_pdf()
 
-# Extract skills from master PDf
-@app.route("/api/extract_resume_skills", methods=["POST"])
+# Resume profile (skill/experience/etc.) extraction via LLM
+@app.route("/api/extract_resume_profile_llm", methods=["POST"])
 @verify_firebase_token
-def api_extract_resume_skills():
-    return extract_skills_from_pdf()
+def api_extract_resume_profile_llm():
+    return extract_resume_profile_llm()
+
+# JD profile (required_skill/responsibilities/etc.) extraction via LLM
+@app.route("/api/extract_jd_profile_llm", methods=["POST"])
+@verify_firebase_token
+def api_jd_profile_llm():
+    return extract_jd_profile_llm(request.json.get("jd", ""))
 
 #  start the server
 if __name__ == "__main__":
