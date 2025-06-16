@@ -23,13 +23,6 @@ def llm_parse_text(text: str, mode: str) -> dict:
             "  • professional experience (as an array of objects with fields 'job_title', 'company', and 'dates')\n"
             "Return a JSON object with exactly these fields."
         )
-        # user = (
-        #     "Extract from this resume:\n"
-        #     "  • skills\n"
-        #     "  • education (degrees, institutions, years)\n"
-        #     "  • professional experience (job titles, companies, dates)\n"
-        #     "Return a JSON object with exactly these fields."
-        # )
         schema = {
             "type": "object",
             "properties": {
@@ -64,16 +57,6 @@ def llm_parse_text(text: str, mode: str) -> dict:
             "required": ["skills", "education", "experience"],
             "additionalProperties": False
         }
-        # schema = {
-        #     "type": "object",
-        #     "properties": {
-        #         "skills": {"type": "array", "items": {"type": "string"}},
-        #         "education": {"type": "array", "items": {"type": "string"}},
-        #         "experience": {"type": "array", "items": {"type": "string"}},
-        #     },
-        #     "required": ["skills", "education", "experience"],
-        #     "additionalProperties": False
-        # }
         name = "ResumeProfile"
 
     # OpenAI prompt details for parsing job descriptions

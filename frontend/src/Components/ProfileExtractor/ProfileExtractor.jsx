@@ -21,16 +21,8 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
         .catch(err => setError(err.toString()))
         .finally(() => setLoading(l => ({ ...l, resume: false })));
   }, [masterDocID, jdText]);
-  // useEffect(() => {
-  //   if (!masterDocID) return;
-  //   setLoading(l => ({ ...l, resume: true }));
-  //   extractResumeProfileLLM(masterDocID)
-  //       .then(profile => setResumeProfile(profile))
-  //       .catch(err => setError(err.toString()))
-  //       .finally(() => setLoading(l => ({ ...l, resume: false })));
-  // }, [masterDocID]);
 
-    // Fetch the job description profile via the text-LLM extractor only
+  // Fetch the job description profile via the text-LLM extractor only
   useEffect(() => {
         if (!jdText) return;
 
