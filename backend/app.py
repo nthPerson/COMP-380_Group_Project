@@ -11,7 +11,8 @@ from jd_utils import (
     # extract_skills_from_jd_text_llm,
     # extract_skills_from_jd_url_llm,
     extract_jd_profile_url_llm,
-    extract_jd_profile_text_llm
+    extract_jd_profile_text_llm,
+    extract_jd_profile_llm
 )
 from pdf_utils import (
     upload_user_pdf, 
@@ -72,11 +73,11 @@ def api_set_master_pdf():
 def api_get_master_pdf():
     return get_master_pdf()
 
-# Extract skills from master PDf using local NLP
-@app.route("/api/extract_resume_skills", methods=["POST"])
-@verify_firebase_token
-def api_extract_resume_skills():
-    return extract_skills_from_pdf()
+# # Extract skills from master PDf using local NLP
+# @app.route("/api/extract_resume_skills", methods=["POST"])
+# @verify_firebase_token
+# def api_extract_resume_skills():
+#     return extract_skills_from_pdf()
 
 @app.route("/api/extract_resume_profile_llm", methods=["POST"])
 @verify_firebase_token
@@ -84,10 +85,16 @@ def api_extract_resume_profile_llm():
     return extract_resume_profile_llm()
 
 # JD skill/responsibility/etc. extraction via LLM
-@app.route("/api/jd_profile_text_llm", methods=["POST"])
+@app.route("/api/jd_profile_llm", methods=["POST"])
 @verify_firebase_token
-def api_jd_profile_text_llm():
-    return extract_jd_profile_text_llm(request.json.get("jd", ""))
+def api_jd_profile_llm():
+    return extract_jd_profile_llm(request.json.get("jd", ""))
+
+# # JD skill/responsibility/etc. extraction via LLM
+# @app.route("/api/jd_profile_text_llm", methods=["POST"])
+# @verify_firebase_token
+# def api_jd_profile_text_llm():
+#     return extract_jd_profile_text_llm(request.json.get("jd", ""))
 
 # # DO NOT WANT TO USE THIS FUNCTION BECAUSE IT DUPLICATES THE URL SCRAPE OPERATION
 # @app.route("/api/jd_profile_url_llm", methods=["POST"])

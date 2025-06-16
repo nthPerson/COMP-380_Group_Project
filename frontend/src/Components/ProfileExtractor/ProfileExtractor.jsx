@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { extractResumeProfileLLM } from "../../services/resumeService";
-import { extractJdProfileText } from "../../services/jobDescriptionService"; // Only need the text profile extractor
+// import { extractJdProfileText } from "../../services/jobDescriptionService"; // Only need the text profile extractor
+import { extractJdProfile } from "../../services/jobDescriptionService";
 import { auth } from "../../firebase";
 
 export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
@@ -28,7 +29,7 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
             try {
                 // Fetch Firebase ID token
                 const idToken = await auth.currentUser.getIdToken();  // Get user's ID token to authenticate profile extraction calls to backend
-                const profile = await extractJdProfileText(jdText, idToken);  // Get the extracted profile (all keywords) from job description
+                const profile = await extractJdProfile(jdText, idToken);  // Get the extracted profile (all keywords) from job description
                 setJdProfile(profile);  // Send the extracted profile to the parent (Homepage)
             } catch (err) {
                 setError(err.toString());
@@ -36,6 +37,20 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                 setLoading(l => ({ ...l, jd: false }));
             }
         }
+
+        // async function fetchJdProfile() {
+        //     setLoading(l => ({ ...l, jd: true }));
+        //     try {
+        //         // Fetch Firebase ID token
+        //         const idToken = await auth.currentUser.getIdToken();  // Get user's ID token to authenticate profile extraction calls to backend
+        //         const profile = await extractJdProfileText(jdText, idToken);  // Get the extracted profile (all keywords) from job description
+        //         setJdProfile(profile);  // Send the extracted profile to the parent (Homepage)
+        //     } catch (err) {
+        //         setError(err.toString());
+        //     } finally {
+        //         setLoading(l => ({ ...l, jd: false }));
+        //     }
+        // }
 
         fetchJdProfile();
   }, [jdText]);

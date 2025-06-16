@@ -93,8 +93,8 @@ export async function explainJdUrl(url, idToken) {
 
 // Extract job description profile (required_skills, required_education, 
 // required_experience, responsibilities) from JD as text (OpenAI API)
-export async function extractJdProfileText(jdText, idToken) {
-  const res = await fetch(`http://localhost:5001/api/jd_profile_text_llm`, {
+export async function extractJdProfile(jdText, idToken) {
+  const res = await fetch(`http://localhost:5001/api/jd_profile_llm`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -104,6 +104,19 @@ export async function extractJdProfileText(jdText, idToken) {
   });
   if (!res.ok) throw new Error(await res.text());
   return await res.json(); // LLM text : { required_skills: [...], required_education: [...], ... }
+// // Extract job description profile (required_skills, required_education, 
+// // required_experience, responsibilities) from JD as text (OpenAI API)
+// export async function extractJdProfileText(jdText, idToken) {
+//   const res = await fetch(`http://localhost:5001/api/jd_profile_text_llm`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "Authorization": `Bearer ${idToken}`
+//     },
+//     body: JSON.stringify({ jd: jdText })
+//   });
+//   if (!res.ok) throw new Error(await res.text());
+//   return await res.json(); // LLM text : { required_skills: [...], required_education: [...], ... }
 }
 
 // Extract job description profile (required_skills, required_education, 
