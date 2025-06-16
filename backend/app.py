@@ -1,7 +1,6 @@
-from flask import Flask, jsonify, request, g
+from flask import Flask, request
 from flask_cors import CORS 
 
-from firebase_config import db 
 from verify_token import verify_firebase_token 
 from jd_utils import (
     handle_jd_text, 
@@ -16,7 +15,7 @@ from pdf_utils import (
     get_master_pdf
 )
 from resume_utils import (
-    extract_resume_profile_llm,
+    extract_resume_profile_llm
 )
 
 

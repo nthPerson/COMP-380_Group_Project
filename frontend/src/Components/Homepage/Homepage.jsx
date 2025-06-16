@@ -1,22 +1,15 @@
-// src/Components/Homepage/Homepage.jsx
-
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-//Import sidebar for nav
-import Sidebar from "../Sidebar/Sidebar";
-
+import Sidebar from "../Sidebar/Sidebar";  //Import sidebar for nav
 import { handleSignout } from "../../services/authHandlers";
-import JdFromUrl from "../JdForm/JdFromUrl";
-import JdFromText from "../JdForm/JdFromText";
-// Import the PDF upload logic from UploadPdf/UploadPdf.jsx
-import UploadPdf from "../UploadPdf/UploadPdf";  // Moved PDF upload logic to PdfContext.js, but UploadPdf.jsx uses PdfContext
-// Import Resume Library and PDF manipulation functionality (view, delete, set master)
-import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
-import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
+import JdFromUrl from "../JdForm/JdFromUrl";  // "Enter Job Posting URL" text box and corresponding button
+import JdFromText from "../JdForm/JdFromText";  // "Paste a Job Description" text box and corresponding button
+import UploadPdf from "../UploadPdf/UploadPdf";  // File upload utility
+import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";  // Resume Library and PDF manipulation functionality (view, delete, set master)
+import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";  // Resume/job descrption profile panes (only appear after choosing master resume and entering job descirpion)
 import { usePdf } from "../PdfContext";
 
 import "./Homepage.css";
@@ -33,7 +26,6 @@ export default function Homepage() {
   
   // State for JD and resume profile extraction (like skill extraction but all important stuff gets extracted instead of only skills)
   const [jdContent, setJdContent] = useState("");
-  // const [jdIsUrl, setJdIsUrl] = useState(false);
   
   // Uses a listener to keep the user state in sync with Firebase
   useEffect(() => {
@@ -44,15 +36,6 @@ export default function Homepage() {
     return () => unsubscribe();
   }, []);
 
-  const handleExplanationReceived = (explanation) => {
-    setJdExplanation(explanation);
-  };
-  // const handleExplanationReceived = (explanation) => {
-  //   setJdExplanation(explanation);
-  //   // setJdSkills(skills);
-  //   // JdContent and jdIsUrl will be set in the child forms (aka the HTML returned below)
-  // };
-
   const handleSignOutOnClick = async () => {
     try {
       await handleSignout();
@@ -61,10 +44,10 @@ export default function Homepage() {
       console.log("Sign Out Error", err);
     }
   };
-  const [headerActive, setHeaderActive] = useState(false);
+  // const [headerActive, setHeaderActive] = useState(false);
 
   return (
-    <>
+
       <div className="homepage-container">
         {user ? (
           <>
@@ -122,79 +105,3 @@ export default function Homepage() {
     </div>
   );
 }
-  // return (
-  //   <>
-  //     {/* ─── MAIN CONTENT ─── */}
-  //     <div className="homepage-container">
-  //       {user ? (
-  //         <>
-  //           <h1>Welcome, {user.displayName || "User"}!</h1>
-  //           <p>You are now logged in and on the Home page.</p>
-  //           <p>Email: {user.email}</p>
-
-  //           <UploadPdf />  
-  //           <ResumeLibrary />
-
-  //           <JdFromUrl 
-  //             user={user} 
-  //             onExplanationReceived={(exp, rawText) => {
-  //               setJdExplanation(exp);
-  //               setJdContent(rawText);
-  //               setJdIsUrl(true);
-  //             }}
-  //           />
-
-  //           <div style={{ margin: '20px 0', textAlign: 'center' }}>
-  //             <strong>--- OR ---</strong>
-  //           </div>
-
-  //           <JdFromText 
-  //             user={user} 
-  //             onExplanationReceived={(exp, rawText) => {
-  //               setJdExplanation(exp);
-  //               setJdContent(rawText);
-  //               setJdIsUrl(false);
-  //             }}
-  //           />
-
-  //           {jdExplanation && (
-  //             <>
-  //               <div className="jd-explanation">
-  //                 <h3>Gemini's Explanation</h3>
-  //                 <p>{jdExplanation}</p>
-  //               </div>
-                
-  //             </>
-  //           )}
-
-  //           {/* Full-featured extractor (must first have both masterDocID and JD content) */}
-  //           { masterDocID && jdContent && (
-  //             <ProfileExtractor
-  //             masterDocID={masterDocID}
-  //             jdText={ jdIsUrl ? "" : jdContent }
-  //             jdUrl={ jdIsUrl ? jdContent : "" }
-  //             />
-  //           )}
-
-  //           {/* <SkillHighlighter jobSkills={jdSkills} /> */}
-
-  //           <button onClick={handleSignOutOnClick}>Logout</button>
-  //         </>
-  //       ) : (
-  //         <p>Loading user...</p>
-  //       )}
-  //     </div>
-  //   </>
-  // );
-
-
-// old JdFromUrl and JdFromText tags
-// <JdFromUrl 
-//   user={user} 
-//   onExplanationReceived={handleExplanationReceived} 
-// />
-
-// <JdFromText 
-//   user={user} 
-//   onExplanationReceived={handleExplanationReceived} 
-// />

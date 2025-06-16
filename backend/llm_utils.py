@@ -4,7 +4,6 @@ import openai
 
 
 load_dotenv()
-# openai.api_key = os.getenv("OPENAI_PERSONAL_KEY")
 openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
 
 # Generic LLM (OpenAI API) resume and job description parsing helper function
