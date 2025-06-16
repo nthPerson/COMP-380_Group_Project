@@ -83,17 +83,17 @@ def api_extract_resume_skills():
 def api_extract_resume_profile_llm():
     return extract_resume_profile_llm()
 
-# JD skill/responsibility/etc. via LLM
-# DO NOT WANT TO USE THIS FUNCTION BECAUSE IT DUPLICATES THE URL SCRAPE OPERATION
+# JD skill/responsibility/etc. extraction via LLM
 @app.route("/api/jd_profile_text_llm", methods=["POST"])
 @verify_firebase_token
 def api_jd_profile_text_llm():
     return extract_jd_profile_text_llm(request.json.get("jd", ""))
 
-@app.route("/api/jd_profile_url_llm", methods=["POST"])
-@verify_firebase_token
-def api_jd_profile_url_llm():
-    return extract_jd_profile_url_llm(request.json.get("url", ""))
+# # DO NOT WANT TO USE THIS FUNCTION BECAUSE IT DUPLICATES THE URL SCRAPE OPERATION
+# @app.route("/api/jd_profile_url_llm", methods=["POST"])
+# @verify_firebase_token
+# def api_jd_profile_url_llm():
+#     return extract_jd_profile_url_llm(request.json.get("url", ""))
 
 #  start the server
 if __name__ == "__main__":

@@ -68,21 +68,23 @@ def extract_skills_from_jd_url(url: str):
         return jsonify({"error": f"Failed to extract skills from JD URL: {e}"}), 501
     
 
-# LLM (OpenAI API) job description text parsing API endpoint
-# DO NOT WANT TO USE THIS FUNCTION BECAUSE IT DUPLICATES THE URL SCRAPE OPERATION
-def extract_jd_profile_url_llm(url: str):
-    jd = scrape(url)
-    if not jd:
-        return jsonify({"error":"Failed to fetch JD from URL"}), 400
-    try:
-        profile = llm_parse_text(jd, mode="jd")
-        return jsonify(profile), 200
-    except Exception as e:
-        return jsonify({"error":f"LLM failed: {e}"}), 500
+# # LLM (OpenAI API) job description text parsing API endpoint
+# # DO NOT WANT TO USE THIS FUNCTION BECAUSE IT DUPLICATES THE URL SCRAPE OPERATION
+# def extract_jd_profile_url_llm(url: str):
+#     jd = scrape(url)
+#     if not jd:
+#         return jsonify({"error":"Failed to fetch JD from URL"}), 400
+#     try:
+#         profile = llm_parse_text(jd, mode="jd")
+#         return jsonify(profile), 200
+#     except Exception as e:
+#         return jsonify({"error":f"LLM failed: {e}"}), 500
 
 
 # LLM (OpenAI API) job description URL parsing API endpoint
 def extract_jd_profile_text_llm(jd_text: str):
+    if jd_text == "":
+        return jsonify({"error": f"Text sent to JD profile extractor is empty"}), 400
     try:
         profile = llm_parse_text(jd_text, mode="jd")
         return jsonify(profile), 200
