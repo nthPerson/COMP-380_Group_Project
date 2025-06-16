@@ -1,5 +1,3 @@
-""" pdf_utils.py: all kinds of cool pdf stuff
-"""
 from flask import jsonify, request, g
 from firebase_admin import firestore # Using to record timestamp of PDF upload
 from firebase_config import db, bucket

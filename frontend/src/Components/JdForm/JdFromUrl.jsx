@@ -15,7 +15,7 @@ export default function JdFromUrl({ user, onExplanationReceived }) {
     }
 
     // Make sure that the user has a master resume set before handling their job description (once 
-    // the JD is entered, the JD and resume profile extraction is automatic)
+    // the JD is entered, the JD and resume profile extraction is automatic so the master resume needs to be set)
     if (!masterDocID) {
       alert("Please set a master resume before submitting a job description.");
       return;

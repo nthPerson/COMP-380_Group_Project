@@ -6,12 +6,6 @@ from verify_token import verify_firebase_token
 from jd_utils import (
     handle_jd_text, 
     handle_jd_from_url,
-    extract_skills_from_jd_text,
-    extract_skills_from_jd_url,
-    # extract_skills_from_jd_text_llm,
-    # extract_skills_from_jd_url_llm,
-    extract_jd_profile_url_llm,
-    extract_jd_profile_text_llm,
     extract_jd_profile_llm
 )
 from pdf_utils import (
@@ -22,9 +16,7 @@ from pdf_utils import (
     get_master_pdf
 )
 from resume_utils import (
-    extract_skills_from_pdf, 
-    # extract_skills_from_pdf_llm,
-    extract_resume_profile_llm
+    extract_resume_profile_llm,
 )
 
 
@@ -73,34 +65,17 @@ def api_set_master_pdf():
 def api_get_master_pdf():
     return get_master_pdf()
 
-# # Extract skills from master PDf using local NLP
-# @app.route("/api/extract_resume_skills", methods=["POST"])
-# @verify_firebase_token
-# def api_extract_resume_skills():
-#     return extract_skills_from_pdf()
-
+# Resume profile (skill/experience/etc.) extraction via LLM
 @app.route("/api/extract_resume_profile_llm", methods=["POST"])
 @verify_firebase_token
 def api_extract_resume_profile_llm():
     return extract_resume_profile_llm()
 
-# JD skill/responsibility/etc. extraction via LLM
-@app.route("/api/jd_profile_llm", methods=["POST"])
+# JD profile (required_skill/responsibilities/etc.) extraction via LLM
+@app.route("/api/extract_jd_profile_llm", methods=["POST"])
 @verify_firebase_token
 def api_jd_profile_llm():
     return extract_jd_profile_llm(request.json.get("jd", ""))
-
-# # JD skill/responsibility/etc. extraction via LLM
-# @app.route("/api/jd_profile_text_llm", methods=["POST"])
-# @verify_firebase_token
-# def api_jd_profile_text_llm():
-#     return extract_jd_profile_text_llm(request.json.get("jd", ""))
-
-# # DO NOT WANT TO USE THIS FUNCTION BECAUSE IT DUPLICATES THE URL SCRAPE OPERATION
-# @app.route("/api/jd_profile_url_llm", methods=["POST"])
-# @verify_firebase_token
-# def api_jd_profile_url_llm():
-#     return extract_jd_profile_url_llm(request.json.get("url", ""))
 
 #  start the server
 if __name__ == "__main__":

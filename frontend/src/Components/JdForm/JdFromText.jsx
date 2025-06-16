@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { sendJobDescription } from "../../services/jobDescriptionService";
 import { explainJdText } from "../../services/jobDescriptionService";
 import { usePdf } from "../PdfContext";
 

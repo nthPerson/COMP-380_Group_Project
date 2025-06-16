@@ -1,11 +1,9 @@
 from typing import Optional, Dict, Any
 from ScraplingScraper import scrape 
-import json
 from gemini_utils import explain_jd_with_gemini, explain_jd_with_url
 from flask import jsonify, request, g
 from typing import Tuple
 
-from skill_utils import extract_skills
 from llm_utils import llm_parse_text
 
 def scrape_jd(url:str)-> Optional[str]:
@@ -54,53 +52,7 @@ def extract_jd_profile_llm(jd_text: str):
         profile = llm_parse_text(jd_text, mode="jd")
         return jsonify(profile), 200
     except Exception as e:
-        return jsonify({"error":f"LLM failed: {e}"}), 500
-
-
-# # Local NLP skill extraction on free text JD
-# def extract_skills_from_jd_text(jd_text: str):
-#     try:
-#         skills = extract_skills(jd_text)
-#         return jsonify({"skills": skills}), 200
-#     except Exception as e:
-#         return jsonify({"error": f"Failed to extract skills from JD text: {e}"}), 501
-    
-
-# # Local NLP skill extraction on URL JD
-# def extract_skills_from_jd_url(url: str):
-#     jd_text = scrape_jd(url)
-#     if not jd_text:
-#         return jsonify({"error": "Failed to fetch JD from URL"}), 400
-#     try:
-#         skills = extract_skills(jd_text)
-#         return jsonify({"skills": skills}), 200
-#     except Exception as e:
-#         return jsonify({"error": f"Failed to extract skills from JD URL: {e}"}), 501
-    
-
-# # LLM (OpenAI API) job description text parsing API endpoint
-# # DO NOT WANT TO USE THIS FUNCTION BECAUSE IT DUPLICATES THE URL SCRAPE OPERATION
-# def extract_jd_profile_url_llm(url: str):
-#     jd = scrape(url)
-#     if not jd:
-#         return jsonify({"error":"Failed to fetch JD from URL"}), 400
-#     try:
-#         profile = llm_parse_text(jd, mode="jd")
-#         return jsonify(profile), 200
-#     except Exception as e:
-#         return jsonify({"error":f"LLM failed: {e}"}), 500
-
-
-# # LLM (OpenAI API) job description URL parsing API endpoint
-# def extract_jd_profile_text_llm(jd_text: str):
-#     if jd_text == "":
-#         return jsonify({"error": f"Text sent to JD profile extractor is empty"}), 400
-#     try:
-#         profile = llm_parse_text(jd_text, mode="jd")
-#         return jsonify(profile), 200
-#     except Exception as e:
-#         return jsonify({"error":f"LLM failed: {e}"}), 500
-    
+        return jsonify({"error":f"LLM failed: {e}"}), 500  
 
 #--------------------------------- Tests ----------------------------------------
 # from JobDescriptionScraper import JobDescriptionScraper
