@@ -1,17 +1,23 @@
 import React, { useState } from "react";
-// import { sendJobDescriptionUrl } from "../../services/jobDescriptionService";
-// import { explainJdUrl, extractJdProfileUrl } from "../../services/jobDescriptionService";
 import { explainJdUrl } from "../../services/jobDescriptionService";
+import { usePdf } from "../PdfContext";
 
 
 export default function JdFromUrl({ user, onExplanationReceived }) {
   const [jdUrl, setJdUrl] = useState("");
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
-  // const [useLLM, setUseLLM] = useState(false);
+  const { masterDocID } = usePdf();
 
     const handleSendJDUrl = async () => {
     if (!jdUrl.trim()) {
       alert("Please enter a valid URL");
+      return;
+    }
+
+    // Make sure that the user has a master resume set before handling their job description (once 
+    // the JD is entered, the JD and resume profile extraction is automatic so the master resume needs to be set)
+    if (!masterDocID) {
+      alert("Please set a master resume before submitting a job description.");
       return;
     }
 

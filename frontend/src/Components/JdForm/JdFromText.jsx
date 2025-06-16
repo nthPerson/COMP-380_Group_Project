@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-// import { sendJobDescription } from "../../services/jobDescriptionService";
 import { explainJdText } from "../../services/jobDescriptionService";
-
+import { usePdf } from "../PdfContext";
 
 export default function JdFromText({ user, onExplanationReceived }) {
   const [jdText, setJdText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const [useLLM, setUseLLM] = useState(false);
+  const { masterDocID } = usePdf();
 
     const handleSendJD = async () => {
     if (!jdText.trim()) {
       alert("Please enter a job description");
+      return;
+    }
+
+    if (!masterDocID) {
+      alert("Please set a master resume before submitting a job description.");
       return;
     }
 
