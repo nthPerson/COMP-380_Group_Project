@@ -1,7 +1,14 @@
+// src/Components/Homepage/Homepage.jsx
+
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+
+//Import sidebar for nav
+import Sidebar from "../Sidebar/Sidebar";
+
 import { handleSignout } from "../../services/authHandlers";
 import JdFromUrl from "../JdForm/JdFromUrl";
 import JdFromText from "../JdForm/JdFromText";
@@ -13,6 +20,7 @@ import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../PdfContext";
 
 import "./Homepage.css";
+import "../Sidebar/Sidebar.css";
 
 export default function Homepage() {
   const navigate = useNavigate();
@@ -36,6 +44,9 @@ export default function Homepage() {
     return () => unsubscribe();
   }, []);
 
+  const handleExplanationReceived = (explanation) => {
+    setJdExplanation(explanation);
+  };
   // const handleExplanationReceived = (explanation) => {
   //   setJdExplanation(explanation);
   //   // setJdSkills(skills);
@@ -50,13 +61,21 @@ export default function Homepage() {
       console.log("Sign Out Error", err);
     }
   };
+  const [headerActive, setHeaderActive] = useState(false);
 
-    return (
-    <div className="homepage-container">
-      {user ? (
-        <>
-          <h1>Welcome, {user.displayName || "User"}!</h1>
-          <p>Email: {user.email}</p>
+  return (
+    <>
+      <div className="homepage-container">
+        {user ? (
+          <>
+            <div>
+            {user && <Sidebar user={user} />}
+            </div>
+            {/* ─── MAIN CONTENT ─── */}
+
+            <h1>Welcome, {user.displayName || "User"}!</h1>
+            <p>You are now logged in and on the Home page.</p>
+            <p>Email: {user.email}</p>
 
           <UploadPdf />
           <ResumeLibrary />
@@ -102,6 +121,7 @@ export default function Homepage() {
       )}
     </div>
   );
+}
   // return (
   //   <>
   //     {/* ─── MAIN CONTENT ─── */}
@@ -166,7 +186,7 @@ export default function Homepage() {
   //     </div>
   //   </>
   // );
-}
+
 
 // old JdFromUrl and JdFromText tags
 // <JdFromUrl 
