@@ -1,80 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;700&display=swap');
 
-
-/* FOR DEMO ONLY*/
-/* Homepage.css */
-
+/* === GLOBAL STYLING FOR HOMEPAGE === */
 .homepage-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
   min-height: 100vh;
   color: #2c3e50;
 }
 
-.homepage-container h1 {
-  color: #3498db;
+/* === HEADER SECTION === */
+.homepage-header {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.welcome-title {
   font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  font-weight: 300;
+  font-weight: 700;
+  color: #3498db;
+  margin-bottom: 0.25rem;
 }
 
-.homepage-container p {
-  color: #5a6c7d;
+.welcome-subtext {
   font-size: 1.1rem;
-  margin-bottom: 1rem;
-  text-align: center;
+  color: #5a6c7d;
 }
 
-/* Component spacing */
-.homepage-container > * {
-  margin-bottom: 2rem;
+/* === TOOL WRAPPERS === */
+.tool-section {
+  background: #ffffff;
+  padding: 1.5rem;
+  margin: 1.5rem auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
 }
 
-/* Divider styling */
-.homepage-container div[style*="margin: '20px 0'"] {
+/* === DIVIDER STYLE === */
+.homepage-container div[style*="margin: '20px 0'"],
+.homepage-container div[style*='margin: "20px 0"'] {
   margin: 2rem 0 !important;
   padding: 1rem;
   background: rgba(52, 152, 219, 0.1);
   border-radius: 8px;
   border-left: 4px solid #3498db;
+  text-align: center;
 }
 
-.homepage-container div[style*="margin: '20px 0'"] strong {
+.homepage-container div[style*="margin: '20px 0'"] strong,
+.homepage-container div[style*='margin: "20px 0"'] strong {
   color: #3498db;
   font-size: 1.2rem;
   letter-spacing: 1px;
 }
 
-/* Explanation section */
-.jd-explanation {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(52, 152, 219, 0.1);
-  border: 1px solid #e1f0ff;
-}
-
-.jd-explanation h3 {
+/* === EXPLANATION PANEL === */
+.tool-section h3 {
   color: #2980b9;
   margin-top: 0;
-  margin-bottom: 1rem;
   font-size: 1.3rem;
+  margin-bottom: 1rem;
 }
 
-.jd-explanation p {
+.tool-section p {
   color: #34495e;
   line-height: 1.6;
   text-align: left;
   margin: 0;
 }
 
-/* Logout button */
-.homepage-container button {
+/* === LOGOUT BUTTON === */
+.logout-btn {
+  display: block;
+  margin: 2rem auto 0;
   background: linear-gradient(135deg, #3498db, #2980b9);
   color: white;
   border: none;
@@ -84,22 +85,20 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: block;
-  margin: 2rem auto 0;
   box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
 }
 
-.homepage-container button:hover {
+.logout-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
   background: linear-gradient(135deg, #2980b9, #1f639a);
 }
 
-.homepage-container button:active {
+.logout-btn:active {
   transform: translateY(0);
 }
 
-/* Loading state */
+/* === LOADING STATE === */
 .homepage-container p:only-child {
   font-size: 1.2rem;
   color: #7fb3d3;
@@ -107,17 +106,22 @@
   margin-top: 3rem;
 }
 
-/* Responsive design */
+/* === RESPONSIVENESS === */
 @media (max-width: 768px) {
   .homepage-container {
     padding: 1rem;
   }
-  
-  .homepage-container h1 {
+
+  .welcome-title {
     font-size: 2rem;
   }
-  
-  .homepage-container p {
+
+  .welcome-subtext,
+  .tool-section p {
     font-size: 1rem;
+  }
+
+  .tool-section {
+    padding: 1rem;
   }
 }
