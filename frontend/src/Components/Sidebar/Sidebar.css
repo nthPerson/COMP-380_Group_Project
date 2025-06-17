@@ -1,20 +1,18 @@
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 14rem;
+  width: 240px;
+  min-width: 200px;
   background: #e6f3ff;
   color: #050404;
-  padding-top: 2rem;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   z-index: 1002;
-  transition: width 0.3s ease;
+  transition: all 0.3s ease;
 }
 
+/* ===== Brand Header ===== */
 .sidebar-header {
   display: flex;
   flex-direction: column;
@@ -42,6 +40,7 @@
   color: #2c3e50;
 }
 
+/* ===== Navigation ===== */
 .sidebar-nav ul {
   list-style: none;
   padding: 0;
@@ -77,16 +76,15 @@
   transform: scale(1.1);
 }
 
-/* Mobile-friendly adjustments */
+/* ===== Mobile View ===== */
 @media (max-width: 768px) {
   .sidebar {
-    width: 100vw;
-    height: auto;
+    width: 100%;
     flex-direction: row;
     justify-content: space-around;
     padding: 1rem 0;
     box-shadow: none;
-    position: static;
+    align-items: center;
   }
 
   .sidebar-header {

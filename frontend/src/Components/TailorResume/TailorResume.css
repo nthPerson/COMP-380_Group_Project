@@ -1,56 +1,65 @@
-/* TailorResume.css */
-
-.tailor-container {
-  background-color: #e6f3ff;
+/* ===== Layout Container ===== */
+.layout {
+  display: flex;
+  flex-direction: row;
   min-height: 100vh;
+  background-color: #f5faff;
+}
+
+/* ===== Sidebar Wrapper ===== */
+.sidebar {
+  width: 240px;
+  min-width: 200px;
+  background-color: #e6f3ff;
+  flex-shrink: 0;
+}
+
+/* ===== Main Content Panel ===== */
+.tailor-container {
+  flex: 1;
+  margin: 0 auto;
   padding: 2rem;
   max-width: 1200px;
-  margin: 0 auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #e6f3ff;
   border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
   box-sizing: border-box;
-  margin-left: 14rem;
-  /* leaves room for sidebar on desktop */
 }
 
-@media (max-width: 768px) {
-  .tailor-container {
-    margin-left: 0;
-    /* allow full width below sidebar on mobile */
-  }
-}
-
+/* ===== Header ===== */
 .header {
   text-align: center;
   padding-bottom: 1rem;
 }
 
 .welcome-title {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
   margin-bottom: 0.5rem;
   color: #1a1a1a;
 }
 
 .welcome-subtext {
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 3vw, 1rem);
   color: #555;
 }
 
+/* ===== Tool Sections ===== */
 .tool-section {
   background: #fff;
   border-radius: 8px;
   padding: 1.5rem;
+  min-height: 260px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
-  width: 100%;
   box-sizing: border-box;
-  min-height: 260px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: auto;
+  width: 100%;
 }
 
 .tool-section:hover {
@@ -58,17 +67,19 @@
 }
 
 .section-subtext {
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
   color: #666;
   margin-bottom: 1rem;
 }
 
+/* ===== Divider ===== */
 .divider {
   text-align: center;
   font-size: 0.9rem;
   color: #888;
 }
 
+/* ===== Logout Button ===== */
 .logout-container {
   text-align: center;
   margin-top: 2rem;
@@ -89,10 +100,20 @@
   background-color: #d9363e;
 }
 
+.logout-btn:active {
+  transform: scale(0.98);
+}
+
+.logout-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.3);
+}
+
+/* ===== Errors & Loaders ===== */
 .url-error-message {
   color: #d9363e;
-  margin-top: 0.5rem;
   font-weight: bold;
+  margin-top: 0.5rem;
   text-align: center;
 }
 
@@ -111,11 +132,11 @@
   display: inline-block;
   width: 1em;
   height: 1em;
+  margin-right: 0.5em;
   border: 3px solid rgba(0, 0, 0, 0.1);
   border-top-color: #3498db;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-right: 0.5em;
 }
 
 @keyframes spin {
@@ -124,50 +145,36 @@
   }
 }
 
-@media (min-width: 1024px) {
-  .tailor-container {
-    grid-template-columns: 1fr;
-  }
-
-  .tool-section {
-    min-height: 260px;
-  }
-}
-
-@media (max-width: 768px) {
+/* ===== Responsive Breakpoints ===== */
+@media (max-width: 1024px) {
   .tailor-container {
     padding: 1.5rem;
   }
 
-  .tool-section {
-    padding: 1rem;
-    min-height: 240px;
+  .sidebar {
+    width: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
   }
 
-  .welcome-title {
-    font-size: 1.5rem;
-  }
-
-  .logout-btn {
+  .sidebar {
     width: 100%;
+    min-height: auto;
+  }
+
+  .tailor-container {
+    padding: 1.25rem;
+    border-radius: 0;
+    box-shadow: none;
   }
 }
 
 @media (max-width: 480px) {
   .tailor-container {
     padding: 1rem;
-  }
-
-  .tool-section {
-    padding: 1rem;
-    min-height: auto;
-  }
-
-  .section-subtext {
-    font-size: 0.85rem;
-  }
-
-  .welcome-subtext {
-    font-size: 0.9rem;
   }
 }

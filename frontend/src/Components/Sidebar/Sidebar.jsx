@@ -6,7 +6,7 @@ import archive_icon from "../Assets/library_icon.png";
 import magicwand_icon from "../Assets/magic-wand_icon.png";
 
 const Sidebar = ({ user }) => (
-  <aside className="sidebar">
+  <div className="sidebar">
     <Link to="/landingPage" className="sidebar-header">
       <img src={logo_icon} alt="Logo" className="sidebar-logo" />
       <div className="sidebar-title">
@@ -37,7 +37,7 @@ const Sidebar = ({ user }) => (
         </li>
       </ul>
     </nav>
-  </aside>
+  </div>
 );
 
 export default Sidebar;
