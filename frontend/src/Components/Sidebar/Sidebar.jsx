@@ -32,7 +32,7 @@ const Sidebar = ({ user }) => (
         <li>
           <Link to="/resumeArchive" className="sidebar-link">
             <img src={archive_icon} alt="Archive icon" />
-            <span>Resume Archive</span>
+            <span>ResumeArchive</span>
           </Link>
         </li>
       </ul>
