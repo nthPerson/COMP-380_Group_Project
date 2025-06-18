@@ -11,6 +11,7 @@ import UploadPdf from "../UploadPdf/UploadPdf";
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../PdfContext";
+import SelectedKeywords from '../SelectedKeywords/SelectedKeywords';
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -104,6 +105,8 @@ export default function Homepage() {
               <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
             </div>
           )}
+
+          <SelectedKeywords />
 
           <button className="logout-btn" onClick={handleSignOutOnClick}>
             Log Out

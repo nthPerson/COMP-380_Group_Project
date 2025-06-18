@@ -22,7 +22,8 @@ from keyword_utils import (
     add_keywords,
     remove_keyword,
     get_keywords,
-    clear_keywords
+    clear_keywords,
+    stream_selected_keywords
 )
 
 
@@ -114,6 +115,16 @@ def api_remove_keyword():
 @verify_firebase_token
 def api_clear_keywords():
     return clear_keywords()
+
+# Access handle for keyword list event stream
+# Note: frontend access to this will not be from service layer. This 
+# functionality is accessed using the API URL 
+# "http://localhost:5001/api/selected_keywords/stream" and will be 
+# found in a useEffect() definition in ProfileExtractor for the time being.
+@app.route("/api/selected_keywords/stream", methods=["GET"])
+@verify_firebase_token
+def api_stream_selected_keywords():
+    return stream_selected_keywords()
 
 
 
