@@ -4,6 +4,7 @@ import logo_icon from "../Assets/logo_icon.png";
 import profile_icon from "../Assets/profile_icon.png";
 import archive_icon from "../Assets/library_icon.png";
 import magicwand_icon from "../Assets/magic-wand_icon.png";
+import resume_icon from "../Assets/resume_icon.png"; // Added new icon for "Create Resume"
 
 const Sidebar = ({ user }) => (
   <aside className="sidebar">
@@ -17,18 +18,31 @@ const Sidebar = ({ user }) => (
 
     <nav className="sidebar-nav">
       <ul>
+        {/* User's Profile */}
         <li>
           <Link to="/userProfile" className="sidebar-link">
             <img src={profile_icon} alt="Profile icon" />
             <span>{user?.displayName || "User"}'s Profile</span>
           </Link>
         </li>
+
+        {/* Create Resume */}
+        <li>
+          <Link to="/createResume" className="sidebar-link">
+            <img src={resume_icon} alt="Resume icon" />
+            <span>Create Resume</span>
+          </Link>
+        </li>
+
+        {/* Tailor Resume */}
         <li>
           <Link to="/tailorResume" className="sidebar-link">
             <img src={magicwand_icon} alt="Tailor icon" />
             <span>Tailor Resume</span>
           </Link>
         </li>
+
+        {/* Resume Archive */}
         <li>
           <Link to="/resumeArchive" className="sidebar-link">
             <img src={archive_icon} alt="Archive icon" />
