@@ -1,10 +1,11 @@
 // src/Components/Sidebar/Sidebar.jsx
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logo_icon from '../Assets/logo_icon.png';
 import profile_icon from "../Assets/profile_icon.png";
 import archive_icon from '../Assets/library_icon.png';
 import magicwand_icon from "../Assets/magic-wand_icon.png";
+import logout_icon from "../Assets/logout_icon.png";
 
 const Sidebar = ({ user }) => (
   <div className="sidebar">
@@ -21,12 +22,12 @@ const Sidebar = ({ user }) => (
     {/* Navigation */}
     <nav className="sidebar-nav">
       <ul>
-      <li>
-  <Link to="/userProfile" className="profile-link">
-    <img src={profile_icon} alt="Profile icon" />
-    <span>{user?.displayName || "User"}'s Profile</span>
-  </Link>
-</li>
+        <li>
+          <Link to="/userProfile" className="profile-link">
+            <img src={profile_icon} alt="Profile icon" />
+            <span>{user?.displayName || "User"}'s Profile</span>
+          </Link>
+        </li>
         <li>
           <Link to="/tailorResume" className="tailor-link">
             <img src= {magicwand_icon} alt="Tailor icon" />
@@ -38,6 +39,12 @@ const Sidebar = ({ user }) => (
             <img src= {archive_icon} alt="File icon" />
             <span>Resume Archive</span>
             </Link>
+        </li>
+        <li>
+          <Link to="/logoutButton" className="logout-link">
+            <img src= {logout_icon} alt="Logout button" />
+            <span>Logout</span>
+          </Link>
         </li>
       </ul>
     </nav>
