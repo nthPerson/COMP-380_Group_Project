@@ -1,5 +1,6 @@
 import { auth } from "../firebase";
 
+
 export async function getSelectedKeywords() {
     const idToken = await auth.currentUser.getIdToken();
     const res = await fetch("http://localhost:5001/api/selected_keywords/get", {
@@ -41,6 +42,7 @@ export async function removeSelectedKeyword(keyword) {
     const responseData = await res.json();
     return responseData.keywords;
 }
+
 
 export async function clearKeywords() {
     const idToken = await auth.currentUser.getIdToken();

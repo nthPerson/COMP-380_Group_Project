@@ -1,7 +1,7 @@
 from flask import jsonify, request, g
 
 
-# In-memory storage (aka does not persist over user sessions)  that maps userID's to selected keywords
+# In-memory storage (aka does not persist over user sessions) that maps userID's to selected keywords
 _selected_keywords = {}
 
 # Add one or more keywords to the user's current selection of keywords that 

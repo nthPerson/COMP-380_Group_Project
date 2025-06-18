@@ -179,10 +179,6 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
             </ul>
             <h3>Education</h3>
             <ul>
-              {resumeProfile.education.map((edu, i) => (
-                // <li key={`education-${i}`}>{edu}</li>
-                <li key={`edu-${i}`}>{edu.degree} at {edu.institution} ({edu.year})</li>
-              ))}
               {resumeProfile.education.map((edu, i) => {
                 const text = `${edu.degree} at ${edu.institution} (${edu.year})`;
                 return (
@@ -201,10 +197,6 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
             </ul>
             <h3>Experience</h3>
             <ul>
-              {resumeProfile.experience.map((exp, i) => (
-                // <li key={`experience-${i}`}>{exp}</li>
-                <li key={`exp-${i}`}>{exp.job_title} at {exp.company} ({exp.dates})</li>
-              ))}
               {resumeProfile.experience.map((exp, i) => {
                 const text = `${exp.job_title} at ${exp.company} (${exp.dates})`;
                 return (
