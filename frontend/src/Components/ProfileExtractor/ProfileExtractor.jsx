@@ -6,11 +6,19 @@ import { extractResumeProfileLLM } from "../../services/resumeService";
 import { extractJdProfile } from "../../services/jobDescriptionService";
 import { auth } from "../../firebase";
 
+import {
+  getSelectedKeywords,
+  addSelectedKeywords,
+  removeSelectedKeyword,
+  // clearKeywords,   Current implementation does not use this, but clearing the keywords is possible
+} from "../../services/keywordService"
+
 export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
   const [resumeProfile, setResumeProfile] = useState(null);
   const [jdProfile, setJdProfile] = useState(null);
   const [loading, setLoading] = useState({ resume: false, jd: false });
-  const [error,   setError]   = useState(null);
+  const [error,   setError] = useState(null);
+  const [selected, setSelected] = useState([]);
 
   // Fetch the resume profile (skills, education, professional experience) from master resume
   useEffect(() => {
@@ -39,9 +47,41 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                 setLoading(l => ({ ...l, jd: false }));
             }
         }
-
         fetchJdProfile();
   }, [jdText]);
+
+  // Load any previously selected keywords for this session
+  useEffect(() => {
+    async function fetchSelected() {
+      try {
+        const keywords = await getSelectedKeywords();
+        setSelected(keywords);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchSelected();
+  }, []);
+
+  // Allows the user to toggle/select keywords
+  const toggleKeyword = async (keyword, checked) => {
+    setSelected(prev => {
+      const exists = prev.includes(keyword);
+      if (checked && !exists) return [...prev, keyword];
+      if (!checked && exists) return prev.filter(k => k !== keyword);
+      return prev;
+    });
+
+    try {
+      if (checked) {
+        await addSelectedKeywords([keyword]);
+      } else {
+        await removeSelectedKeyword(keyword);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   if (error) {
     return <div style={{ color: "red" }}>Error: {error}</div>;
@@ -57,25 +97,61 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
             <h3>Required Skills</h3>
             <ul>
               {jdProfile.required_skills.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(s)}
+                      onChange={e => toggleKeyword(s, e.target.checked)}
+                    />{' '}
+                    {s}
+                  </label>
+                </li>
               ))}
             </ul>
             <h3>Required Education</h3>
             <ul>
               {jdProfile.required_education.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(s)}
+                      onChange={e => toggleKeyword(s, e.target.checked)}
+                    />{' '}
+                    {s}
+                  </label>
+                </li>
               ))}
             </ul>
             <h3>Required Experience</h3>
             <ul>
               {jdProfile.required_experience.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(s)}
+                      onChange={e => toggleKeyword(s, e.target.checked)}
+                    />{' '}
+                    {s}
+                  </label>
+                </li>
               ))}
             </ul>
             <h3>Responsibilities</h3>
             <ul>
               {jdProfile.responsibilities.map((s) => (
-                <li key={s}>{s}</li>
+                <li key={s}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(s)}
+                      onChange={e => toggleKeyword(s, e.target.checked)}
+                    />{' '}
+                    {s}
+                  </label>
+                </li>
               ))}
             </ul>
           </>
@@ -89,7 +165,16 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
             <h3>Skills</h3>
             <ul>
               {resumeProfile.skills.map((skill, i) => (
-                <li key={`skill-${i}`}>{skill}</li>
+                <li key={`skill-${i}`}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(skill)}
+                      onChange={e => toggleKeyword(skill, e.target.checked)}
+                    />{' '}
+                    {skill}
+                  </label>
+                </li>
               ))}
             </ul>
             <h3>Education</h3>
@@ -98,6 +183,21 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                 // <li key={`education-${i}`}>{edu}</li>
                 <li key={`edu-${i}`}>{edu.degree} at {edu.institution} ({edu.year})</li>
               ))}
+              {resumeProfile.education.map((edu, i) => {
+                const text = `${edu.degree} at ${edu.institution} (${edu.year})`;
+                return (
+                  <li key={`edu-${i}`}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(text)}
+                        onChange={e => toggleKeyword(text, e.target.checked)}
+                      />{' '}
+                      {text}
+                    </label>
+                  </li>
+                );
+              })}
             </ul>
             <h3>Experience</h3>
             <ul>
@@ -105,6 +205,21 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                 // <li key={`experience-${i}`}>{exp}</li>
                 <li key={`exp-${i}`}>{exp.job_title} at {exp.company} ({exp.dates})</li>
               ))}
+              {resumeProfile.experience.map((exp, i) => {
+                const text = `${exp.job_title} at ${exp.company} (${exp.dates})`;
+                return (
+                  <li key={`exp-${i}`}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(text)}
+                        onChange={e => toggleKeyword(text, e.target.checked)}
+                      />{' '}
+                      {text}
+                    </label>
+                  </li>
+                );
+              })}
             </ul>
           </>
         )}
