@@ -1,3 +1,4 @@
+# Import necessary modules
 import os, json, io, fitz  # fitz = PyMuPDF, to install: pip install pymupdf
 from flask import jsonify, request, g
 from firebase_admin import storage
@@ -61,3 +62,23 @@ def save_resume_data(resume_data):
     except Exception as e:
         print(f"Error saving resume data: {e}")
         return jsonify({"error": "Failed to save resume data"}), 500
+    
+
+# Add this new Flask route for saving resumes
+# This is the new API endpoint that connects the frontend to the backend
+def create_save_resume_route(app):
+    """
+    Flask route to handle saving resumes.
+    :param app: Flask app instance.
+    """
+    @app.route("/api/save-resume", methods=["POST"])
+    def save_resume():
+        """
+        API endpoint to save resume data.
+        Expects JSON data from the frontend.
+        """
+        resume_data = request.json  # Get the JSON data from the request
+        if not resume_data:
+            return jsonify({"error": "No resume data provided"}), 400  # Return error if no data is provided
+
+        return save_resume_data(resume_data)  # Call the save_resume_data function to save the data

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Trash2, User, Briefcase, GraduationCap, Award, FileText } from 'lucide-react';
 import './ResumeBuilderForm.css'; // Import your CSS file for styling
+import { saveResume } from "../services/resumeService"; // Import the saveResume function from your service file
 
 const ResumeBuilderForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -177,9 +178,17 @@ const [fieldErrors, setFieldErrors] = useState({});
   };
 
   const handleSaveResume = async () => {
-    // This will connect to your Firebase/Firestore
-    console.log('Saving resume data:', resumeData);
-    alert('Resume saved successfully! (This will connect to Firebase in your actual app)');
+    try {
+      // Call the saveResume function from the service layer
+      const response = await saveResume(resumeData);
+  
+      // Show a success message with the resume ID
+      alert(`Resume saved successfully! Resume ID: ${response.resumeID}`);
+    } catch (error) {
+      // Handle errors and show an error message
+      alert(`Failed to save resume: ${error.message}`);
+      console.error("Error saving resume:", error);
+    }
   };
 
   const renderPersonalInfoStep = () => (
