@@ -180,8 +180,6 @@ const [fieldErrors, setFieldErrors] = useState({});
 
   const handleSaveResume = async () => {
     try {
-      // // Call the saveResume function from the service layer  // TODO: removing this during implementation of PDF generation when saving resume data
-      // const response = await saveResume(resumeData);
       const payload = {...resumeData, fileName: documentName };
       const response = await saveResume(payload);
   

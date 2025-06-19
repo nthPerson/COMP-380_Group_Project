@@ -45,7 +45,7 @@ def extract_resume_profile_llm():
     return jsonify(profile), 200
 
 
-# Generate a PDF document from resume data and return the PDF bytes
+# Generate a PDF document from resume form data and return the PDF bytes (aka the PDF but without a filename and other metadata)
 def _generate_resume_pdf(resume_data: dict) -> bytes:
     styles = getSampleStyleSheet()
     buffer = io.BytesIO()
@@ -130,12 +130,7 @@ def save_resume_data(resume_data):
         # Reference the user's "resumes" collection in Firestore
         resumes_collection = db.collection("users").document(user_id).collection("resumes")
 
-        # TODO removed this code block during implementation of resume data -> PDF save stuff
-        # # Add the resume data to Firestore
-        # new_resume_ref = resumes_collection.document()  # Create a new document
-        # new_resume_ref.set(resume_data)  # Save the resume data
-
-        # Create a name for the PDF file using user data
+        # Create a name for the PDF file that is created from the resume data (can be customized by the user or left default)
         custom_name = resume_data.get("fileName")
 
         new_resume_ref = resumes_collection.document()
@@ -161,7 +156,6 @@ def save_resume_data(resume_data):
             "resumeID": resume_id,
         })
 
-        # return jsonify({"message": "Resume saved successfully!", "resumeID": new_resume_ref.id}), 200
         return jsonify({"message": "Resume saved successfully!", "resumeID": resume_id, "pdfFile": file_name}), 200
     except Exception as e:
         print(f"Error saving resume data: {e}")
