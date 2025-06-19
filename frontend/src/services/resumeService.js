@@ -67,3 +67,29 @@ export async function extractResumeProfileLLM(docID) {
   if (!res.ok) throw new Error(await res.text());
   return await res.json();  // Returns JSON: { skills: [...], education: [...], experience: [...] }
 }
+
+// Save a new resume to the backend
+export const saveResume = async (resumeData) => {
+  try {
+    const idToken = await auth.currentUser.getIdToken(); // Get the user's authentication token
+    const response = await fetch("http://localhost:5001/api/save_resume", { // Backend API endpoint
+      method: "POST", // HTTP POST method
+      headers: {
+        Authorization: `Bearer ${idToken}`, // Pass the user's token for authentication
+        "Content-Type": "application/json", // Specify JSON content type
+      },
+      body: JSON.stringify(resumeData), // Convert resume data to JSON
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json(); // Parse error response
+      throw new Error(errorData.error || "Failed to save resume"); // Throw an error if the request fails
+    }
+
+    const data = await response.json(); // Parse the successful response
+    return data; // Return the response data
+  } catch (error) {
+    console.error("Error saving resume:", error); // Log the error for debugging
+    throw error; // Re-throw the error for the caller to handle
+  }
+};

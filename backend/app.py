@@ -25,6 +25,8 @@ from keyword_utils import (
     clear_keywords
 )
 
+# Added new import for saving resume data
+from resume_utils import save_resume_data  # Step 4: Added import for saving resume data
 
 app = Flask(__name__) 
 CORS(app)
@@ -115,6 +117,18 @@ def api_remove_keyword():
 def api_clear_keywords():
     return clear_keywords()
 
+
+
+# Step 4: Added new API endpoint for saving resume data
+@app.route("/api/save_resume", methods=["POST"])
+@verify_firebase_token
+def save_resume():
+    """
+    Save resume data to the database.
+    This endpoint receives resume data from the frontend and saves it to the backend.
+    """
+    resume_data = request.json  # Get the resume data from the request body
+    return save_resume_data(resume_data)  # Call the function to save the data
 
 
 #  start the server

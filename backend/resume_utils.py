@@ -1,3 +1,4 @@
+# Import necessary modules
 import os, json, io, fitz  # fitz = PyMuPDF, to install: pip install pymupdf
 from flask import jsonify, request, g
 from firebase_admin import storage
@@ -40,3 +41,25 @@ def extract_resume_profile_llm():
     profile = llm_parse_text(text=raw, mode="resume")
     return jsonify(profile), 200
 
+def save_resume_data(resume_data):
+    """
+    Save resume data to Firebase Firestore.
+    :param resume_data: Dictionary containing resume information.
+    :return: JSON response indicating success or failure.
+    """
+    try:
+        # Get the user ID from the Firebase authentication context
+        user_id = g.firebase_user["uid"]
+
+        # Reference the user's "resumes" collection in Firestore
+        resumes_collection = db.collection("users").document(user_id).collection("resumes")
+
+        # Add the resume data to Firestore
+        new_resume_ref = resumes_collection.document()  # Create a new document
+        new_resume_ref.set(resume_data)  # Save the resume data
+
+        return jsonify({"message": "Resume saved successfully!", "resumeID": new_resume_ref.id}), 200
+    except Exception as e:
+        print(f"Error saving resume data: {e}")
+        return jsonify({"error": "Failed to save resume data"}), 500
+    
