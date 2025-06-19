@@ -72,7 +72,7 @@ export async function extractResumeProfileLLM(docID) {
 export const saveResume = async (resumeData) => {
   try {
     const idToken = await auth.currentUser.getIdToken(); // Get the user's authentication token
-    const response = await fetch("http://localhost:5001/api/save-resume", { // Backend API endpoint
+    const response = await fetch("http://localhost:5001/api/save_resume", { // Backend API endpoint
       method: "POST", // HTTP POST method
       headers: {
         Authorization: `Bearer ${idToken}`, // Pass the user's token for authentication
