@@ -12,7 +12,8 @@ from pdf_utils import (
     list_user_pdfs, 
     delete_user_pdf, 
     set_master_pdf, 
-    get_master_pdf
+    get_master_pdf,
+    generate_pdf_link
 )
 from resume_utils import (
     extract_resume_profile_llm
@@ -75,6 +76,12 @@ def api_extract_resume_profile_llm():
 @verify_firebase_token
 def api_jd_profile_llm():
     return extract_jd_profile_llm(request.json.get("jd", ""))
+
+
+@app.route("/api/get_resume_url", methods = ["GET"])
+@verify_firebase_token
+def get_resume_url():
+    return generate_pdf_link()
 
 #  start the server
 if __name__ == "__main__":

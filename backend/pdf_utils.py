@@ -2,6 +2,8 @@ from flask import jsonify, request, g
 from firebase_admin import firestore # Using to record timestamp of PDF upload
 from firebase_config import db, bucket
 from google.cloud.exceptions import NotFound
+from datetime import timedelta
+
 
 def upload_user_pdf():
     if "file" not in request.files:
@@ -104,3 +106,22 @@ def get_master_pdf():
         return jsonify({"masterDocID": masterDocID}), 200
     else:
         return jsonify({"masterDocID": None}), 200
+
+
+def generate_pdf_link():
+    path = request.args.get("path")
+    if not path:
+        return jsonify({"error" : "Missing path"}), 400
+    
+    try:
+        blob = bucket.blob(path)
+        url = blob.generate_signed_url(
+            version = "v4",
+            expiration=timedelta(minutes=15),
+            method = "GET"
+        )
+        print("Generated signed url:", url)
+        return jsonify ({"url": url}), 200
+    except Exception as e:
+        print("Failed to genereate signed url:", e)
+        return jsonify ({"error": str(e)}), 500

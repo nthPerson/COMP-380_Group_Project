@@ -67,3 +67,16 @@ export async function extractResumeProfileLLM(docID) {
   if (!res.ok) throw new Error(await res.text());
   return await res.json();  // Returns JSON: { skills: [...], education: [...], experience: [...] }
 }
+
+export const getResumeSignedUrl = async (storagePath) => {
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch(`http://localhost:5001/api/get_resume_url?path=${encodeURIComponent(storagePath)}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+  });
+  if (!res.ok) throw new Error("Failed to generate signed resume URL");
+  const data = await res.json();
+  return data.url;  
+};
