@@ -18,11 +18,20 @@ from resume_utils import (
     extract_resume_profile_llm
 )
 
+from keyword_utils import (
+    add_keywords,
+    remove_keyword,
+    get_keywords,
+    clear_keywords
+)
+
 # Added new import for saving resume data
 from resume_utils import save_resume_data  # Step 4: Added import for saving resume data
 
 app = Flask(__name__) 
 CORS(app)
+
+#====================== Job Description Handling ========================================
 
 # Get Gemini explanation from text
 @app.route("/api/jd", methods =["POST"])
@@ -35,6 +44,8 @@ def receive_jd():
 @verify_firebase_token
 def receive_jd_url():
     return handle_jd_from_url(request.get_json().get("url", ""))
+
+#============================= PDF Management ===========================================
     
 # Upload user PDF
 @app.route("/api/upload_pdf", methods=["POST"])
@@ -66,6 +77,8 @@ def api_set_master_pdf():
 def api_get_master_pdf():
     return get_master_pdf()
 
+#====================== Profile (keyword) Extraction ====================================
+
 # Resume profile (skill/experience/etc.) extraction via LLM
 @app.route("/api/extract_resume_profile_llm", methods=["POST"])
 @verify_firebase_token
@@ -77,6 +90,34 @@ def api_extract_resume_profile_llm():
 @verify_firebase_token
 def api_jd_profile_llm():
     return extract_jd_profile_llm(request.json.get("jd", ""))
+
+#====================== Selected Keyword Management =====================================
+
+# Get user's list of selected keywords
+@app.route("/api/selected_keywords/get", methods=["GET"])
+@verify_firebase_token
+def api_get_keywords():
+    return get_keywords()
+
+# Add a selected keyword to the user's list of keywords
+@app.route("/api/selected_keywords/add", methods=["POST"])
+@verify_firebase_token
+def api_add_keywords():
+    return add_keywords()
+
+# Remove a selected keyword from the user's list of keywords
+@app.route("/api/selected_keywords/remove", methods=["POST"])
+@verify_firebase_token
+def api_remove_keyword():
+    return remove_keyword()
+
+# Clear the current user's list of keywords
+@app.route("/api/selected_keywords/clear", methods=["POST"])
+@verify_firebase_token
+def api_clear_keywords():
+    return clear_keywords()
+
+
 
 # Step 4: Added new API endpoint for saving resume data
 @app.route("/api/save_resume", methods=["POST"])
