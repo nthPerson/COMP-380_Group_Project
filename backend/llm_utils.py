@@ -9,7 +9,7 @@ openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
 # Generic LLM (OpenAI API) resume and job description parsing helper function
 def llm_parse_text(text: str, mode: str) -> dict:
     """
-    mode == 'resume' -> extract skills, education, experience
+    mode == 'resume' -> extract skills, education, experience, projects
     mode == 'jd'     -> extract required_skills, required_education, required_experience, responsibilities
     """
     # OpenAI prompt details for parsing resumes
@@ -18,8 +18,11 @@ def llm_parse_text(text: str, mode: str) -> dict:
         user = (
             "Extract from this resume:\n"
             "  • skills (as an array of strings)\n"
-            "  • education (as an array of objects with fields 'degree', 'institution', and 'year')\n"
+            """  • education (as an array of objects with fields 'degree', 'institution', 'major', and 'year')
+            Return 'major' only if it is explicitly mentioned in the resume. \n"""
             "  • professional experience (as an array of objects with fields 'job_title', 'company', and 'dates')\n"
+            """  • projects (as an array of objects with fields 'name', 'description', and 'technologies'), where:
+                - 'description' is an array of bullet points (strings), each describing one key responsibility, task, or achievement.\n"""
             "Return a JSON object with exactly these fields."
         )
         schema = {
@@ -33,9 +36,10 @@ def llm_parse_text(text: str, mode: str) -> dict:
                         "properties": {
                             "degree": {"type": "string"},
                             "institution": {"type": "string"},
-                            "year": {"type": "string"}
+                            "year": {"type": "string"},
+                            "major": {"type": "string"}
                         },
-                        "required": ["degree", "institution", "year"],
+                        "required": ["degree", "institution", "year", "major"],
                         "additionalProperties": False
                     }
                 },
@@ -52,8 +56,27 @@ def llm_parse_text(text: str, mode: str) -> dict:
                         "additionalProperties": False
                     }
                 },
+                "projects": {
+                    "type" : "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {"type": "string"},
+                            "description": {
+                                "type" : "array",
+                                "items": {"type": "string"}
+                            },
+                            "technologies": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            } 
+                        },
+                        "required": ["name", "description", "technologies"],
+                        "additionalProperties": False
+                    }
+                }
             },
-            "required": ["skills", "education", "experience"],
+            "required": ["skills", "education", "experience", "projects"],
             "additionalProperties": False
         }
         name = "ResumeProfile"

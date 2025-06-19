@@ -6,48 +6,48 @@ import { extractResumeProfileLLM } from "../../services/resumeService";
 import { extractJdProfile } from "../../services/jobDescriptionService";
 import { auth } from "../../firebase";
 
-export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
+export default function ProfileExtractor({ masterDocID, jdText, jdUrl }) {
   const [resumeProfile, setResumeProfile] = useState(null);
   const [jdProfile, setJdProfile] = useState(null);
   const [loading, setLoading] = useState({ resume: false, jd: false });
-  const [error,   setError]   = useState(null);
+  const [error, setError] = useState(null);
 
-  // Fetch the resume profile (skills, education, professional experience) from master resume
+  // Fetch the resume profile (skills, education, professional experience + projects) from master resume
   useEffect(() => {
     if (!masterDocID || !jdText) return;
-    setLoading(l => ({ ...l, resume: true }));
+    setLoading((l) => ({ ...l, resume: true }));
     extractResumeProfileLLM(masterDocID)
-        .then(profile => setResumeProfile(profile))
-        .catch(err => setError(err.toString()))
-        .finally(() => setLoading(l => ({ ...l, resume: false })));
+      .then((profile) => setResumeProfile(profile))
+      .catch((err) => setError(err.toString()))
+      .finally(() => setLoading((l) => ({ ...l, resume: false })));
   }, [masterDocID, jdText]);
 
   // Fetch the job description profile via the text-LLM extractor only
   useEffect(() => {
-        if (!jdText) return;
+    if (!jdText) return;
 
-        async function fetchJdProfile() {
-            setLoading(l => ({ ...l, jd: true }));
-            try {
-                // Fetch Firebase ID token
-                const idToken = await auth.currentUser.getIdToken();  // Get user's ID token to authenticate profile extraction calls to backend
-                const profile = await extractJdProfile(jdText, idToken);  // Get the extracted profile (all keywords) from job description
-                setJdProfile(profile);  // Send the extracted profile to the parent (Homepage)
-            } catch (err) {
-                setError(err.toString());
-            } finally {
-                setLoading(l => ({ ...l, jd: false }));
-            }
-        }
+    async function fetchJdProfile() {
+      setLoading((l) => ({ ...l, jd: true }));
+      try {
+        // Fetch Firebase ID token
+        const idToken = await auth.currentUser.getIdToken(); // Get user's ID token to authenticate profile extraction calls to backend
+        const profile = await extractJdProfile(jdText, idToken); // Get the extracted profile (all keywords) from job description
+        setJdProfile(profile); // Send the extracted profile to the parent (Homepage)
+      } catch (err) {
+        setError(err.toString());
+      } finally {
+        setLoading((l) => ({ ...l, jd: false }));
+      }
+    }
 
-        fetchJdProfile();
+    fetchJdProfile();
   }, [jdText]);
 
   if (error) {
     return <div style={{ color: "red" }}>Error: {error}</div>;
   }
 
-    return (
+  return (
     <div style={{ display: "flex", gap: 40, marginTop: 24 }}>
       <section style={{ flex: 1 }}>
         <h2>Job Description Profile</h2>
@@ -92,18 +92,39 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                 <li key={`skill-${i}`}>{skill}</li>
               ))}
             </ul>
+
             <h3>Education</h3>
             <ul>
               {resumeProfile.education.map((edu, i) => (
                 // <li key={`education-${i}`}>{edu}</li>
-                <li key={`edu-${i}`}>{edu.degree} at {edu.institution} ({edu.year})</li>
+                <li key={`edu-${i}`}>
+                  {edu.degree} at {edu.institution} ({edu.year}) ({edu.major})
+                </li>
               ))}
             </ul>
+
             <h3>Experience</h3>
             <ul>
               {resumeProfile.experience.map((exp, i) => (
                 // <li key={`experience-${i}`}>{exp}</li>
-                <li key={`exp-${i}`}>{exp.job_title} at {exp.company} ({exp.dates})</li>
+                <li key={`exp-${i}`}>
+                  {exp.job_title} at {exp.company} ({exp.dates})
+                </li>
+              ))}
+            </ul>
+
+            <h3>Projects</h3>
+            <ul>
+              {resumeProfile.projects.map((proj, i) => (
+                <li key={`proj-${i}`}>
+                  <strong>{proj.name}</strong>
+                  <ul>
+                    {proj.description.map((bullet, j) => (
+                      <li key={`proj-${i}-bullet-${j}`}>{bullet}</li>
+                    ))}
+                  </ul>
+                  <em>Technologies: {proj.technologies.join(", ")}</em>
+                </li>
               ))}
             </ul>
           </>
