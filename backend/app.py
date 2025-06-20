@@ -1,5 +1,6 @@
-from flask import Flask, request
-from flask_cors import CORS 
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import sys
 
 from verify_token import verify_firebase_token 
 from jd_utils import (
@@ -28,7 +29,8 @@ from keyword_utils import (
 )
 
 from llm_utils import (
-    generate_targeted_resume
+    generate_targeted_resume,
+    compute_similarity_scores
 )
 
 
@@ -145,11 +147,23 @@ def api_generate_targeted_resume():
     """
     return generate_targeted_resume()
 
-# ——— save the generated resume PDF into the user’s library —————
+# Save the generated resume PDF into the user’s library
 @app.route("/api/save_generated_resume", methods=["POST"])
 @verify_firebase_token
 def api_save_generated_resume():
     return save_generated_resume()
+
+# Similarity scoring endpoint
+@app.route("/api/similarity_score", methods=["POST"])
+@verify_firebase_token
+def api_similarity_score():
+    try:
+        return compute_similarity_scores()
+    except Exception as e:
+        # Log server-side error:
+        print("similarity_score error:", e, file=sys.stderr)
+        # Continue to return JSON so CORS can attach headers and frontend doesn't freak out
+        return jsonify({"error": str(e)}), 500
 
 
 #  start the server

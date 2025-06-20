@@ -13,7 +13,7 @@ import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../PdfContext";
 import { getSelectedKeywords } from "../../services/keywordService";
-import { generateTargetedResume, saveGeneratedResume } from "../../services/resumeService";
+import { generateTargetedResume, saveGeneratedResume, getSimilarityScore } from "../../services/resumeService";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -31,6 +31,19 @@ export default function Homepage() {
   // Resume generation state
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedResume, setGeneratedResume] = useState("");
+
+  // State for calculating similarity scores
+  // const [simScores, setSimScores] = useState({ master_score: null, generated_score: null });
+  const [initialSim, setInitialSim] = useState(null);  // Master Resume vs JD
+  const [postGenSim, setPostGenSim] = useState(null);  // Generated Resume vs JD
+
+  // As soon as we have a master resume set and a job decription, compute the similarity between Master and JD
+  useEffect(() => {
+    if (!masterDocID || !jdContent) return;
+    getSimilarityScore(masterDocID, jdContent)
+      .then(({ master_score }) => setInitialSim(master_score))
+      .catch(console.error);
+  }, [masterDocID, jdContent]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -106,6 +119,13 @@ export default function Homepage() {
             </div>
           )}
 
+          {/* ④ show initial similarity between master and JD */}
+          {initialSim != null && (
+            <div className="tool-section" data-aos="fade-up">
+              <strong>Master vs JD match:</strong> {initialSim}% 
+            </div>
+          )}          
+
           {masterDocID && jdContent && (
             <div className="tool-section" data-aos="fade-up">
               <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
@@ -128,6 +148,14 @@ export default function Homepage() {
                       keywords
                     );
                     setGeneratedResume(gen);
+
+                    // Calculate similarity scores for “Generated vs JD”
+                    try {
+                      const { generated_score } = await getSimilarityScore(masterDocID, jdContent, gen);
+                      setPostGenSim(generated_score);
+                    } catch (e) {
+                      console.error("Post-gen similarity failed", e);
+                    }
                   } catch (err) {
                     console.error(err);
                     alert("Failed to generate resume. See console.");
@@ -208,6 +236,14 @@ export default function Homepage() {
             >
               Save to Library
             </button>
+
+            {/* ⑤ show post-gen similarity */}
+            {postGenSim != null && (
+              <div style={{ marginTop: 12 }}>
+                <strong>Generated vs JD match:</strong> {postGenSim}% 
+              </div>
+            )}
+
             </div>
           )}
 
