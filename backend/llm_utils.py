@@ -18,8 +18,9 @@ def llm_parse_text(text: str, mode: str) -> dict:
         user = (
             "Extract from this resume:\n"
             "  • skills (as an array of strings)\n"
-            """  • education (as an array of objects with fields 'degree', 'institution', 'major', and 'year')
-            Return 'major' only if it is explicitly mentioned in the resume. \n"""
+            """  • education (as an array of objects with fields 'degree', 'institution', 'major', 'year' 'relevant courswork')
+            Return 'major' only if it is explicitly mentioned in the resume. 
+            Return relevant courswork only if it is mentioned in the resume\n"""
             "  • professional experience (as an array of objects with fields 'job_title', 'company', and 'dates')\n"
             """  • projects (as an array of objects with fields 'name', 'description', and 'technologies'), where:
                 - 'description' is an array of bullet points (strings), each describing one key responsibility, task, or achievement.\n"""
@@ -37,9 +38,13 @@ def llm_parse_text(text: str, mode: str) -> dict:
                             "degree": {"type": "string"},
                             "institution": {"type": "string"},
                             "year": {"type": "string"},
-                            "major": {"type": "string"}
+                            "major": {"type": "string"},
+                            "relevant_coursework" : {
+                                "type": "array",
+                                "items": { "type": "string" }
+                            }
                         },
-                        "required": ["degree", "institution", "year", "major"],
+                        "required": ["degree", "institution", "year", "major", "relevant_coursework"],
                         "additionalProperties": False
                     }
                 },

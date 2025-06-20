@@ -34,7 +34,6 @@ const ResumeViewerModal = ({ isOpen, onClose, pdfUrl }) => {
         },
       }}
     >
-      {/* Header */}
       <div
         style={{
           display: "flex",
@@ -86,10 +85,9 @@ const ResumeViewerModal = ({ isOpen, onClose, pdfUrl }) => {
         </button>
       </div>
 
-      {/* PDF Container */}
       <div
         style={{
-          height: "calc(100% - 81px)", // Subtract header height
+          height: "calc(100% - 81px)", 
           width: "100%",
           backgroundColor: "#f9fafb",
           position: "relative",
@@ -107,8 +105,7 @@ const ResumeViewerModal = ({ isOpen, onClose, pdfUrl }) => {
           }}
           loading="lazy"
         />
-        
-        {/* Loading overlay - you can enhance this further */}
+        --
         <div
           style={{
             position: "absolute",

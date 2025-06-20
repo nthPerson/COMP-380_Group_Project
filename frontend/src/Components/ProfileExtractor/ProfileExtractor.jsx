@@ -99,6 +99,14 @@ export default function ProfileExtractor({ masterDocID, jdText, jdUrl }) {
                 // <li key={`education-${i}`}>{edu}</li>
                 <li key={`edu-${i}`}>
                   {edu.degree} at {edu.institution} ({edu.year}) ({edu.major})
+                  {Array.isArray(edu.relevant_coursework) && edu.relevant_coursework.length > 0 && (
+                    <ul>
+                    {edu.relevant_coursework.map((course, j) => (
+                      <li key= {`course-${i}-${j}`}>{course}</li>
+                    ))}
+                    </ul>
+                  )}
+                 
                 </li>
               ))}
             </ul>
