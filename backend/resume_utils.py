@@ -153,6 +153,48 @@ def save_resume_data(resume_data):
         return jsonify({"error": "Failed to save resume data"}), 500
 
 
+# Save targeted resume to the user's Resume Library after it has been generated
+def save_generated_resume():
+    """
+    Accepts JSON in the following format:
+        { generated_resume: string,
+          filename?: string }
+    Builds a PDF from the text, uploads it, and records metadata.
+    """
+    data = request.get_json() or {}
+    generated_text = data.get("generated_resume", "").strip()
+    file_name = data.get("fileName") or "Generated_Resume.pdf"  # Uses default filename unless provided by user
+    if not generated_text:
+        return jsonify({"error":"No generated_resume provided"}), 400
+    
+    # Build a one-page PDF from plain text
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    styles = getSampleStyleSheet()
+    elems = [ Paragraph(line, styles["Normal"]) for line in generated_text.split("\n")]
+    doc.build(elems)
+    pdf_bytes = buffer.getvalue()
+    buffer.close()
 
+    # Upload to Firebase Storage
+    user_id = g.firebase_user["uid"]
+    blob = bucket.blob(f"user_docs/{user_id}/{file_name}")
+    blob.upload_from_string(pdf_bytes, content_type="application/pdf")
+
+    # Record metadata in Firestore under documents
+    doc_ref = (
+      db.collection("users")
+        .document(user_id)
+        .collection("documents")
+        .document()
+    )
+    doc_ref.set({
+      "fileName": file_name,
+      "storagePath": blob.name,
+      "uploadedAt": firestore.SERVER_TIMESTAMP,
+      "generated": True   # Mark file as 'generated' so we can distinguish in the UI
+    })
+
+    return jsonify({"message":"Generated resume saved","docID":doc_ref.id}), 200
 
 
