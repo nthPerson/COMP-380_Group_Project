@@ -25,6 +25,10 @@ from keyword_utils import (
     clear_keywords
 )
 
+from llm_utils import (
+    generate_targeted_resume
+)
+
 # Added new import for saving resume data
 from resume_utils import save_resume_data  # Step 4: Added import for saving resume data
 
@@ -131,6 +135,15 @@ def save_resume():
     resume_data = request.json  # Get the resume data from the request body
     return save_resume_data(resume_data)  # Call the function to save the data
 
+# ====================== Targeted Resume Generation =======================================
+@app.route("/api/generate_targeted_resume", methods=["POST"])
+@verify_firebase_token
+def api_generate_targeted_resume():
+    """
+    Expects JSON: { docID: string, job_description: string, keywords: [string] }
+    Returns: { generated_resume: string } (aka just the plain text of the generated resume)
+    """
+    return generate_targeted_resume()
 
 
 #  start the server

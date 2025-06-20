@@ -93,3 +93,28 @@ export const saveResume = async (resumeData) => {
     throw error; // Re-throw the error for the caller to handle
   }
 };
+
+/**
+ * Generate a tailored resume via the backend/OpenAI.
+ * @param {string} docID       Master resume document ID
+ * @param {string} jobDescription  Full JD text
+ * @param {[string]} keywords  Array of user-selected keywords
+ * @returns {Promise<string>}  The generated resume as plain text
+ */
+export async function generateTargetedResume(docID, jobDescription, keywords) {
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch("http://localhost:5001/api/generate_targeted_resume", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${idToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ docID, job_description: jobDescription, keywords })
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Generation failed: ${res.status} ${txt}`);
+  }
+  const { generated_resume } = await res.json();
+  return generated_resume;
+}

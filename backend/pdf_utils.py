@@ -1,7 +1,10 @@
 from flask import jsonify, request, g
-from firebase_admin import firestore # Using to record timestamp of PDF upload
+from firebase_admin import firestore, storage # Using to record timestamp of PDF upload
 from firebase_config import db, bucket
 from google.cloud.exceptions import NotFound
+import fitz  # fitz = PyMuPDF, to install: pip install pymupdf
+
+
 
 def upload_user_pdf():
     if "file" not in request.files:
@@ -104,3 +107,19 @@ def get_master_pdf():
         return jsonify({"masterDocID": masterDocID}), 200
     else:
         return jsonify({"masterDocID": None}), 200
+
+
+# Download a PDF from Firebase Storage and return the text within
+def _download_pdf_as_text(user_id: str, doc_id: str) -> str:
+    # Fetch the PDF bytes from Firebase Storage and return as plain text
+    bucket = storage.bucket()  # Identify Firebase storage bucket for our project
+    doc = db.collection("users").document(user_id).collection("documents").document(doc_id).get()  # Get document
+    if not doc.exists:
+        return ""
+    
+    blob_path = doc.to_dict()["storagePath"]
+    pdf_bytes = bucket.blob(blob_path).download_as_bytes()
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    text = "\n".join(page.get_text() for page in doc)
+    
+    return text
