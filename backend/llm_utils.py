@@ -21,7 +21,8 @@ def llm_parse_text(text: str, mode: str) -> dict:
             """  • education (as an array of objects with fields 'degree', 'institution', 'major', 'year' 'relevant courswork')
             Return 'major' only if it is explicitly mentioned in the resume. 
             Return relevant courswork only if it is mentioned in the resume\n"""
-            "  • professional experience (as an array of objects with fields 'job_title', 'company', and 'dates')\n"
+            """  • professional experience (as an array of objects with fields 'job_title', 'company', 'dates' and "accomplishments")
+            Return the work experience accomplishments for each professional experience completely\n"""
             """  • projects (as an array of objects with fields 'name', 'description', and 'technologies'), where:
                 - 'description' is an array of bullet points (strings), each describing one key responsibility, task, or achievement.\n"""
             "Return a JSON object with exactly these fields."
@@ -55,9 +56,13 @@ def llm_parse_text(text: str, mode: str) -> dict:
                         "properties": {
                             "job_title": {"type": "string"},
                             "company": {"type": "string"},
-                            "dates": {"type": "string"}
+                            "dates": {"type": "string"},
+                            "accomplishments" : {
+                                "type" : "array",
+                                "items" : {"type" : "string"}
+                            }
                         },
-                        "required": ["job_title", "company", "dates"],
+                        "required": ["job_title", "company", "dates", "accomplishments"],
                         "additionalProperties": False
                     }
                 },

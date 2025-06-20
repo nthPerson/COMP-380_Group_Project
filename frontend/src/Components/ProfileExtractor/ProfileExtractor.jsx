@@ -116,7 +116,14 @@ export default function ProfileExtractor({ masterDocID, jdText, jdUrl }) {
               {resumeProfile.experience.map((exp, i) => (
                 // <li key={`experience-${i}`}>{exp}</li>
                 <li key={`exp-${i}`}>
-                  {exp.job_title} at {exp.company} ({exp.dates})
+                  {exp.job_title} at {exp.company} ({exp.dates}) 
+                  {Array.isArray(exp.accomplishments) && exp.accomplishments.length > 0 && (
+                    <ul>
+                      {exp.accomplishments.map((acomp, j) => (
+                       <li key= {`acomp-${i}-${j}`}>{acomp}</li> 
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ul>
