@@ -1,7 +1,7 @@
 //initialize firebase and import the auth method and the initalization method 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-
+import {getFirestore} from "firebase/firestore"
 
 // Environment file should contain the following variables at COMP-380_Group_Project/frontend/login-signup/.env
 // See Discord > #configs text channel for details on variable values
@@ -17,5 +17,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-export { auth };
+export { auth, db };

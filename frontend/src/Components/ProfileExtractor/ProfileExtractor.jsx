@@ -114,7 +114,7 @@ export default function ProfileExtractor({ masterDocID, jdText, jdUrl }) {
             <h3>Experience</h3>
             {resumeProfile.total_years_experience && (
               <p style={{ marginTop: -12, marginBottom: 8 }}>
-                <strong>Total YOE:</strong> {resumeProfile.total_years_experience}{" "}
+                <strong>Total YOEc:</strong> {resumeProfile.total_years_experience}{" "}
                 years
               </p>
             )}

@@ -12,6 +12,8 @@ import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../PdfContext";
 
+import UserInfo from "../UserInfo/UserInfo"
+
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -62,6 +64,10 @@ export default function Homepage() {
 
           <div className="tool-section" data-aos="fade-up">
             <UploadPdf />
+          </div>
+
+          <div className="tool-section" data-aos="fade-up">
+            <UserInfo />
           </div>
 
           <div className="tool-section" data-aos="fade-up">
