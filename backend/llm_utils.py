@@ -25,6 +25,8 @@ def llm_parse_text(text: str, mode: str) -> dict:
             Return the work experience accomplishments for each professional experience completely\n"""
             """  • projects (as an array of objects with fields 'name', 'description', and 'technologies'), where:
                 - 'description' is an array of bullet points (strings), each describing one key responsibility, task, or achievement.\n"""
+            """• total_years_experience (as a number)\n"
+            "  - Calculate based on the job date ranges in 'professional_experience'. Round to the nearest half year. Do not double-count overlapping time periods.\n"""
             "Return a JSON object with exactly these fields."
         )
         schema = {
@@ -84,9 +86,10 @@ def llm_parse_text(text: str, mode: str) -> dict:
                         "required": ["name", "description", "technologies"],
                         "additionalProperties": False
                     }
-                }
+                },
+                "total_years_experience": {"type": "number"}
             },
-            "required": ["skills", "education", "experience", "projects"],
+            "required": ["skills", "education", "experience", "projects", "total_years_experience"],
             "additionalProperties": False
         }
         name = "ResumeProfile"

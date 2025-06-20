@@ -99,31 +99,38 @@ export default function ProfileExtractor({ masterDocID, jdText, jdUrl }) {
                 // <li key={`education-${i}`}>{edu}</li>
                 <li key={`edu-${i}`}>
                   {edu.degree} at {edu.institution} ({edu.year}) ({edu.major})
-                  {Array.isArray(edu.relevant_coursework) && edu.relevant_coursework.length > 0 && (
-                    <ul>
-                    {edu.relevant_coursework.map((course, j) => (
-                      <li key= {`course-${i}-${j}`}>{course}</li>
-                    ))}
-                    </ul>
-                  )}
-                 
+                  {Array.isArray(edu.relevant_coursework) &&
+                    edu.relevant_coursework.length > 0 && (
+                      <ul>
+                        {edu.relevant_coursework.map((course, j) => (
+                          <li key={`course-${i}-${j}`}>{course}</li>
+                        ))}
+                      </ul>
+                    )}
                 </li>
               ))}
             </ul>
 
             <h3>Experience</h3>
+            {resumeProfile.total_years_experience && (
+              <p style={{ marginTop: -12, marginBottom: 8 }}>
+                <strong>Total YOE:</strong> {resumeProfile.total_years_experience}{" "}
+                years
+              </p>
+            )}
             <ul>
               {resumeProfile.experience.map((exp, i) => (
                 // <li key={`experience-${i}`}>{exp}</li>
                 <li key={`exp-${i}`}>
-                  {exp.job_title} at {exp.company} ({exp.dates}) 
-                  {Array.isArray(exp.accomplishments) && exp.accomplishments.length > 0 && (
-                    <ul>
-                      {exp.accomplishments.map((acomp, j) => (
-                       <li key= {`acomp-${i}-${j}`}>{acomp}</li> 
-                      ))}
-                    </ul>
-                  )}
+                  {exp.job_title} at {exp.company} ({exp.dates})
+                  {Array.isArray(exp.accomplishments) &&
+                    exp.accomplishments.length > 0 && (
+                      <ul>
+                        {exp.accomplishments.map((acomp, j) => (
+                          <li key={`acomp-${i}-${j}`}>{acomp}</li>
+                        ))}
+                      </ul>
+                    )}
                 </li>
               ))}
             </ul>
