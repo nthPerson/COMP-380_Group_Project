@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import { jsPDF } from "jspdf";
 
 import Sidebar from "../Sidebar/Sidebar";
 import { handleSignout } from "../../services/authHandlers";
@@ -164,6 +165,30 @@ export default function Homepage() {
               }}
             >
               Download as Text
+            </button>
+
+            {/* —— Download as PDF button —— */}
+            <button
+              style={{ marginLeft: 8 }}
+              onClick={() => {
+                // 1) Import jsPDF at top:
+                //    import { jsPDF } from "jspdf";
+                const doc = new jsPDF({
+                  unit: "pt",
+                  format: "letter",
+                });
+
+                // 2) Split long lines to fit page width (~540pt wide minus margins)
+                const lines = doc.splitTextToSize(generatedResume, 540);
+
+                // 3) Place text starting at (36, 40)
+                doc.text(lines, 36, 40);
+
+                // 4) Trigger download
+                doc.save("Tailored_Resume.pdf");
+              }}
+            >
+              Download as PDF
             </button>
 
             {/* —— SAVE TO LIBRARY BUTTON —— */}
