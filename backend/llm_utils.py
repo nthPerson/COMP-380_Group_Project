@@ -1,4 +1,4 @@
-import os, json
+import os, json, math
 from dotenv import load_dotenv
 import openai
 from flask import request, g, jsonify
@@ -9,6 +9,9 @@ from pdf_utils import (
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
+
+EMBED_MODEL = "text-embedding-3-small"  # 1,536 dimensional vector
+# EMBED_MODEL = "text-embedding-3-large"  # 3072 dimensional vector
 
 # Generic LLM (OpenAI API) resume and job description parsing helper function
 def llm_parse_text(text: str, mode: str) -> dict:
@@ -169,7 +172,70 @@ def generate_targeted_resume():
     # 4: Return the plain text of the augmented resume
     return jsonify({"generated_resume": generated}), 200
 
+#============================ Embeddings Functionality ====================================================
 
+# Helper function that calls OpenAI API Embeddings to get a single embedding vector from text
+def _get_embedding(text: str):
+    response = openai.embeddings.create(
+        input=[text],
+        model=EMBED_MODEL
+    )
+    return response.data[0].embedding
 
+# Calculate cosine similarity between two vectors
+def _cosine_sim(a: list, b: list) -> float:
+    dot = sum(x*y for x,y in zip(a, b))
+    norm_a = math.sqrt(sum(x*x for x in a))
+    norm_b = math.sqrt(sum(y*y for y in b))
+    return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
+""" JD <-> Resume similiarity calculation using OpenAI Embeddings and consine similarity
+    Here's the plan:
+        1. After user tags a master resume and inputs a JD, create embeddings from resume and JD
+        2. Calculate cosine sim to get baseline measurement
+        3. After targeted resume is generated, create embeddings for targeted resume
+        4. Calculate cosine sim again to see if augmented resume performs better against JD
+"""
+def compute_similarity_scores():
+    """
+    Expects JSON in the following format:
+        { 
+          docID: string,
+          job_description: string,
+          generated_resume?: string 
+        }
+    Returns JSON in the following format:
+        { 
+          master_score: float,      # Range: 0.0 - 100
+          generated_score?: float   # Only if generated_resume is provided
+        }
+    """
+    data = request.get_json() or {}
+    doc_id   = data.get("docID")
+    jd_text  = data.get("job_description", "").strip()
+    generated_text = data.get("generated_resume", "").strip()
+
+    if not doc_id or not jd_text:
+        return jsonify({"error":"docID and job_description required"}), 400
+    
+    # Load master resume text
+    user_id = g.firebase_user["uid"]
+    master_txt = _download_pdf_as_text(user_id, doc_id)
+    if not master_txt:
+        return jsonify({"error":"Could not fetch resume text"}), 404
+    
+    # Embed JD and master resume
+    jd_embed = _get_embedding(jd_text)
+    master_embed = _get_embedding(master_txt)
+    master_sim = _cosine_sim(master_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
+
+    result = {"master_score": round(master_sim, 1)}
+
+    # If the targeted resume has been generated, embed, calculate, and compare that too
+    if generated_text:
+        gen_embed = _get_embedding(generated_text)
+        generated_sim = _cosine_sim(gen_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
+        result["generated_score"] = round(generated_sim, 1)
+
+    return jsonify(result), 200
 

@@ -138,3 +138,34 @@ export async function saveGeneratedResume(generatedText, fileName="Generated_Res
   }
   return await res.json();  // { message, docID }
 }
+
+
+/**
+ * Compare the master resume (and optional generated resume)
+ * against the job description via embeddings.
+ *
+ * @param {string} docID
+ * @param {string} jobDescription
+ * @param {string} [generated]  plain-text of the generated resume
+ * @returns {Promise<{master_score:number, generated_score?:number}>}
+ */
+export async function getSimilarityScore(docID, jobDescription, generated) {
+  const idToken = await auth.currentUser.getIdToken();
+  const body    = { docID, job_description: jobDescription };
+  if (generated) body.generated_resume = generated;
+
+  const res = await fetch("http://localhost:5001/api/similarity_score", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Similarity check failed");
+  }
+  return await res.json();
+}
+
