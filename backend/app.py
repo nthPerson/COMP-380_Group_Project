@@ -137,7 +137,7 @@ def save_resume():
     resume_data = request.json  # Get the resume data from the request body
     return save_resume_data(resume_data)  # Call the function to save the data
 
-# ====================== Targeted Resume Generation =======================================
+# ====================== Targeted Resume Generation =====================================
 @app.route("/api/generate_targeted_resume", methods=["POST"])
 @verify_firebase_token
 def api_generate_targeted_resume():
@@ -153,6 +153,7 @@ def api_generate_targeted_resume():
 def api_save_generated_resume():
     return save_generated_resume()
 
+# ======================= Similarity Scoring ============================================
 # Similarity scoring endpoint
 @app.route("/api/similarity_score", methods=["POST"])
 @verify_firebase_token

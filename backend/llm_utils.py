@@ -13,6 +13,8 @@ openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
 EMBED_MODEL = "text-embedding-3-small"  # 1,536 dimensional vector
 # EMBED_MODEL = "text-embedding-3-large"  # 3072 dimensional vector
 
+#================== Keyword Extraction ============================================================
+
 # Generic LLM (OpenAI API) resume and job description parsing helper function
 def llm_parse_text(text: str, mode: str) -> dict:
     """
@@ -117,6 +119,7 @@ def llm_parse_text(text: str, mode: str) -> dict:
 
     return json.loads(response.choices[0].message.content)
 
+#====================== Targeted Resume Generation ================================================
 
 """ Augmented resume generation using user's master resume, job description, and selected keywords
     Here's the plan:
@@ -172,7 +175,7 @@ def generate_targeted_resume():
     # 4: Return the plain text of the augmented resume
     return jsonify({"generated_resume": generated}), 200
 
-#============================ Embeddings Functionality ====================================================
+#============================ Similarity Scoring ============================================
 
 # Helper function that calls OpenAI API Embeddings to get a single embedding vector from text
 def _get_embedding(text: str):
