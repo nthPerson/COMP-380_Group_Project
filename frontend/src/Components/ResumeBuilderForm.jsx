@@ -7,6 +7,7 @@ const ResumeBuilderForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [newTechnicalSkill, setNewTechnicalSkill] = useState('');
   const [newSoftSkill, setNewSoftSkill] = useState('');
+  const [documentName, setDocumentName] = useState('');
   const [resumeData, setResumeData] = useState({
     personalInfo: {
       firstName: '',
@@ -179,8 +180,8 @@ const [fieldErrors, setFieldErrors] = useState({});
 
   const handleSaveResume = async () => {
     try {
-      // Call the saveResume function from the service layer
-      const response = await saveResume(resumeData);
+      const payload = {...resumeData, fileName: documentName };
+      const response = await saveResume(payload);
   
       // Show a success message with the resume ID
       alert(`Resume saved successfully! Resume ID: ${response.resumeID}`);
@@ -680,8 +681,21 @@ const [fieldErrors, setFieldErrors] = useState({});
               <h4 className="font-medium text-gray-700">Soft Skills:</h4>
               <p className="text-gray-600">{resumeData.skills.soft.join(', ')}</p>
             </div>
-          )}
-        </div>
+        )}
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          PDF File Name (optional)
+        </label>
+        <input
+          type="text"
+          value={documentName}
+          onChange={(e) => setDocumentName(e.target.value)}
+          className="input-field"
+          placeholder="MyResume.pdf"
+        />
+      </div>
       </div>
 
       <button
