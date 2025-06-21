@@ -1,5 +1,6 @@
-from flask import Flask, request
-from flask_cors import CORS 
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import sys
 
 from verify_token import verify_firebase_token 
 from jd_utils import (
@@ -15,12 +16,28 @@ from pdf_utils import (
     get_master_pdf
 )
 from resume_utils import (
-    extract_resume_profile_llm
+    extract_resume_profile_llm,
+    save_resume_data,
+    save_generated_resume
+)
+
+from keyword_utils import (
+    add_keywords,
+    remove_keyword,
+    get_keywords,
+    clear_keywords
+)
+
+from llm_utils import (
+    generate_targeted_resume,
+    compute_similarity_scores
 )
 
 
 app = Flask(__name__) 
 CORS(app)
+
+#====================== Job Description Handling ========================================
 
 # Get Gemini explanation from text
 @app.route("/api/jd", methods =["POST"])
@@ -33,6 +50,8 @@ def receive_jd():
 @verify_firebase_token
 def receive_jd_url():
     return handle_jd_from_url(request.get_json().get("url", ""))
+
+#============================= PDF Management ===========================================
     
 # Upload user PDF
 @app.route("/api/upload_pdf", methods=["POST"])
@@ -64,6 +83,8 @@ def api_set_master_pdf():
 def api_get_master_pdf():
     return get_master_pdf()
 
+#====================== Profile (keyword) Extraction ====================================
+
 # Resume profile (skill/experience/etc.) extraction via LLM
 @app.route("/api/extract_resume_profile_llm", methods=["POST"])
 @verify_firebase_token
@@ -75,6 +96,75 @@ def api_extract_resume_profile_llm():
 @verify_firebase_token
 def api_jd_profile_llm():
     return extract_jd_profile_llm(request.json.get("jd", ""))
+
+#====================== Selected Keyword Management =====================================
+
+# Get user's list of selected keywords
+@app.route("/api/selected_keywords/get", methods=["GET"])
+@verify_firebase_token
+def api_get_keywords():
+    return get_keywords()
+
+# Add a selected keyword to the user's list of keywords
+@app.route("/api/selected_keywords/add", methods=["POST"])
+@verify_firebase_token
+def api_add_keywords():
+    return add_keywords()
+
+# Remove a selected keyword from the user's list of keywords
+@app.route("/api/selected_keywords/remove", methods=["POST"])
+@verify_firebase_token
+def api_remove_keyword():
+    return remove_keyword()
+
+# Clear the current user's list of keywords
+@app.route("/api/selected_keywords/clear", methods=["POST"])
+@verify_firebase_token
+def api_clear_keywords():
+    return clear_keywords()
+
+#====================== Resume Builder Functions ========================================
+
+# Save resume data created using ResumeBuilderForm prompts (also creates 
+# and saves a PDF version of the data)
+@app.route("/api/save_resume", methods=["POST"])
+@verify_firebase_token
+def save_resume():
+    """
+    Save resume data to the database.
+    This endpoint receives resume data from the frontend and saves it to the backend.
+    """
+    resume_data = request.json  # Get the resume data from the request body
+    return save_resume_data(resume_data)  # Call the function to save the data
+
+# ====================== Targeted Resume Generation =======================================
+@app.route("/api/generate_targeted_resume", methods=["POST"])
+@verify_firebase_token
+def api_generate_targeted_resume():
+    """
+    Expects JSON: { docID: string, job_description: string, keywords: [string] }
+    Returns: { generated_resume: string } (aka just the plain text of the generated resume)
+    """
+    return generate_targeted_resume()
+
+# Save the generated resume PDF into the user’s library
+@app.route("/api/save_generated_resume", methods=["POST"])
+@verify_firebase_token
+def api_save_generated_resume():
+    return save_generated_resume()
+
+# Similarity scoring endpoint
+@app.route("/api/similarity_score", methods=["POST"])
+@verify_firebase_token
+def api_similarity_score():
+    try:
+        return compute_similarity_scores()
+    except Exception as e:
+        # Log server-side error:
+        print("similarity_score error:", e, file=sys.stderr)
+        # Continue to return JSON so CORS can attach headers and frontend doesn't freak out
+        return jsonify({"error": str(e)}), 500
+
 
 #  start the server
 if __name__ == "__main__":

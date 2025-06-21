@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import { jsPDF } from "jspdf";
 
 import Sidebar from "../Sidebar/Sidebar";
 import { handleSignout } from "../../services/authHandlers";
@@ -11,6 +12,8 @@ import UploadPdf from "../UploadPdf/UploadPdf";
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../PdfContext";
+import { getSelectedKeywords } from "../../services/keywordService";
+import { generateTargetedResume, saveGeneratedResume, getSimilarityScore } from "../../services/resumeService";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -23,7 +26,81 @@ export default function Homepage() {
   const [user, setUser] = useState(null);
   const [jdExplanation, setJdExplanation] = useState("");
   const [jdContent, setJdContent] = useState("");
-  const { masterDocID } = usePdf();
+  const { masterDocID, fetchPdfsAndMaster } = usePdf();
+
+  // Resume generation state
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedResume, setGeneratedResume] = useState("");
+
+  // State for calculating similarity scores
+  // const [simScores, setSimScores] = useState({ master_score: null, generated_score: null });
+  const [initialSim, setInitialSim] = useState(null);  // Master Resume vs JD
+  const [postGenSim, setPostGenSim] = useState(null);  // Generated Resume vs JD
+
+  //   const handleExplanation = (exp, rawText) => {  // TODO: this function was suggested by GPT, but I haven't yet figured out what it's used for
+  //   setJdExplanation(exp);
+  //   setJdContent(rawText);
+  // };
+
+  const handleGenerateResume = async () => {
+    setIsGenerating(true);
+    try {
+      const keywords = await getSelectedKeywords();
+      const gen = await generateTargetedResume(masterDocID, jdContent, keywords);
+      setGeneratedResume(gen);
+      try {
+        const { generated_score } = await getSimilarityScore(
+          masterDocID,
+          jdContent,
+          gen
+        );
+        setPostGenSim(generated_score);
+      } catch (e) {
+        console.error("Post-gen similarity failed", e);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to generate resume. See console.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleDownloadText = () => {
+    const blob = new Blob([generatedResume], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Tailored_Resume.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadPdf = () => {
+    const doc = new jsPDF({ unit: "pt", format: "letter" });
+    const lines = doc.splitTextToSize(generatedResume, 540);
+    doc.text(lines, 36, 40);
+    doc.save("Tailored_Resume.pdf");
+  };
+
+  const handleSaveToLibrary = async () => {
+    try {
+      await saveGeneratedResume(generatedResume, "Tailored_Resume.pdf");
+      await fetchPdfsAndMaster();
+      alert("Saved to your library!");
+    } catch (e) {
+      console.error(e);
+      alert("Failed to save generated resume.");
+    }
+  };
+
+  // As soon as we have a master resume set and a job decription, compute the similarity between Master and JD
+  useEffect(() => {
+    if (!masterDocID || !jdContent) return;
+    getSimilarityScore(masterDocID, jdContent)
+      .then(({ master_score }) => setInitialSim(master_score))
+      .catch(console.error);
+  }, [masterDocID, jdContent]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -75,6 +152,7 @@ export default function Homepage() {
                 setJdExplanation(exp);
                 setJdContent(rawText);
               }}
+              // onExplanationReceived={(exp, handleExplanation)}  // Possible replacement for the statement above
             />
           </div>
 
@@ -89,6 +167,7 @@ export default function Homepage() {
                 setJdExplanation(exp);
                 setJdContent(rawText);
               }}
+              // onExplanationReceived={(exp, handleExplanation)}  // Possible replacement for the statement above
             />
           </div>
 
@@ -99,9 +178,66 @@ export default function Homepage() {
             </div>
           )}
 
+          {/* ④ show initial similarity between master and JD */}
+          {initialSim != null && (
+            <div className="tool-section" data-aos="fade-up">
+              <strong>Master vs JD match:</strong> {initialSim}% 
+            </div>
+          )}          
+
           {masterDocID && jdContent && (
             <div className="tool-section" data-aos="fade-up">
               <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
+            </div>
+          )}
+
+          {/* Generate button */}
+          {masterDocID && jdContent && (
+            <div className="tool-section" data-aos="fade-up">
+              <button onClick={handleGenerateResume} disabled={isGenerating}>
+                {isGenerating ? "Generating…" : "Generate Tailored Resume"}
+              </button>
+            </div>
+          )}
+
+          {/* Show & download the generated resume */}
+          {generatedResume && (
+            <div className="tool-section" data-aos="fade-up">
+              <h3>Your Tailored Resume</h3>
+              <textarea
+                rows={15}
+                cols={80}
+                value={generatedResume}
+                onChange={e => setGeneratedResume(e.target.value)}
+              />
+              <br/>
+             <button onClick={handleDownloadText}>
+              Download as Text
+            </button>
+
+            {/* —— Download as PDF button —— */}
+            <button
+              style={{ marginLeft: 8 }}
+              onClick={handleDownloadPdf}
+            >
+              Download as PDF
+            </button>
+
+            {/* —— SAVE TO LIBRARY BUTTON —— */}
+            <button
+              style={{ marginLeft: 8 }}
+              onClick={handleSaveToLibrary}
+            >
+              Save to Library
+            </button>
+
+            {/* ⑤ show post-gen similarity */}
+            {postGenSim != null && (
+              <div style={{ marginTop: 12 }}>
+                <strong>Generated vs JD match:</strong> {postGenSim}% 
+              </div>
+            )}
+
             </div>
           )}
 

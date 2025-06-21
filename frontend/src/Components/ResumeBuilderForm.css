@@ -1,0 +1,128 @@
+/* General container styling */
+.resume-builder-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Progress bar styling */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  
+  .progress-step {
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+  
+  .progress-step-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #d1d5db;
+    background-color: #f9fafb;
+    color: #6b7280;
+    transition: all 0.3s ease;
+  }
+  
+  .progress-step-icon.active {
+    border-color: #2563eb;
+    background-color: #2563eb;
+    color: #ffffff;
+  }
+  
+  .progress-step-title {
+    margin-left: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+  
+  .progress-step-title.active {
+    color: #2563eb;
+  }
+  
+  .progress-bar-line {
+    flex: 1;
+    height: 2px;
+    background-color: #d1d5db;
+    margin: 0 16px;
+  }
+  
+  .progress-bar-line.active {
+    background-color: #2563eb;
+  }
+  
+  /* Input field styling */
+  .input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-field:focus {
+    border-color: #2563eb;
+    outline: none;
+  }
+  
+  /* Button styling */
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-primary {
+    background-color: #2563eb;
+    color: #ffffff;
+  }
+  
+  .button-primary:hover {
+    background-color: #1d4ed8;
+  }
+  
+  .button-secondary {
+    background-color: #e5e7eb;
+    color: #6b7280;
+  }
+  
+  .button-secondary:hover {
+    background-color: #d1d5db;
+  }
+  
+  .button-disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  /* Validation error styling */
+.input-error {
+    border-color: #dc2626; /* Red border for invalid fields */
+    background-color: #fef2f2; /* Light red background */
+}
+
+.error-message {
+    color: #dc2626; /* Red text for error messages */
+    font-size: 12px;
+    margin-top: 4px;
+}
