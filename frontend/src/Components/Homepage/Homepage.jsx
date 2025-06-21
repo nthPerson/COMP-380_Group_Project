@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import { jsPDF } from "jspdf";
 
 import Sidebar from "../Sidebar/Sidebar";
 import { handleSignout } from "../../services/authHandlers";
@@ -12,7 +13,7 @@ import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../PdfContext";
 import { getSelectedKeywords } from "../../services/keywordService";
-import { generateTargetedResume } from "../../services/resumeService";
+import { generateTargetedResume, saveGeneratedResume } from "../../services/resumeService";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -25,7 +26,7 @@ export default function Homepage() {
   const [user, setUser] = useState(null);
   const [jdExplanation, setJdExplanation] = useState("");
   const [jdContent, setJdContent] = useState("");
-  const { masterDocID } = usePdf();
+  const { masterDocID, fetchPdfsAndMaster } = usePdf();
 
   // Resume generation state
   const [isGenerating, setIsGenerating] = useState(false);
@@ -153,18 +154,60 @@ export default function Homepage() {
               />
               <br/>
               <button
-                onClick={() => {
-                  const blob = new Blob([generatedResume], { type: "text/plain" });
-                  const url  = URL.createObjectURL(blob);
-                  const a    = document.createElement("a");
-                  a.href     = url;
-                  a.download = "Tailored_Resume.txt";
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-              >
-                Download as Text
-              </button>
+              onClick={() => {
+                const blob = new Blob([generatedResume], { type: "text/plain" });
+                const url  = URL.createObjectURL(blob);
+                const a    = document.createElement("a");
+                a.href     = url;
+                a.download = "Tailored_Resume.txt";
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+            >
+              Download as Text
+            </button>
+
+            {/* —— Download as PDF button —— */}
+            <button
+              style={{ marginLeft: 8 }}
+              onClick={() => {
+                // 1) Import jsPDF at top:
+                //    import { jsPDF } from "jspdf";
+                const doc = new jsPDF({
+                  unit: "pt",
+                  format: "letter",
+                });
+
+                // 2) Split long lines to fit page width (~540pt wide minus margins)
+                const lines = doc.splitTextToSize(generatedResume, 540);
+
+                // 3) Place text starting at (36, 40)
+                doc.text(lines, 36, 40);
+
+                // 4) Trigger download
+                doc.save("Tailored_Resume.pdf");
+              }}
+            >
+              Download as PDF
+            </button>
+
+            {/* —— SAVE TO LIBRARY BUTTON —— */}
+            <button
+              style={{ marginLeft: 8 }}
+              onClick={async () => {
+                try {
+                  await saveGeneratedResume(generatedResume, "Tailored_Resume.pdf");
+                  // after saving, re‐fetch the PDF list
+                  await fetchPdfsAndMaster();
+                  alert("Saved to your library!");
+                } catch (e) {
+                  console.error(e);
+                  alert("Failed to save generated resume.");
+                }
+              }}
+            >
+              Save to Library
+            </button>
             </div>
           )}
 

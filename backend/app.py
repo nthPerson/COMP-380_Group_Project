@@ -15,7 +15,9 @@ from pdf_utils import (
     get_master_pdf
 )
 from resume_utils import (
-    extract_resume_profile_llm
+    extract_resume_profile_llm,
+    save_resume_data,
+    save_generated_resume
 )
 
 from keyword_utils import (
@@ -29,8 +31,6 @@ from llm_utils import (
     generate_targeted_resume
 )
 
-# Added new import for saving resume data
-from resume_utils import save_resume_data  # Step 4: Added import for saving resume data
 
 app = Flask(__name__) 
 CORS(app)
@@ -144,6 +144,12 @@ def api_generate_targeted_resume():
     Returns: { generated_resume: string } (aka just the plain text of the generated resume)
     """
     return generate_targeted_resume()
+
+# ——— save the generated resume PDF into the user’s library —————
+@app.route("/api/save_generated_resume", methods=["POST"])
+@verify_firebase_token
+def api_save_generated_resume():
+    return save_generated_resume()
 
 
 #  start the server

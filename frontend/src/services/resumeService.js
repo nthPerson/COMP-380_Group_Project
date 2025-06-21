@@ -118,3 +118,23 @@ export async function generateTargetedResume(docID, jobDescription, keywords) {
   const { generated_resume } = await res.json();
   return generated_resume;
 }
+
+/**
+ * Persist a generated resume (plain text) to the user’s ResumeLibrary
+ */
+export async function saveGeneratedResume(generatedText, fileName="Generated_Resume.pdf") {
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch("http://localhost:5001/api/save_generated_resume", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${idToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ generated_resume: generatedText, fileName })
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Failed to save generated resume");
+  }
+  return await res.json();  // { message, docID }
+}
