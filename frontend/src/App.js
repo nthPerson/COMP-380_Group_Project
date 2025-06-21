@@ -8,6 +8,7 @@ import Homepage    from './Components/Homepage/Homepage';
 import LandingPage    from './Components/LandingPage/LandingPage';
 import UserProfile    from './Components/UserProfile/UserProfile';
 import TailorResume   from './Components/TailorResume/TailorResume';
+import ResumeBuilderForm from './Components/ResumeBuilderForm'; // Added import for ResumeBuilderForm
 import { PdfProvider } from './Components/PdfContext';
 
 function App() {
@@ -33,6 +34,10 @@ function App() {
 
         {/* 7) Tailor Resume */}
         <Route path="/tailorResume" element={<TailorResume />} />
+
+        {/* 9) Create Resume */}
+        <Route path="/createResume" element={<ResumeBuilderForm />} /> {/* Added route for Create Resume */}
+
 
         {/* 8) Anything else → redirect to “/signup” */}
         <Route path="*" element={<Navigate to="/signup" replace />} />

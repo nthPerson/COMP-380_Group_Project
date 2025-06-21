@@ -1,10 +1,17 @@
-import os, json
+import os, json, math
 from dotenv import load_dotenv
 import openai
+from flask import request, g, jsonify
 
+from pdf_utils import (
+    _download_pdf_as_text
+)
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
+
+EMBED_MODEL = "text-embedding-3-small"  # 1,536 dimensional vector
+# EMBED_MODEL = "text-embedding-3-large"  # 3072 dimensional vector
 
 # Generic LLM (OpenAI API) resume and job description parsing helper function
 def llm_parse_text(text: str, mode: str) -> dict:
@@ -111,6 +118,124 @@ def llm_parse_text(text: str, mode: str) -> dict:
     return json.loads(response.choices[0].message.content)
 
 
-# Future resume augmentation functions would go here
-def augment_resume():
-    pass
+""" Augmented resume generation using user's master resume, job description, and selected keywords
+    Here's the plan:
+        1. Pull master resume from Firebase Storage
+        2. Build OpenAI API prompt with resume, JD, and selected keywords
+        3. Call openai.chat.completions to rewrite the resume
+        4. Return the raw generated text
+"""
+def generate_targeted_resume():
+    data = request.get_json() or {}          # Request from frontend must contain:
+    doc_id = data.get("docID")               # master resume (docID),
+    jd_text = data.get("job_description", "")# job description (dob_description),
+    keywords = data.get("keywords", [])      # but keywords (uh, keywords) are optional
+
+    if not doc_id or not jd_text:
+        return jsonify({"error":"docID and job_description are required"}), 400
+    
+    # Step 1 (as described above the function definition): download resume as plain text
+    user_id = g.firebase_user["uid"]
+    raw_resume = _download_pdf_as_text(user_id, doc_id)
+    if raw_resume is None:
+        return jsonify({"error":"Could not retrieve resume PDF"}), 404
+    
+    # 2: Build prompt (direct instruction prompt). Provide the model with the 
+    # full resume and job descriptin in the prompt, and instruct it to rewrite 
+    # the resume to align with the job.
+    keyword_list = ", ".join(keywords) if keywords else "None"  # Allows the user to generate a resume without selecting any keywords
+    system_msg = "You are a professional resume writer. Rewrite resumes to match job descriptions"
+    user_msg = (
+        f"Here is the candidate's original resume:\n```{raw_resume}```\n\n"
+        f"Here is the target job description:\n```{jd_text}```\n\n"
+        "Please rewrite the resume to optimize it for this job posting."
+        "Include and emphasize these keywords if relevant: "
+        f"{keyword_list}. "
+        "Use only facts from the original resume -- do not invent new experiences."
+    )
+
+    # 3: Call OpenAI API
+    try:
+        response = openai.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role":"system", "content": system_msg},
+                {"role":"user", "content": user_msg}
+            ],
+            temperature=0.7,  # Allow GPT to be creative without it just making shit up all the time
+            max_tokens = 1200,
+        )
+        generated = response.choices[0].message.content
+    except Exception as e:
+        return jsonify({"error":f"OpenAI request failed: {str(e)}"}), 500
+    
+    # 4: Return the plain text of the augmented resume
+    return jsonify({"generated_resume": generated}), 200
+
+#============================ Embeddings Functionality ====================================================
+
+# Helper function that calls OpenAI API Embeddings to get a single embedding vector from text
+def _get_embedding(text: str):
+    response = openai.embeddings.create(
+        input=[text],
+        model=EMBED_MODEL
+    )
+    return response.data[0].embedding
+
+# Calculate cosine similarity between two vectors
+def _cosine_sim(a: list, b: list) -> float:
+    dot = sum(x*y for x,y in zip(a, b))
+    norm_a = math.sqrt(sum(x*x for x in a))
+    norm_b = math.sqrt(sum(y*y for y in b))
+    return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
+
+""" JD <-> Resume similiarity calculation using OpenAI Embeddings and consine similarity
+    Here's the plan:
+        1. After user tags a master resume and inputs a JD, create embeddings from resume and JD
+        2. Calculate cosine sim to get baseline measurement
+        3. After targeted resume is generated, create embeddings for targeted resume
+        4. Calculate cosine sim again to see if augmented resume performs better against JD
+"""
+def compute_similarity_scores():
+    """
+    Expects JSON in the following format:
+        { 
+          docID: string,
+          job_description: string,
+          generated_resume?: string 
+        }
+    Returns JSON in the following format:
+        { 
+          master_score: float,      # Range: 0.0 - 100
+          generated_score?: float   # Only if generated_resume is provided
+        }
+    """
+    data = request.get_json() or {}
+    doc_id   = data.get("docID")
+    jd_text  = data.get("job_description", "").strip()
+    generated_text = data.get("generated_resume", "").strip()
+
+    if not doc_id or not jd_text:
+        return jsonify({"error":"docID and job_description required"}), 400
+    
+    # Load master resume text
+    user_id = g.firebase_user["uid"]
+    master_txt = _download_pdf_as_text(user_id, doc_id)
+    if not master_txt:
+        return jsonify({"error":"Could not fetch resume text"}), 404
+    
+    # Embed JD and master resume
+    jd_embed = _get_embedding(jd_text)
+    master_embed = _get_embedding(master_txt)
+    master_sim = _cosine_sim(master_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
+
+    result = {"master_score": round(master_sim, 1)}
+
+    # If the targeted resume has been generated, embed, calculate, and compare that too
+    if generated_text:
+        gen_embed = _get_embedding(generated_text)
+        generated_sim = _cosine_sim(gen_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
+        result["generated_score"] = round(generated_sim, 1)
+
+    return jsonify(result), 200
+
