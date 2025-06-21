@@ -46,68 +46,73 @@ export default function Homepage() {
   };
 
   return (
-    <div className="homepage-container">
+    <div className="homepage-layout">
       {user ? (
         <>
           <Sidebar user={user} />
 
-          <div className="homepage-header" data-aos="fade-down">
-            <h1 className="welcome-title">
-              Welcome, {user.displayName || "User"} 👋
-            </h1>
-            <p className="welcome-subtext">
-              You're logged in as <strong>{user.email}</strong>
-            </p>
-          </div>
-
-          <div className="tool-section" data-aos="fade-up">
-            <UploadPdf />
-          </div>
-
-          <div className="tool-section" data-aos="fade-up">
-            <ResumeLibrary />
-          </div>
-
-          <div className="tool-section" data-aos="fade-up">
-            <JdFromUrl
-              user={user}
-              onExplanationReceived={(exp, rawText) => {
-                setJdExplanation(exp);
-                setJdContent(rawText);
-              }}
-            />
-          </div>
-
-          <div style={{ margin: "20px 0", textAlign: "center" }}>
-            <strong>--- OR ---</strong>
-          </div>
-
-          <div className="tool-section" data-aos="fade-up">
-            <JdFromText
-              user={user}
-              onExplanationReceived={(exp, rawText) => {
-                setJdExplanation(exp);
-                setJdContent(rawText);
-              }}
-            />
-          </div>
-
-          {jdExplanation && (
-            <div className="tool-section" data-aos="fade-up">
-              <h3>Gemini's Explanation</h3>
-              <p>{jdExplanation}</p>
+          <div className="homepage-container">
+            <div className="homepage-header" data-aos="fade-down">
+              <h1 className="welcome-title">
+                Welcome, {user.displayName || "User"} 👋
+              </h1>
+              <p className="welcome-subtext">
+                You're logged in as <strong>{user.email}</strong>
+              </p>
             </div>
-          )}
 
-          {masterDocID && jdContent && (
             <div className="tool-section" data-aos="fade-up">
-              <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
+              <UploadPdf />
             </div>
-          )}
 
-          <button className="logout-btn" onClick={handleSignOutOnClick}>
-            Log Out
-          </button>
+            <div className="tool-section" data-aos="fade-up">
+              <ResumeLibrary />
+            </div>
+
+            <div className="tool-section" data-aos="fade-up">
+              <JdFromUrl
+                user={user}
+                onExplanationReceived={(exp, rawText) => {
+                  setJdExplanation(exp);
+                  setJdContent(rawText);
+                }}
+              />
+            </div>
+
+            <div className="divider">
+              <strong>--- OR ---</strong>
+            </div>
+
+            <div className="tool-section" data-aos="fade-up">
+              <JdFromText
+                user={user}
+                onExplanationReceived={(exp, rawText) => {
+                  setJdExplanation(exp);
+                  setJdContent(rawText);
+                }}
+              />
+            </div>
+
+            {jdExplanation && (
+              <div className="tool-section" data-aos="fade-up">
+                <h3>Gemini's Explanation</h3>
+                <p>{jdExplanation}</p>
+              </div>
+            )}
+
+            {masterDocID && jdContent && (
+              <div className="tool-section" data-aos="fade-up">
+                <ProfileExtractor
+                  masterDocID={masterDocID}
+                  jdText={jdContent}
+                />
+              </div>
+            )}
+
+            <button className="logout-btn" onClick={handleSignOutOnClick}>
+              Log Out
+            </button>
+          </div>
         </>
       ) : (
         <p>Loading user...</p>
