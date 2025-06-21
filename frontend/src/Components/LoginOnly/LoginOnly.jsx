@@ -13,6 +13,7 @@ export default function LoginOnly() {
   // State for email & password fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Field-specific error flags + an error message
   const [emailError, setEmailError] = useState(false);
@@ -25,12 +26,15 @@ export default function LoginOnly() {
   const navigate = useNavigate();
 
   // “Login” button handler
-  const handleLoginSubmit = async () => {
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();  
     // Clear previous errors
     setEmailError(false);
     setPasswordError(false);
     setErrorMsg("");
 
+    if (loading) return;
+    setLoading(true);
     // error handling for login
     try {
       const user = await handleLogin(email, password);
@@ -69,6 +73,8 @@ export default function LoginOnly() {
         default:
           setErrorMsg("Login failed. Please try again.");
       }
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -81,11 +87,12 @@ export default function LoginOnly() {
       </div>
 
       {/* Input fields */}
-      <div className="inputs">
+      <form className="inputs" onSubmit={handleLoginSubmit} noValidate>
         {/* Email Input */}
         <div className={`input ${emailError ? "error" : ""}`}>
           <img src={email_icon} alt="Email icon" /> {/* Image for email icon */}
           <input
+            autoFocus
             type="email"
             placeholder="Email"
             value={email}
@@ -95,6 +102,7 @@ export default function LoginOnly() {
               if (emailError) setEmailError(false);
               if (errorMsg) setErrorMsg(""); // Error message clears once user starts typing again
             }}
+            required
           />
         </div>
 
@@ -124,7 +132,7 @@ export default function LoginOnly() {
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </span>
         </div>
-      </div>
+   
 
       {/* Inline error message */}
       {errorMsg && (
@@ -166,10 +174,12 @@ export default function LoginOnly() {
 
       {/* Login button */}
       <div className="submit-container">
-        <div className="submit" onClick={handleLoginSubmit}>
+        <button type="submit" className="submit" >
           Login
-        </div>
+        </button>
       </div>
+      </form>
+
     </div>
   );
 }
