@@ -1,139 +1,174 @@
-
 import React, { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { AiOutlineCheckCircle, AiOutlineCloudUpload } from "react-icons/ai";
-import { MdClear } from "react-icons/md";
-import { auth } from "../../firebase";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import AOS from "aos";
 
-//Import sidebar for nav
-import Sidebar from "../Sidebar/Sidebar";
-
+import { auth } from "../../firebase";
 import { handleSignout } from "../../services/authHandlers";
+import { usePdf } from "../PdfContext";
 
-
+import Sidebar from "../Sidebar/Sidebar";
 import JdFromUrl from "../JdForm/JdFromUrl";
 import JdFromText from "../JdForm/JdFromText";
-
-// Import the PDF upload logic from UploadPdf/UploadPdf.jsx
 import UploadPdf from "../UploadPdf/UploadPdf";
-
-// Import Resume Library and PDF manipulation functionality (view, delete, set master)
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
+import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 
+import "aos/dist/aos.css";
 import "./TailorResume.css";
 import "../Sidebar/Sidebar.css";
 
 export default function TailorResume() {
-  // local state to store the current Firebase user
   const [user, setUser] = useState(null);
-  // used for gemini explanation
   const [jdExplanation, setJdExplanation] = useState("");
-
-  // State variables for the error handling
+  const [jdContent, setJdContent] = useState("");
   const [urlError, setUrlError] = useState("");
   const [highlightTextInput, setHighlightTextInput] = useState(false);
+
   const navigate = useNavigate();
+  const { masterDocID } = usePdf();
+
+  useEffect(() => onAuthStateChanged(auth, setUser), []);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser); //update the user with the current user with the onAuthStateChanged to change the current user to the current one
-    });
-    // clean up the listener when the component clears
-    return () => unsubscribe();
+    AOS.init({ duration: 700, once: true });
   }, []);
 
-  //if it works clean the error
-  const handleExplanationReceived = (explanation, skills) => {
+  const handleExplanationReceived = (explanation, rawText) => {
     setJdExplanation(explanation);
-    // clear error if successful 
+    setJdContent(rawText);
     setUrlError("");
     setHighlightTextInput(false);
-    // You can handle skills here if needed, or just ignore the parameter
   };
 
-  // funciton for handling the errors 
-  const handleUrlError = (errorMessage) => {
-    setUrlError(errorMessage);
+  const handleUrlError = (message) => {
+    setUrlError(message);
     setHighlightTextInput(true);
     setJdExplanation("");
-
-    // stop after 5 seconds 
-    setTimeout(() => {
-      setHighlightTextInput(false);
-    }, 5000); // 5000ms = 5 seconds
+    setTimeout(() => setHighlightTextInput(false), 5000);
   };
 
-  const handleTextInputFocus = () => {
+  const clearErrorState = () => {
     setUrlError("");
     setHighlightTextInput(false);
   };
 
-  const handleSignOutOnClick = async () => {
+  const handleSignOut = async () => {
     try {
       await handleSignout();
       navigate("/", { replace: true });
     } catch (err) {
-      console.log("Sign Out Error", err);
+      console.error("Sign Out Error", err);
     }
   };
-  const [headerActive, setHeaderActive] = useState(false);
+
+  if (!user) {
+    return (
+      <p className="loading-text">
+        <span className="spinner" /> Loading...
+      </p>
+    );
+  }
 
   return (
-    <>
-      <div className="tailor-container">
-        {user ? (
-          <>
-            <div>
-            {user && <Sidebar user={user} />}
-            </div>
+    <div className="layout">
+      <aside className="sidebar">
+        <Sidebar user={user} />
+      </aside>
+      <main className="tailor-container">
+        <header className="header" data-aos="fade-down">
+          <h1 className="welcome-title">
+            Welcome, {user.displayName || "User"} 👋
+          </h1>
+          <p className="welcome-subtext">
+            You're logged in as <strong>{user.email}</strong>
+          </p>
+        </header>
 
-            <div className="outsidepdf-box"> Upload Resume
-              <div className="uploadpdf-box"><UploadPdf /></div>
-            </div>
-            
-            <div><ResumeLibrary /></div>
+        <ToolSection title="Upload Resume" delay={100}>
+          <p className="section-subtext">
+            Start by uploading a PDF resume to tailor it to a job description.
+          </p>
+          <UploadPdf />
+        </ToolSection>
 
-            <JdFromUrl 
-              user={user} 
-              onExplanationReceived={handleExplanationReceived}
-              onError={handleUrlError}
-            />
+        <ToolSection title="Resume Library" delay={200}>
+          <p className="section-subtext">
+            Access your saved resumes and manage document versions.
+          </p>
+          <ResumeLibrary />
+        </ToolSection>
 
-            
-            {urlError && (
-                <div className="url-error-message">
-              {urlError}
-              </div>
-            )}
+        <ToolSection title="Paste a Job Description (URL)" delay={300}>
+          <p className="section-subtext">
+            Paste a job post link and we'll extract relevant insights.
+          </p>
+          <JdFromUrl
+            user={user}
+            onExplanationReceived={handleExplanationReceived}
+            onError={handleUrlError}
+          />
+          {urlError && <div className="url-error-message">{urlError}</div>}
+        </ToolSection>
 
-            <div style={{ margin: '20px 0', textAlign: 'center' }}>
-              <strong>--- OR ---</strong>
-            </div>
+        <div className="divider">
+          <strong>— OR —</strong>
+        </div>
 
-            <div className={highlightTextInput ? 'text-input-highlight' : ''}>
+        <ToolSection
+          title="Paste a Job Description (Text)"
+          delay={400}
+          extraClass={highlightTextInput ? "highlighted-section" : ""}
+        >
+          <p className="section-subtext">
+            Prefer to copy-paste instead? Paste the text and get started
+            instantly.
+          </p>
+          <JdFromText
+            user={user}
+            onExplanationReceived={handleExplanationReceived}
+            onFocus={clearErrorState}
+          />
+        </ToolSection>
 
-            <JdFromText 
-              user={user} 
-              onExplanationReceived={handleExplanationReceived}
-              onFocus={handleTextInputFocus}
-            />
-            </div>
-
-            {jdExplanation && (
-              <div className="jd-explanation">
-                <h3>Gemini's Explanation</h3>
-                <p>{jdExplanation}</p>
-              </div>
-            )}
-
-            <button onClick={handleSignOutOnClick}>Logout</button>
-          </>
-        ) : (
-          <p>Loading user...</p>
+        {jdExplanation && (
+          <ToolSection title="Gemini's Explanation" delay={500}>
+            <p className="section-subtext">
+              AI-generated insights from your uploaded job description.
+            </p>
+            <p>{jdExplanation}</p>
+          </ToolSection>
         )}
-      </div>
-    </>
+
+        {masterDocID && jdContent && (
+          <ToolSection title="Profile Extractor" delay={600}>
+            <p className="section-subtext">
+              Extract key info and tailor your resume for better alignment.
+            </p>
+            <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
+          </ToolSection>
+        )}
+
+        <div className="logout-container">
+          <button className="logout-btn" onClick={handleSignOut}>
+            Log Out
+          </button>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function ToolSection({ title, delay = 0, extraClass = "", children }) {
+  return (
+    <section
+      className={`tool-section ${extraClass}`.trim()}
+      data-aos="fade-up"
+      data-aos-delay={delay}
+      data-aos-offset="120"
+    >
+      <h2>{title}</h2>
+      {children}
+    </section>
   );
 }

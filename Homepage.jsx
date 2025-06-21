@@ -64,7 +64,7 @@ export default function Homepage() {
             {/* ─── MAIN CONTENT ─── */}
 
             <h1>Welcome, {user.displayName || "User"}!</h1>
-            <p>You are now logged in and on the Home page.</p>
+            <p>You are now888 logged in and on the Home page.</p>
             <p>Email: {user.email}</p>
 
             <UploadPdf />  

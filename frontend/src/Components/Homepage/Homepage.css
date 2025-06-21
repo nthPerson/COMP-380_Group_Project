@@ -1,13 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;700&display=swap');
 
-/* === GLOBAL STYLING FOR HOMEPAGE === */
-.homepage-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+/* === LAYOUT FIX === */
+.homepage-layout {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+}
+
+@media (min-width: 1024px) {
+  .homepage-layout {
+    flex-direction: row;
+  }
+}
+
+.homepage-container {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: #2c3e50;
 }
 
@@ -39,10 +51,9 @@
   max-width: 900px;
 }
 
-/* === DIVIDER STYLE === */
-.homepage-container div[style*="margin: '20px 0'"],
-.homepage-container div[style*='margin: "20px 0"'] {
-  margin: 2rem 0 !important;
+/* === DIVIDER === */
+.divider {
+  margin: 2rem 0;
   padding: 1rem;
   background: rgba(52, 152, 219, 0.1);
   border-radius: 8px;
@@ -50,8 +61,7 @@
   text-align: center;
 }
 
-.homepage-container div[style*="margin: '20px 0'"] strong,
-.homepage-container div[style*='margin: "20px 0"'] strong {
+.divider strong {
   color: #3498db;
   font-size: 1.2rem;
   letter-spacing: 1px;
