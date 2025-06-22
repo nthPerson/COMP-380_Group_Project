@@ -53,3 +53,18 @@ export async function clearKeywords() {
     const responseData = await res.json();
     return responseData.keywords;
 }
+
+
+export async function fetchHighlights(resumeItems, jdItems) {
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch("http://localhost:5001/api/highlight_similarity", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`
+    },
+    body: JSON.stringify({ resume_items: resumeItems, jd_items: jdItems })
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json(); // { matched_resume: [...], matched_jd: [...] }
+}
