@@ -30,7 +30,8 @@ from keyword_utils import (
 
 from llm_utils import (
     generate_targeted_resume,
-    compute_similarity_scores
+    compute_similarity_scores,
+    highlight_profile_similarity
 )
 
 
@@ -153,6 +154,8 @@ def api_generate_targeted_resume():
 def api_save_generated_resume():
     return save_generated_resume()
 
+# ====================== Similarity Calculation =======================================
+
 # Similarity scoring endpoint
 @app.route("/api/similarity_score", methods=["POST"])
 @verify_firebase_token
@@ -165,6 +168,16 @@ def api_similarity_score():
         # Continue to return JSON so CORS can attach headers and frontend doesn't freak out
         return jsonify({"error": str(e)}), 500
 
+# SImilarity highlighting endpoint
+@app.route("/api/highlight_similarity", methods=["POST"])
+@verify_firebase_token
+def api_highlight_similarity():
+    body = request.get_json() or {}
+    resume_items = body.get("resume_items", [])
+    jd_items     = body.get("jd_items", [])
+    # optional threshold override:
+    threshold    = float(body.get("threshold", 0.7))
+    return highlight_profile_similarity(resume_items, jd_items, threshold)
 
 #  start the server
 if __name__ == "__main__":
