@@ -12,69 +12,63 @@ import logout_icon from "../Assets/logout_icon.png";
 const Sidebar = ({ user }) => {
   const navigate = useNavigate();
 
-  const onClick = async (e) => {
-    e.preventDefault();      // in case you’re inside a form
-    try {
-      await handleSignout();
-      console.log("Logged out");
-      navigate("/", { replace: true });
-    } catch (err) {
-      console.error("Log out failed:", err);
-    }
+  const onClick = async () => {
+    await handleSignout();
+    navigate("/login");
   };
 
   return (
-  <aside className="sidebar">
-    <Link to="/landingPage" className="sidebar-header">
-      <img src={logo_icon} alt="Logo" className="sidebar-logo" />
-      <div className="sidebar-title">
-        <span className="light-blue">Rezu</span>
-        <span className="solid-blue">Me</span>
-      </div>
-    </Link>
+    <div className="sidebar">
+      <Link to="/landingPage" className="sidebar-header">
+        <img src={logo_icon} alt="Logo" className="sidebar-logo" />
+        <div className="sidebar-title">
+          <span className="light-blue">Rezu</span>
+          <span className="solid-blue">Me</span>
+        </div>
+      </Link>
 
-    <nav className="sidebar-nav">
-      <ul>
-        {/* User's Profile */}
-        <li>
-          <Link to="/userProfile" className="sidebar-link">
-            <img src={profile_icon} alt="Profile icon" />
-            <span>{user?.displayName || "User"}'s Profile</span>
-          </Link>
-        </li>
+      <nav className="sidebar-nav">
+        <ul>
+          {/* User's Profile */}
+          <li>
+            <Link to="/userProfile" className="sidebar-link">
+              <img src={profile_icon} alt="Profile icon" />
+              <span>{user?.displayName || "User"}'s Profile</span>
+            </Link>
+          </li>
 
-        {/* Create Resume */}
-        <li>
-          <Link to="/createResume" className="sidebar-link">
-            <img src={resume_icon} alt="Resume icon" />
-            <span>Create Resume</span>
-          </Link>
-        </li>
+          {/* Create Resume */}
+          <li>
+            <Link to="/createResume" className="sidebar-link">
+              <img src={resume_icon} alt="Resume icon" />
+              <span>Create Resume</span>
+            </Link>
+          </li>
 
-        {/* Tailor Resume */}
-        <li>
-          <Link to="/tailorResume" className="sidebar-link">
-            <img src={magicwand_icon} alt="Tailor icon" />
-            <span>Tailor Resume</span>
-          </Link>
-        </li>
+          {/* Tailor Resume */}
+          <li>
+            <Link to="/tailorResume" className="sidebar-link">
+              <img src={magicwand_icon} alt="Tailor icon" />
+              <span>Tailor Resume</span>
+            </Link>
+          </li>
 
-        {/* Resume Archive */}
-        <li>
-          <Link to="/resumeArchive" className="sidebar-link">
-            <img src={archive_icon} alt="Archive icon" />
-            <span>Resume Archive</span>
-          </Link>
-        </li>
-        <li>
-         <button type="button" className="sidebar-link" onClick={onClick} style={{background: "none", border: "none", alignItems: "center" }}>
-          <img src={logout_icon} alt="Log Out icon" />
-          <span>Logout</span>
-         </button>
-        </li>
-      </ul>
-    </nav>
-  </aside>
-);
-  };
+          {/* Resume Archive */}
+          <li>
+            <Link to="/resumeArchive" className="sidebar-link">
+              <img src={archive_icon} alt="Archive icon" />
+              <span>Resume Archive</span>
+            </Link>
+          </li>
+          <li>
+            <button type="button" className="sidebar-link" onClick={onClick} style={{background: "none", border: "none", alignItems: "center" }}>
+              <img src={logout_icon} alt="Log Out icon" />
+              <span>Logout</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  );
+};
 export default Sidebar;

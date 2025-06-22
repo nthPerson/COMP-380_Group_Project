@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../firebase"; 
+import { auth } from "../../firebase";
 import Sidebar from "../Sidebar/Sidebar";
 import "../Sidebar/Sidebar.css";
 import "./UserProfile.css"
@@ -133,4 +132,5 @@ const UserProfile = () => {
     </div>
   );
 };
+
 export default UserProfile;

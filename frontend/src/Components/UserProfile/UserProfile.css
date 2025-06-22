@@ -1,17 +1,29 @@
-.user-profile-page {
+.user-profile-layout {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 6rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.user-profile-page-content {
-  display: flex;
-  flex: 1;
+@media (min-width: 1024px) {
+  .user-profile-layout {
+    flex-direction: row;
+  }
 }
 
-.user-profile {
+.user-profile-content {
   flex: 1;
+  padding: 3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #2c3e50;
+}
+
+.user-profile-content h1 {
+  font-size: 2rem;
+  color: #3498db;
+  margin-bottom: 1rem;
 }
 .profile-form input,
 .profile-form textarea {

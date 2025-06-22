@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "firebase": "^11.8.1"
+    "firebase": "^11.8.1",
+    "jspdf": "^3.0.1",
+    "lucide-react": "^0.522.0"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
