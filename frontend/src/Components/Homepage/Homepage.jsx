@@ -123,127 +123,73 @@ export default function Homepage() {
   };
 
   return (
-    <div className="homepage-container">
+    <div className="homepage-layout">
       {user ? (
         <>
           <Sidebar user={user} />
 
-          <div className="homepage-header" data-aos="fade-down">
-            <h1 className="welcome-title">
-              Welcome, {user.displayName || "User"} 👋
-            </h1>
-            <p className="welcome-subtext">
-              You're logged in as <strong>{user.email}</strong>
-            </p>
-          </div>
-
-          <div className="tool-section" data-aos="fade-up">
-            <UploadPdf />
-          </div>
-
-          <div className="tool-section" data-aos="fade-up">
-            <ResumeLibrary />
-          </div>
-
-          <div className="tool-section" data-aos="fade-up">
-            <JdFromUrl
-              user={user}
-              onExplanationReceived={(exp, rawText) => {
-                setJdExplanation(exp);
-                setJdContent(rawText);
-              }}
-              // onExplanationReceived={(exp, handleExplanation)}  // Possible replacement for the statement above
-            />
-          </div>
-
-          <div style={{ margin: "20px 0", textAlign: "center" }}>
-            <strong>--- OR ---</strong>
-          </div>
-
-          <div className="tool-section" data-aos="fade-up">
-            <JdFromText
-              user={user}
-              onExplanationReceived={(exp, rawText) => {
-                setJdExplanation(exp);
-                setJdContent(rawText);
-              }}
-              // onExplanationReceived={(exp, handleExplanation)}  // Possible replacement for the statement above
-            />
-          </div>
-
-          {jdExplanation && (
-            <div className="tool-section" data-aos="fade-up">
-              <h3>Gemini's Explanation</h3>
-              <p>{jdExplanation}</p>
+          <div className="homepage-container">
+            <div className="homepage-header" data-aos="fade-down">
+              <h1 className="welcome-title">
+                Welcome, {user.displayName || "User"} 👋
+              </h1>
+              <p className="welcome-subtext">
+                You're logged in as <strong>{user.email}</strong>
+              </p>
             </div>
-          )}
 
-          {/* ④ show initial similarity between master and JD */}
-          {initialSim != null && (
             <div className="tool-section" data-aos="fade-up">
-              <strong>Master vs JD match:</strong> {initialSim}% 
+              <UploadPdf />
             </div>
-          )}          
 
-          {masterDocID && jdContent && (
             <div className="tool-section" data-aos="fade-up">
-              <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
+              <ResumeLibrary />
             </div>
-          )}
 
-          {/* Generate button */}
-          {masterDocID && jdContent && (
             <div className="tool-section" data-aos="fade-up">
-              <button onClick={handleGenerateResume} disabled={isGenerating}>
-                {isGenerating ? "Generating…" : "Generate Tailored Resume"}
-              </button>
-            </div>
-          )}
-
-          {/* Show & download the generated resume */}
-          {generatedResume && (
-            <div className="tool-section" data-aos="fade-up">
-              <h3>Your Tailored Resume</h3>
-              <textarea
-                rows={15}
-                cols={80}
-                value={generatedResume}
-                onChange={e => setGeneratedResume(e.target.value)}
+              <JdFromUrl
+                user={user}
+                onExplanationReceived={(exp, rawText) => {
+                  setJdExplanation(exp);
+                  setJdContent(rawText);
+                }}
               />
-              <br/>
-             <button onClick={handleDownloadText}>
-              Download as Text
-            </button>
+            </div>
 
-            {/* —— Download as PDF button —— */}
-            <button
-              style={{ marginLeft: 8 }}
-              onClick={handleDownloadPdf}
-            >
-              Download as PDF
-            </button>
+            <div className="divider">
+              <strong>--- OR ---</strong>
+            </div>
 
-            {/* —— SAVE TO LIBRARY BUTTON —— */}
-            <button
-              style={{ marginLeft: 8 }}
-              onClick={handleSaveToLibrary}
-            >
-              Save to Library
-            </button>
+            <div className="tool-section" data-aos="fade-up">
+              <JdFromText
+                user={user}
+                onExplanationReceived={(exp, rawText) => {
+                  setJdExplanation(exp);
+                  setJdContent(rawText);
+                }}
+              />
+            </div>
 
-            {/* ⑤ show post-gen similarity */}
-            {postGenSim != null && (
-              <div style={{ marginTop: 12 }}>
-                <strong>Generated vs JD match:</strong> {postGenSim}% 
+            {jdExplanation && (
+              <div className="tool-section" data-aos="fade-up">
+                <h3>Gemini's Explanation</h3>
+                <p>{jdExplanation}</p>
               </div>
             )}
 
-            </div>
-          )}
+            {masterDocID && jdContent && (
+              <div className="tool-section" data-aos="fade-up">
+                <ProfileExtractor
+                  masterDocID={masterDocID}
+                  jdText={jdContent}
+                />
+              </div>
+            )}
 
-          <button className="logout-btn" onClick={handleSignOutOnClick}>
-            Log Out
-          </button>
+            <button className="logout-btn" onClick={handleSignOutOnClick}>
+              Log Out
+            </button>
+          </div>
         </>
       ) : (
         <p>Loading user...</p>
