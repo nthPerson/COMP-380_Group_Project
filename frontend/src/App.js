@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import LoginSignup from './Components/LoginSignup/LoginSignup';
 import LoginOnly   from './Components/LoginOnly/LoginOnly';   
-import Homepage    from './Components/Homepage/Homepage';     
+// import Homepage    from './Components/Homepage/Homepage';     
 // import ForgotPassword    from './Components/ForgotPassword/ForgotPassword';  // Not currently being used
 import LandingPage    from './Components/LandingPage/LandingPage';
 import UserProfile    from './Components/UserProfile/UserProfile';
@@ -24,7 +24,8 @@ function App() {
         <Route path="/login" element={<LoginOnly />} />
 
         {/* 4) Home (after they’ve successfully logged in) */}
-        <Route path="/home" element={<Homepage />} />
+        {/* <Route path="/home" element={<Homepage />} /> */}
+        <Route path="/home" element={<TailorResume />} />
 
         {/* 5) User Profile */}
         <Route path="/landingPage" element={<LandingPage />} />
