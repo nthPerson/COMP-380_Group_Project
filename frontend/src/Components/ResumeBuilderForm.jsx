@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '.././firebase';
+import Sidebar from './Sidebar/Sidebar';
+import './Sidebar/Sidebar.css';
 import { ChevronLeft, ChevronRight, Plus, Trash2, User, Briefcase, GraduationCap, Award, FileText } from 'lucide-react';
 import './ResumeBuilderForm.css'; // Import your CSS file for styling
 import { saveResume } from "../services/resumeService"; // Import the saveResume function from your service file
 
+
 const ResumeBuilderForm = () => {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, u => setUser(u));
+    return () => unsub();
+  }, []);
+
   const [currentStep, setCurrentStep] = useState(0);
   const [newTechnicalSkill, setNewTechnicalSkill] = useState('');
   const [newSoftSkill, setNewSoftSkill] = useState('');
@@ -41,9 +52,7 @@ const ResumeBuilderForm = () => {
     certifications: [],
     projects: []
   });
-
-// Add this line for field errors
-const [fieldErrors, setFieldErrors] = useState({});
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const steps = [
     { title: 'Personal Info', icon: User },
@@ -720,7 +729,9 @@ const [fieldErrors, setFieldErrors] = useState({});
   };
 
   return (
-    <div className="resume-builder-container">      {/* Progress Bar */}
+    <div className="resume-builder-page">      {/* Progress Bar */}
+      <Sidebar user={user} />
+      <div className="resume-builder-content">
       <div className="mb-8">
       <div className="progress-bar">
           {steps.map((step, index) => {
@@ -778,6 +789,7 @@ const [fieldErrors, setFieldErrors] = useState({});
           {currentStep !== steps.length - 1 && <ChevronRight size={16} />}
         </button>
       </div>
+    </div>
     </div>
   );
 };
