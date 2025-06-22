@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 // import { AiOutlineCheckCircle, AiOutlineCloudUpload } from "react-icons/ai";
 // import { MdClear } from "react-icons/md";
 import { auth } from "../../firebase";
 // import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";  // PDF generation from text
 
 import Sidebar from "../Sidebar/Sidebar";
@@ -69,15 +69,11 @@ export default function TailorResume() {
   }, []);
 
   // function for handling the errors 
-  const handleUrlError = (errorMessage) => {
-    setUrlError(errorMessage);
+  const handleUrlError = (message) => {
+    setUrlError(message);
     setHighlightTextInput(true);
     setJdExplanation("");
-
-    // stop after 5 seconds 
-    setTimeout(() => {
-      setHighlightTextInput(false);
-    }, 5000); // 5000ms = 5 seconds
+    setTimeout(() => setHighlightTextInput(false), 5000);
   };
 
   const handleGenerateResume = async () => {
@@ -132,7 +128,7 @@ export default function TailorResume() {
     }
   };
 
-  const handleTextInputFocus = () => {
+  const clearErrorState = () => {
     setUrlError("");
     setHighlightTextInput(false);
   };
@@ -140,6 +136,15 @@ export default function TailorResume() {
   const handleExplanationReceived = (exp, rawText) => {
     setJdExplanation(exp);
     setJdContent(rawText);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await handleSignout();
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.error("Sign Out Error", err);
+    }
   };
 
   const handleSignOutOnClick = async () => {
@@ -151,118 +156,158 @@ export default function TailorResume() {
     }
   };
 
+  if (!user) {
+    return (
+      <p className="loading-text">
+        <span className="spinner" /> Loading...
+      </p>
+    );
+  }
 
   return (
-    <>
-      <div className="tailor-container">
-        {user ? (
-          <>
-            <div>
-            {user && <Sidebar user={user} />}
-            </div>
+    <div className="layout">
+      <aside className="sidebar">
+        <Sidebar user={user} />
+      </aside>
+      <main className="tailor-container">
+        <header className="header" data-aos="fade-down">
+          <h1 className="welcome-title">
+            Welcome, {user.displayName || "User"} 👋
+          </h1>
+          <p className="welcome-subtext">
+            You're logged in as <strong>{user.email}</strong>
+          </p>
+        </header>
 
-            <div className="outsidepdf-box"> Upload Your Resume
-              <div className="uploadpdf-box"><UploadPdf /></div>
-            </div>
-            
-            <div><ResumeLibrary /></div>
+        <ToolSection title="Upload Resume" delay={100}>
+          <p className="section-subtext">
+            Start by uploading a PDF resume to tailor it to a job description.
+          </p>
+          <UploadPdf />
+        </ToolSection>
 
-            <JdFromUrl 
-              user={user} 
-              onExplanationReceived={handleExplanationReceived}
-              onError={handleUrlError}
-            />
+        <ToolSection title="Resume Library" delay={200}>
+          <p className="section-subtext">
+            Access your saved resumes and manage document versions.
+          </p>
+          <ResumeLibrary />
+        </ToolSection>
 
-            
-            {urlError && (
-                <div className="url-error-message">
-              {urlError}
-              </div>
-            )}
+        <ToolSection title="Paste a Job Description (URL)" delay={300}>
+          <p className="section-subtext">
+            Paste a job post link and we'll extract relevant insights.
+          </p>
+          <JdFromUrl
+            user={user}
+            onExplanationReceived={handleExplanationReceived}
+            onError={handleUrlError}
+          />
+          {urlError && <div className="url-error-message">{urlError}</div>}
+        </ToolSection>
 
-            <div style={{ margin: '20px 0', textAlign: 'center' }}>
-              <strong>--- OR ---</strong>
-            </div>
+        <div className="divider">
+          <strong>— OR —</strong>
+        </div>
 
-            <div className={highlightTextInput ? 'text-input-highlight' : ''}>
+        <ToolSection
+          title="Paste a Job Description (Text)"
+          delay={400}
+          extraClass={highlightTextInput ? "highlighted-section" : ""}
+        >
+          <p className="section-subtext">
+            Prefer to copy-paste instead? Paste the text and get started
+            instantly.
+          </p>
+          <JdFromText
+            user={user}
+            onExplanationReceived={handleExplanationReceived}
+            onFocus={clearErrorState}
+          />
+        </ToolSection>
 
-            <JdFromText 
-              user={user} 
-              onExplanationReceived={handleExplanationReceived}
-              onFocus={handleTextInputFocus}
-            />
-            </div>
-
-          {jdExplanation && (
-            <div className="tool-section" data-aos="fade-up">
-              <h3>Gemini's Explanation</h3>
-              <p>{jdExplanation}</p>
-            </div>
-          )}
-
-            {/* {jdExplanation && (
-              <div className="jd-explanation">
-                <h3>Gemini's Explanation</h3>
-                <p>{jdExplanation}</p>
-              </div>
-            )} */}
-
-            {/* Calculate and show similarity between master resume and JD */}
-            {initialSim != null && (
-              <div className="tool-section" data-aos="fade-up">
-                <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
-              </div>
-            )}
-
-            {/* Extract Resume/JD profiles */}
-            {masterDocID && jdContent && (
-              <div className="tool-section" data-aos="fade-up">
-                <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
-              </div>
-            )}
-
-            {/* If a master resume is set and a job description has been entered, render "Generate Tailored Resume" button*/}
-            {masterDocID && jdContent && (
-              <div className="tool-section" data-aos="fade-up">
-                <button onClick={handleGenerateResume} disabled={isGenerating}>
-                  {isGenerating ? "Generating..." : "Generate Tailored Resume"}
-                </button>
-              </div>
-            )}
-
-            {/* Once a tailored resume has been generated, display generated text in a text edit box */}
-            {generatedResume && (
-              <div className="tool-section" data-aos="fade-up">
-                <h3>Your Tailored RezuMe</h3>
-                <textarea
-                  rows={15}
-                  cols={80}
-                  value={generatedResume}
-                  onChange={e => setGeneratedResume(e.target.value)}
-                />
-                <br />
-
-                <button onClick={handleDownloadText}>Download as Text</button>
-
-                <button style={{ marginLeft: 8 }} onClick={handleDownloadPdf}>Download as PDF</button>
-
-                <button style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
-
-                {/* Display Targeted Resume vs JD similarity */}
-                {postGenSim != null && (
-                  <div style={{ marginTop: 12 }}><strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}% </div>
-                )}
-
-              </div>
-            )}
-
-            <button className="logout-btn" onClick={handleSignOutOnClick}>Log Out</button>
-            
-          </>
-        ) : (
-          <p>Loading user...</p>
+        {jdExplanation && (
+          <ToolSection title="Gemini's Explanation" delay={500}>
+            <p className="section-subtext">
+              AI-generated insights from your uploaded job description.
+            </p>
+            <p>{jdExplanation}</p>
+          </ToolSection>
         )}
-      </div>
-    </>
+
+        {/* Calculate and show similarity between master resume and JD */}
+        {initialSim != null && (
+          <div className="tool-section" data-aos="fade-up">
+            <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
+          </div>
+        )}
+
+        {/* Extract Resume/JD profiles */}
+        {masterDocID && jdContent && (
+          <ToolSection title="Profile Extractor" delay={600}>
+            <p className="section-subtext">
+              Extract key info and tailor your resume for better alignment.
+            </p>
+            <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
+          </ToolSection>
+        )}
+
+        {/* If a master resume is set and a job description has been entered, render "Generate Tailored Resume" button*/}
+        {masterDocID && jdContent && (
+          <div className="tool-section" data-aos="fade-up">
+            <button onClick={handleGenerateResume} disabled={isGenerating}>
+              {isGenerating ? "Generating..." : "Generate Tailored Resume"}
+            </button>
+          </div>
+        )}
+
+        {/* Once a tailored resume has been generated, display generated text in a text edit box */}
+        {generatedResume && (
+          <div className="tool-section" data-aos="fade-up">
+            <h3>Your Tailored RezuMe</h3>
+            <textarea
+              rows={15}
+              cols={80}
+              value={generatedResume}
+              onChange={e => setGeneratedResume(e.target.value)}
+            />
+            <br />
+
+            <button onClick={handleDownloadText}>Download as Text</button>
+
+            <button style={{ marginLeft: 8 }} onClick={handleDownloadPdf}>Download as PDF</button>
+
+            <button style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
+
+            {/* Display Targeted Resume vs JD similarity */}
+            {postGenSim != null && (
+              <div style={{ marginTop: 12 }}><strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}% </div>
+            )}
+
+          </div>
+        )}
+
+        <button className="logout-btn" onClick={handleSignOutOnClick}>Log Out</button>
+
+        <div className="logout-container">
+          <button className="logout-btn" onClick={handleSignOut}>
+            Log Out
+          </button>
+        </div>
+      </main>
+    </div>
   );
 }
+
+  function ToolSection({ title, delay = 0, extraClass = "", children }) {
+    return (
+      <section
+        className={`tool-section ${extraClass}`.trim()}
+        data-aos="fade-up"
+        data-aos-delay={delay}
+        data-aos-offset="120"
+      >
+        <h2>{title}</h2>
+        {children}
+      </section>
+    );
+  }

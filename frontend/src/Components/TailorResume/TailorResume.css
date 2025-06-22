@@ -1,82 +1,181 @@
-
-.tailor-container{
-  padding: 5rem;
-  display: flex;     /* Keeps it in place while scrolling */
-  flex-direction: column; 
-  align-items: center;
-}
-.outsidepdf-box{
-  border: 0.2rem solid #b7c6cb;
-  border-radius: 0.5rem;
-  width: 40vw;
-  height: 15vh;
-  
-}
-.outsidepdf-box title {
-  align-items: center;
-}
-.uploadpdf-box{
-    border: 0.2rem dotted #b7c6cb;
-    border-radius: 0.5rem;
-    margin-top: 4rem;
-    margin-left: 2rem ;
-    padding: 0 0 0 0;
-    width: 35vw;
-    height: 5vh;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-}
-.uploadpdf-box:hover{
-    border: 0.2rem dotted #4d727e;
-
+/* ===== Layout Container ===== */
+.layout {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  background-color: #f5faff;
 }
 
+/* ===== Sidebar Wrapper ===== */
+.sidebar {
+  width: 240px;
+  min-width: 200px;
+  background-color: #e6f3ff;
+  flex-shrink: 0;
+}
 
+/* ===== Main Content Panel ===== */
+.tailor-container {
+  flex: 1;
+  margin: 0 auto;
+  padding: 2rem;
+  max-width: 1200px;
+  background-color: #e6f3ff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  box-sizing: border-box;
+}
+
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  padding-bottom: 1rem;
+}
+
+.welcome-title {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+}
+
+.welcome-subtext {
+  font-size: clamp(0.9rem, 3vw, 1rem);
+  color: #555;
+}
+
+/* ===== Tool Sections ===== */
+.tool-section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  min-height: 260px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
+  width: 100%;
+}
+
+.tool-section:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.section-subtext {
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+/* ===== Divider ===== */
+.divider {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* ===== Logout Button ===== */
+.logout-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.logout-btn {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #d9363e;
+}
+
+.logout-btn:active {
+  transform: scale(0.98);
+}
+
+.logout-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.3);
+}
+
+/* ===== Errors & Loaders ===== */
 .url-error-message {
-  color: #dc3545;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  border-radius: 4px;
-  padding: 10px;
-  margin: 10px 0;
-  font-size: 14px;
+  color: #d9363e;
+  font-weight: bold;
+  margin-top: 0.5rem;
   text-align: center;
 }
 
-/* Green pulse animation for text input highlight */
-.text-input-highlight {
-  animation: greenPulse 2s ease-in-out infinite;
-  border-radius: 8px;
-  padding: 5px;
+.highlighted-section {
+  border: 2px solid #d9363e;
 }
 
-@keyframes greenPulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0.3);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+.loading-text {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #444;
+  margin-top: 5rem;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-/* Alternative: Green border pulse if you prefer */
-.text-input-highlight-border {
-  animation: greenBorderPulse 1.5s ease-in-out infinite;
-  border-radius: 8px;
+/* ===== Responsive Breakpoints ===== */
+@media (max-width: 1024px) {
+  .tailor-container {
+    padding: 1.5rem;
+  }
+
+  .sidebar {
+    width: 180px;
+  }
 }
 
-@keyframes greenBorderPulse {
-  0% {
-    border: 2px solid rgba(40, 167, 69, 0.3);
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
   }
-  50% {
-    border: 2px solid rgba(40, 167, 69, 1);
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
   }
-  100% {
-    border: 2px solid rgba(40, 167, 69, 0.3);
+
+  .tailor-container {
+    padding: 1.25rem;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .tailor-container {
+    padding: 1rem;
   }
 }
 
