@@ -17,7 +17,7 @@ function ResumeLibrary() {
   } = usePdf();
 
       return (
-        <div>
+        <div className="tool-section" data-aos="fade-up">
         <h2>Your Uploaded Resumes</h2>
         {statusMessage && (
             <div style={{ color: "#007bff", marginBottom: "10px" }}>{statusMessage}</div>
