@@ -84,6 +84,11 @@ def api_set_master_pdf():
 def api_get_master_pdf():
     return get_master_pdf()
 
+@app.route("/api/get_resume_url", methods = ["GET"])
+@verify_firebase_token
+def get_resume_url():
+    return generate_pdf_link()
+
 #====================== Profile (keyword) Extraction ====================================
 
 # Resume profile (skill/experience/etc.) extraction via LLM

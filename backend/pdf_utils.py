@@ -108,6 +108,24 @@ def get_master_pdf():
     else:
         return jsonify({"masterDocID": None}), 200
 
+#Get signed URL for the PDF. 
+def generate_pdf_link():
+    path = request.args.get("path")
+    if not path:
+        return jsonify({"error" : "Missing path"}), 400
+    
+    try:
+        blob = bucket.blob(path)
+        url = blob.generate_signed_url(
+            version = "v4",
+            expiration=timedelta(minutes=15),
+            method = "GET"
+        )
+        print("Generated signed url:", url)
+        return jsonify ({"url": url}), 200
+    except Exception as e:
+        print("Failed to genereate signed url:", e)
+        return jsonify ({"error": str(e)}), 500
 
 # Download a PDF from Firebase Storage and return the text within
 def _download_pdf_as_text(user_id: str, doc_id: str) -> str:
