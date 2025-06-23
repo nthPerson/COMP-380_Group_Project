@@ -31,6 +31,8 @@ backend/.pytest_cache/
 backend/.mypy_cache/
 coverage.xml
 htmlcov/
+.pytest_cache
+__pycache__
 
 # Temporary Firebase key file (decoded at runtime)
 backend/firebase_key.b64

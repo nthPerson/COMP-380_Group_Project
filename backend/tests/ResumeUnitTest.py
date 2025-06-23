@@ -1,4 +1,5 @@
-from llm_utils import _cosine_sim 
+from backend.llm_utils import _cosine_sim 
+# from llm_utils import _cosine_sim 
 #unit testing (starting at llm_utils)-- you must do pip install pytest if you haven't yet
 #test highlight profile similarity function
 
