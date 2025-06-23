@@ -1,3 +1,19 @@
+
+
+
+
+
+/* 
+
+THIS FILE HAS BEEN DEPRECATED. WE ARE CURRENTLY USING TailorResume.jsx FOR CORE APP BEHAVIOR
+
+*/
+
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";

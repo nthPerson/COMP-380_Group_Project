@@ -168,7 +168,7 @@ def api_similarity_score():
         # Continue to return JSON so CORS can attach headers and frontend doesn't freak out
         return jsonify({"error": str(e)}), 500
 
-# SImilarity highlighting endpoint
+# Similarity highlighting endpoint
 @app.route("/api/highlight_similarity", methods=["POST"])
 @verify_firebase_token
 def api_highlight_similarity():

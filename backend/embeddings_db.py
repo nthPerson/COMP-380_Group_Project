@@ -36,33 +36,39 @@ def save_embedding_to_db(text: str, embedding: list[float]) -> None:
         )
         _conn.commit()
 
-
+def print_all_rows():
+    conn = sqlite3.connect(DB_PATH)
+    for key, emb_json in conn.execute("SELECT text, embedding FROM embeddings"):
+        vec = json.loads(emb_json)
+        # print only the first element + ellipsis
+        print(f'"{key}": [{vec[0]:.12f} ...]')
+    conn.close()
 
 #testing the functions
 if __name__ == "__main__":
-    #sample test data
-    sample_text = "hello world"
-    sample_embedding = [0.1,0.2,0.3] #example embedding
+    # #sample test data
+    # sample_text = "hello world"
+    # sample_embedding = [0.1,0.2,0.3] #example embedding
 
-    #save the embedding
-    save_embedding_to_db(sample_text, sample_embedding)
+    # #save the embedding
+    # save_embedding_to_db(sample_text, sample_embedding)
 
-    #retrieve the embedding
-    result = get_embedding_from_db(sample_text)
-    print("Retrieved embedding: ", result)
+    # #retrieve the embedding
+    # result = get_embedding_from_db(sample_text)
+    # print("Retrieved embedding: ", result)
 
-    #multiple embeddings
-    save_embedding_to_db("cat", [0.5, 0.2, 0.8])
-    save_embedding_to_db("dog", [0.1, 0.9, 0.3])
-    print("Cat embedding:", get_embedding_from_db("cat"))
-    print("Dog embedding:", get_embedding_from_db("dog"))
+    # #multiple embeddings
+    # save_embedding_to_db("cat", [0.5, 0.2, 0.8])
+    # save_embedding_to_db("dog", [0.1, 0.9, 0.3])
+    # print("Cat embedding:", get_embedding_from_db("cat"))
+    # print("Dog embedding:", get_embedding_from_db("dog"))
 
-    #overwrite test
-    save_embedding_to_db("cat", [1.0,1.0,1.0])
-    print("Cat embedding after overwrite:", get_embedding_from_db("cat"))
+    # #overwrite test
+    # save_embedding_to_db("cat", [1.0,1.0,1.0])
+    # print("Cat embedding after overwrite:", get_embedding_from_db("cat"))
 
-    #query non-existing embedding
-    print("Unicorn embedding(should be None): ", get_embedding_from_db("unicorn"))
+    # #query non-existing embedding
+    # print("Unicorn embedding(should be None): ", get_embedding_from_db("unicorn"))
 
 # #print everything in the embeddings table
 #     def print_all_rows():
@@ -73,18 +79,7 @@ if __name__ == "__main__":
 #             for row in rows:
 #                  print(f"Text: {row[0]} | Embedding: {row[1]}") #loops through each row and prints test (input string) and embedding (stored as a JSON string)
 
-def print_all_rows():
-    with _db_lock:
-        cursor = _conn.execute("SELECT text, embedding FROM embeddings")
-        rows = cursor.fetchall()
 
-    print("\nAll rows in the embeddings table (first element only):")
-    for text, embedding_json in rows:
-        # parse the JSON string back into a Python list
-        embedding = json.loads(embedding_json)
-        # guard against empty embeddings
-        first_value = embedding[0] if embedding else None
-        print(f"Text: {text} | First embedding value: {first_value}")
 
 #call the function here
     print_all_rows()
