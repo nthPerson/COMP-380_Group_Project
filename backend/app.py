@@ -13,7 +13,8 @@ from pdf_utils import (
     list_user_pdfs, 
     delete_user_pdf, 
     set_master_pdf, 
-    get_master_pdf
+    get_master_pdf,
+    generate_pdf_link
 )
 from resume_utils import (
     extract_resume_profile_llm,
