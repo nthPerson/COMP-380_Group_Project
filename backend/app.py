@@ -175,9 +175,7 @@ def api_highlight_similarity():
     body = request.get_json() or {}
     resume_items = body.get("resume_items", [])
     jd_items     = body.get("jd_items", [])
-    # optional threshold override:
-    threshold    = float(body.get("threshold", 0.7))
-    return highlight_profile_similarity(resume_items, jd_items, threshold)
+    return highlight_profile_similarity(resume_items, jd_items)
 
 #  start the server
 if __name__ == "__main__":

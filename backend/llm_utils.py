@@ -268,7 +268,7 @@ def compute_similarity_scores():
     return jsonify(result), 200
 
 # Similarity highlighting mask
-def highlight_profile_similarity(resume_items: list[str], jd_items: list[str], threshold: float = 0.7):
+def highlight_profile_similarity(resume_items: list[str], jd_items: list[str], threshold: float = 0.4):
     """
     Return two parallel lists of booleans:
       - matched_resume[i] = does resume_items[i] match any jd_items?
@@ -279,27 +279,28 @@ def highlight_profile_similarity(resume_items: list[str], jd_items: list[str], t
     resume_embeds = get_embeddings(resume_items)
     jd_embeds = get_embeddings(jd_items)
 
-    """ Calculate cosine sim between list items """
-    # For each resume keyword, does it match any JD keyword?
-    matched_resume = []
+    # Build full similarity matrix (resume x jd)
+    sim_scores: list[list[float]] = []
     for res_emb in resume_embeds:
-        if any(_cosine_sim(res_emb, jd_emb) >= threshold for jd_emb in jd_embeds):
-            matched_resume.append(True)
-        else:
-            matched_resume.append(False)
+        row = []
+        for jd_emb in jd_embeds:
+            row.append(round(_cosine_sim(res_emb, jd_emb), 4)) # Note: the 4 in there is for the number of digits in each element of the matrix
+        sim_scores.append(row)
 
-    # Vice versa: for each jd keyword, does it match any resume keyword?
+    # Boolean masks
+    matched_resume = [ any(score >= threshold for score in row) for row in sim_scores ]
+    # Transpose sim_scores to get jd -> resume cosim
     matched_jd = []
-    for jd_emb in jd_embeds:
-        if any(_cosine_sim(jd_emb, res_emb) >= threshold for res_emb in resume_embeds):
-            matched_jd.append(True)
-        else:
-            matched_jd.append(False)
+    for col_idx in range(len(jd_embeds)):
+        col = [ sim_scores[row_idx][col_idx] for row_idx in range(len(resume_embeds)) ]
+        matched_jd.append(any(score >= threshold for score in col))
 
     return jsonify({
         "matched_resume": matched_resume,
-        "matched_jd": matched_jd
+        "matched_jd": matched_jd,
+        "sim_scores": sim_scores
     }), 200
+
 
 #Helper Function to make highlight_profile_similarity testable without flask!
 #right now it returns a jsonify(..) which only work into a flask route so this helper function just returns python data
