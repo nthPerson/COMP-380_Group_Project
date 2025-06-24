@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
 import Sidebar from "../Sidebar/Sidebar";
 import "../Sidebar/Sidebar.css";
 import "./UserProfile.css"
+import { Link } from "react-router-dom";
+
+import defaultAvatar from "../Assets/blank-avatar.png";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 
-const UserProfile = () => {
+export default function UserProfile() {
   const [user, setUser] = useState(null);
 
+  const [file, setFile]             = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const fileInputRef = useRef();
+
   const [form, setForm] = useState({
-    phoneNumber: "",
-    address: "",
-    education: "",
-    workExperience: "",
-    skills: "",
-    linkedin: "",
-    github: "",
-    portfolioUrl: "",
+    username: "",
+    accountEmail: "",
   });
 
   useEffect(() => {
@@ -40,6 +41,12 @@ const UserProfile = () => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
   };
+  function handleFileSelect(e) {
+    const chosen = e.target.files?.[0];
+    if (!chosen) return;
+    setFile(chosen);
+    setPreviewUrl(URL.createObjectURL(chosen));
+  }
 
   const handleSave = e => {
     e.preventDefault();
@@ -52,85 +59,87 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="user-profile-page">
-      <div>
-        <Sidebar user={user} />
-        <div className="user-profile">
-          <h1>Welcome, {user.displayName || "User"}!</h1>
-          <p>You've been successfully logged in. Start tailoring your resume!</p>
-          <p>Email: {user.email}</p>
+    <div className="user-profile-layout">
 
+        <Sidebar user={user} />
+
+        <div className="profile-content"> 
+        <div className="profile-container">
           <form className="profile-form" onSubmit={handleSave}>
+
+            <div className="welcome-section">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  style={{ display: 'none' }}
+                />
+                <div
+                  className="avatar-wrapper"
+                  onClick={() => fileInputRef.current.click()}
+                  title="Click to change avatar"
+                >
+                <img
+                  src={ previewUrl ||defaultAvatar }
+                    alt="avatar"
+                    className="profile-picture"
+                />
+                </div>
+                <div className="user-profile-content">
+                <h1>Welcome, {user.displayName || "User"}!</h1>
+                <p>You've successfully logged in.</p>
+
+                </div>
+             
+              </div>
+
+            
           
-            <div className="form-layout" data-aos="fade-up">
+            <div className="form-layout">
             <section className="profile-section">
               <h2 className="section-title">Personal Information</h2>
               <label>
-                Address
+                Username
                 <input
                   type="text"
-                  name="address"
-                  value={form.address}
+                  name="username"
+                  value={form.username}
                   onChange={handleChange}
                 />
               </label>
               <label>
-                Phone number
+                Account Email
                 <input
-                  type="tel"
-                  name="phone"
-                  value={form.phone}
+                  type="email"
+                  name="email"
+                  value={form.email}
                   onChange={handleChange}
                 />
               </label>
              
             </section>
-            </div>
-
-            <div className="form-layout" data-aos="fade-up">
-              <section className="profile-section">
-              <h2 className="section-title">Education</h2>
-              <label>
-                Education 1
-                
-              </label>
-              </section>
-            </div>
-
-            <div className="form-layout" data-aos="fade-up">
-              <section className="profile-section">
-              <h2 className="section-title">Links </h2>
-              <label>
-                LinkedIn
-                <input
-                  typle="url"
-                  name="linkedin"
-                  placeholder="https://linkedin.com/in/..."
-                  value={form.linkedin}
-                  onChange={handleChange}
-                />
-              </label>
-              <label>
-                GitHub
-                <input
-                  type="url"
-                  name="github"
-                  placeholder="https://github.com/..."
-                  value={form.github}
-                  onChange={handleChange}
-                />
-
-              </label>
-              </section>
-            </div>
-            <button type="submit" className="save-btn">
+            <button type="submit" className="save-button">
             Save Profile
           </button>
+            </div>
+
+          <div className="form-layout">
+          <p>You can start by creating a resume or tailoring a resume!</p>
+          <div className="button-row">
+          <Link to="/createResume" className="button">
+            Create Resume
+          </Link>
+          <Link to="/tailorResume" className="button">
+            Tailor Resume
+          </Link>
+          </div>
+          </div>
           </form>
         </div>
-      </div>
+       </div>
+      
     </div>
   );
-};
+}
 
-export default UserProfile;
