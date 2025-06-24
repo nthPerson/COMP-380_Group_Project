@@ -7,34 +7,6 @@ import aiGif from '../Assets/AI.gif';
 import resumeGif from '../Assets/resume.gif';
 import "./LandingPage.css";
 
-
-// Steps for our web app 
-const sections = [
-  {
-    title: 'Upload Your Master Resume',
-    desc: 'Start by uploading your main, complete resume to the application.'
-  },
-  {
-    title: 'Provide a Job Description',
-    desc: 'Either paste the job description text or enter the URL of the job posting.'
-  },
-  {
-    title: 'System Analyzes the Job Posting',
-    desc: 'The application automatically scans the job description to identify key skills and requirements.'
-  },
-  {
-    title: 'AI Generates a Customized Resume',
-    desc: 'The system uses AI to create a tailored resume version optimized for the specific job.'
-  },
-  {
-    title: 'Review and Edit Your Resume',
-    desc: 'Preview the generated resume and make any edits or adjustments you want.'
-  },
-  {
-    title: 'Download Your Customized Resume',
-    desc: 'Once satisfied, download your personalized resume and use it for your job application.'
-  }
-];
 // Landing page itself
 export default function LandingPage() {
   // Tracks which step in the timeline is "active" based on scroll
@@ -73,29 +45,6 @@ export default function LandingPage() {
   // State for header styling 
   const [headerActive, setHeaderActive] = useState(false);
 
-  // Timeline Step Component
-  function TimelineStep({ isActive, stepNumber, title, content }) {
-    return (
-      <motion.div
-        className={`timeline-step${isActive ? " active" : ""}`}
-        style={{
-          marginBottom: 80,
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "row",   // content left, marker right
-          position: "relative"
-        }}
-      >
-
-        <motion.div className="step-content">
-          <h3>{title}</h3>
-          <p>{content}</p>
-        </motion.div>
-        <div className="step-marker">{stepNumber}</div>
-
-      </motion.div>
-    );
-  }
   // Based on scroll posiiton
   useEffect(() => {
     const handleScroll = () => {
@@ -165,126 +114,10 @@ export default function LandingPage() {
             </h1>
           </div>
           {/* Right side panel of hero- resume graphic(svg)*/}
-          <div className="hero-right">
-            <motion.svg
-              width="400"
-              height="480"
-              viewBox="0 0 400 480"
-              className="resume-svg"
-            >
-              {/* Gradient for graphic */}
-              <defs>
-                <linearGradient id="highlight" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="white" stopOpacity="0" />
-                  <stop offset="35%" stopColor="white" stopOpacity="0.25" />
-                  <stop offset="50%" stopColor="white" stopOpacity="0.8" />
-                  <stop offset="65%" stopColor="white" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="white" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-
-              {/* Resume paper */}
-              <rect
-                x="24"
-                y="24"
-                width="352"
-                height="432"
-                rx="26"
-                fill="#fff"
-                stroke="#B4CBEB"
-                strokeWidth="5"
-              />
-
-              {/* Blue text box at the top */}
-              <rect
-                x="114"
-                y="40"
-                width="172"
-                height="44"
-                rx="12"
-                fill="#4A90E2"
-              />
-
-              {/* Simulated lines for text */}
-              {[0, 1, 2, 3, 4, 5].map((line, idx) => (
-                <rect
-                  key={idx}
-                  x="60"
-                  y={170 + idx * 38}
-                  rx="7"
-                  width={220 - idx * 28}
-                  height="24"
-                  fill="#e7effa"
-                />
-              ))}
-
-              {/* Gray button */}
-              <rect
-                x="244"
-                y="380"
-                width="80"
-                height="34"
-                rx="10"
-                fill="#c3d0e8"
-              />
-              <text
-                x={244 + 40}           // Button x + half width
-                y={376 + 22}           // Button y + about 2/3 height (for vertical center)
-                textAnchor="middle"
-                alignmentBaseline="middle"
-                fontSize="18"
-                fill="#233c65"
-                fontFamily="'Fira Sans Condensed', Arial, sans-serif"
-                fontWeight="bold"
-              >
-                Start
-              </text>
-            </motion.svg>
-          </div>
         </div>
         {/* === END HERO COLUMNS === */}
       </motion.section>
 
-      {/* --- TITLE BETWEEN HERO AND TIMELINE --- */}
-      <div className="how-it-works-title" >
-        <h2>How RezuMe Works</h2>
-      </div>
-
-      {/* ==== TIMELINE SECTION ==== */}
-      <div className="timeline-row" style={{ position: "relative" }}>
-        {/* Right: resume SVG illustration and connector line*/}
-        <div className="hero-right" style={{ position: "relative" }}>
-
-          {/*Resume SVG*/}
-          <motion.svg
-            width="400"
-            height="480"
-            viewBox="0 0 400 480"
-            className="resume-svg"
-          >
-          </motion.svg>
-
-          {/* --- Vertical connector line, connects the 'start' box from resume svg to the timeline line --- */}
-          <div className="vertical-connector" />
-        </div>
-
-        {/* Timeline Steps (left side) */}
-        <div className="timeline-side">
-
-          {/*Timeline Steps*/}
-          <div className="timeline-line"></div>
-          {sections.map((step, idx) => (
-            <TimelineStep
-              key={idx}
-              isActive={activeSection === idx}
-              stepNumber={idx + 1}
-              title={step.title}
-              content={step.desc}
-            />
-          ))}
-        </div>
-
-      </div>
 
 
     </>
