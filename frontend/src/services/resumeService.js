@@ -169,3 +169,18 @@ export async function getSimilarityScore(docID, jobDescription, generated) {
   return await res.json();
 }
 
+// Fetch raw text from master resume
+export async function fetchMasterText(docID) {
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch("http://localhost:5001/api/download_pdf_text", {
+    method : "POST",
+    headers: {
+      Authorization : `Bearer ${idToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ docID })
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const { pdf_text } = await res.json();      // { text: "…" }
+  return pdf_text;
+}

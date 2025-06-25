@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, g
 from flask_cors import CORS
 import sys
 
@@ -13,7 +13,8 @@ from pdf_utils import (
     list_user_pdfs, 
     delete_user_pdf, 
     set_master_pdf, 
-    get_master_pdf
+    get_master_pdf,
+    _download_pdf_as_text
 )
 from resume_utils import (
     extract_resume_profile_llm,
@@ -153,6 +154,18 @@ def api_generate_targeted_resume():
 @verify_firebase_token
 def api_save_generated_resume():
     return save_generated_resume()
+
+# Retrieve the master resume text for use in the targeted resume text editor (master resume and targeted resume diff to highlight changes)
+@app.route("/api/download_pdf_text", methods=["POST"])
+@verify_firebase_token
+def api_download_pdf_ext():
+    data = request.get_json() or {}
+    text = _download_pdf_as_text(g.firebase_user["uid"], data.get("docID", ""))
+    return jsonify({"pdf_text": text}), 200
+# @app.route("/api/download_pdf_text", methods=["POST"])
+# @verify_firebase_token
+# def api_download_pdf_as_text():
+#     return _download_pdf_as_text()
 
 # ====================== Similarity Calculation =======================================
 

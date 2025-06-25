@@ -106,9 +106,24 @@ def get_master_pdf():
         masterDocID = user_doc.to_dict().get("master_resume")
         return jsonify({"masterDocID": masterDocID}), 200
     else:
-        return jsonify({"masterDocID": None}), 200
+        return jsonify({"masterDocID": None}), 400
 
 
+# def _download_pdf_as_text(user_id: str, doc_id: str) -> str:
+#     # Fetch the PDF bytes from Firebase Storage and return as plain text
+#     bucket = storage.bucket()  # Identify Firebase storage bucket for our project
+#     doc = db.collection("users").document(user_id).collection("documents").document(doc_id).get()  # Get document
+#     if doc.exists:
+#         blob_path = doc.to_dict()["storagePath"]
+#         pdf_bytes = bucket.blob(blob_path).download_as_bytes()
+#         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+#         text = "\n".join(page.get_text() for page in doc)
+
+#         return text   
+#     else:
+#         return ""
+    
+    
 # Download a PDF from Firebase Storage and return the text within
 def _download_pdf_as_text(user_id: str, doc_id: str) -> str:
     # Fetch the PDF bytes from Firebase Storage and return as plain text
