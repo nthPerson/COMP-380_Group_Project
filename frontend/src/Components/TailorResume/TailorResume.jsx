@@ -21,12 +21,13 @@ import { generateTargetedResume, saveGeneratedResume, getSimilarityScore } from 
 import TinyDiffEditor from "../TinyDiffEditor/TinyDiffEditor";
 import { toDiffHtml } from "../../utils/diffHtml";
 import { fetchMasterText } from "../../services/resumeService";
+import { resumeTextToHtml } from "../../utils/resumeHtmlFormatter";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./TailorResume.css";
 import "../Sidebar/Sidebar.css";
-import { formatPatch } from "diff";
+
 
 export default function TailorResume() {
   const navigate = useNavigate();
@@ -85,13 +86,20 @@ export default function TailorResume() {
         .catch(console.error);  // If shit goes down, handle it
   }, [masterDocID]);
 
-  // Enables live update of the master resume vs targeted resume changes
-  // Whenever a masterDocID is set or a targeted resume is generated, build the diff-HTML (used for highligting changes in targeted resume)
+  // // Enables live update of the master resume vs targeted resume changes
+  // // Whenever a masterDocID is set or a targeted resume is generated, build the diff-HTML (used for highligting changes in targeted resume)
+  // useEffect(() => {
+  //   if (masterText && generatedResume) {
+  //     setEditorHtml(toDiffHtml(masterText, generatedResume));
+  //   }
+  // }, [masterText, generatedResume]);
+
+  // Push new HTML into the editor on every change
   useEffect(() => {
-    if (masterText && generatedResume) {
-      setEditorHtml(toDiffHtml(masterText, generatedResume));
+    if (editorRef.current && editorHtml) {
+      editorRef.current.setContent(editorHtml);
     }
-  }, [masterText, generatedResume]);
+}, [editorHtml]);
 
   // function for handling the errors 
   const handleUrlError = (message) => {
@@ -105,19 +113,32 @@ export default function TailorResume() {
     setIsGenerating(true);
     try {
       const keywords = await getSelectedKeywords();
-      const gen = await generateTargetedResume(masterDocID, jdContent, keywords);
-      setGeneratedResume(gen);
+      const generatedResume = await generateTargetedResume(masterDocID, jdContent, keywords);
+      setGeneratedResume(generatedResume);
 
-      // TODO decide if this needs to be included
-      /* Build diff HTML for TinyMCE (the text editor for editing the targeted resume) */
-      // if (masterText) {
-      //   setEditorHtml(toDiffHtml(masterText, gen));
-      // }
+      if (masterText) {
+        // 0) Strip out any pesky backticks and markdown/plaintext markers from generated resume before formatting
+        let raw = generatedResume.replace(/^```(?:markdown|plaintext)[^\n]*\n/, "").replace(/\n?```$/, "");
+
+        // 1) Format both raw texts into HTML
+        const masterHtml = resumeTextToHtml(masterText);
+        const tailoredHtml = resumeTextToHtml(raw);
+        // const tailoredHtml = resumeTextToHtml(generatedResume);
+
+        // 2) Diff them to highlight additions
+        const diffedHtml = toDiffHtml(masterHtml, tailoredHtml);
+        console.log("⏩ final payload to editor:", diffedHtml)
+        setEditorHtml(diffedHtml);  // This is the text that will be displayed in the TinyMCE editor
+      } else {
+        // Fallback: just display the formatted targeted resume in the TinyMCE editor
+        setEditorHtml(resumeTextToHtml(generatedResume));
+      }
+
       try {
         const { generated_score } = await getSimilarityScore(
           masterDocID,
           jdContent,
-          gen
+          generatedResume
         );
         setPostGenSim(generated_score);
       } catch (e) {
@@ -131,9 +152,6 @@ export default function TailorResume() {
     }
   };
 
-  // function currentPlainText() {
-  //   return editorRef.current?.getContent({ format: 'text'}) ?? '';
-  // }
   
   const handleDownloadText = () => {
     const plainText = editorRef.current.getContent({ format: "text" });  // Clean up text (remove classes/objects that were used to implement the diff between master and targeted resume)
@@ -145,16 +163,6 @@ export default function TailorResume() {
     a.click();
     URL.revokeObjectURL(url);
   };
-
-  // const handleDownloadText = () => {
-  //   const blob = new Blob([generatedResume], { type: "text/plain" });
-  //   const url = URL.createObjectURL(blob);
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = "Tailored_Resume.txt";
-  //   a.click();
-  //   URL.revokeObjectURL(url);
-  // };
 
   const handleDownloadPdf = () => {
     const doc = new jsPDF({ unit: "pt", format: "letter" });
@@ -310,13 +318,8 @@ export default function TailorResume() {
         {generatedResume && (
           <div className="tool-section" data-aos="fade-up">
             <h3>Review and Edit Your Tailored RezuMe</h3>
-            <TinyDiffEditor ref={editorRef} html={editorHtml} onChange={(newHtml) => setEditorHtml(newHtml)} />
-            {/* <textarea
-              rows={15}
-              cols={80}
-              value={generatedResume}
-              onChange={e => setGeneratedResume(e.target.value)}
-            /> */}
+            {/* <TinyDiffEditor ref={editorRef} html={editorHtml} onChange={(newHtml) => setEditorHtml(newHtml)} /> */}
+            <TinyDiffEditor ref={editorRef} value={editorHtml} onChange={setEditorHtml} />
             <br />
 
             <button onClick={handleDownloadText}>Download as Text</button>
