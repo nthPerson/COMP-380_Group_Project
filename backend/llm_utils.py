@@ -135,7 +135,7 @@ def generate_targeted_resume():
     data = request.get_json() or {}          # Request from frontend must contain:
     doc_id = data.get("docID")               # master resume (docID),
     jd_text = data.get("job_description", "")# job description (dob_description),
-    keywords = data.get("keywords", [])      # but keywords (uh, keywords) are optional
+    keywords = data.get("keywords", [])      # but keywords (keywords) are optional
 
     if not doc_id or not jd_text:
         return jsonify({"error":"docID and job_description are required"}), 400
@@ -150,14 +150,19 @@ def generate_targeted_resume():
     # full resume and job descriptin in the prompt, and instruct it to rewrite 
     # the resume to align with the job.
     keyword_list = ", ".join(keywords) if keywords else "None"  # Allows the user to generate a resume without selecting any keywords
-    system_msg = "You are a professional resume writer. Rewrite resumes to match job descriptions"
+    system_msg = (
+        "You are a professional resume writer. Insert keyword(s) into given resume to match given job posting. " \
+        "Return only VALID HTML (no markdown, no backticks). Use:" \
+        " • <h1>, <h2>, <h3> for section titles" \
+        " • <p> for paragraphs" \
+        " • <ul><li> for bullet lists"
+    )
     user_msg = (
-        f"Here is the candidate's original resume:\n```{raw_resume}```\n\n"
+        f"Here is the candidates original resume:\n```{raw_resume}```\n\n"
         f"Here is the target job description:\n```{jd_text}```\n\n"
-        "Please rewrite the resume to optimize it for this job posting."
-        "Include and emphasize these keywords if relevant: "
-        f"{keyword_list}. "
-        "Use only facts from the original resume -- do not invent new experiences."
+        f"Include an emphasize these keywords if relevant:"
+        f"{keyword_list}."
+        f"Use only facts from the original resume -- do not invent new experiences, education, or skills."
     )
 
     # 3: Call OpenAI API
@@ -171,12 +176,59 @@ def generate_targeted_resume():
             temperature=0.7,  # Allow GPT to be creative without it just making shit up all the time
             max_tokens = 1200,
         )
-        generated = response.choices[0].message.content
+        generated_html = response.choices[0].message.content
     except Exception as e:
         return jsonify({"error":f"OpenAI request failed: {str(e)}"}), 500
     
-    # 4: Return the plain text of the augmented resume
-    return jsonify({"generated_resume": generated}), 200
+    # 4: Return the HTML of the augmented resume
+    return jsonify({"generated_resume_html": generated_html}), 200
+
+# def generate_targeted_resume():
+#     data = request.get_json() or {}          # Request from frontend must contain:
+#     doc_id = data.get("docID")               # master resume (docID),
+#     jd_text = data.get("job_description", "")# job description (dob_description),
+#     keywords = data.get("keywords", [])      # but keywords (keywords) are optional
+
+#     if not doc_id or not jd_text:
+#         return jsonify({"error":"docID and job_description are required"}), 400
+    
+#     # Step 1 (as described above the function definition): download resume as plain text
+#     user_id = g.firebase_user["uid"]
+#     raw_resume = _download_pdf_as_text(user_id, doc_id)
+#     if raw_resume is None:
+#         return jsonify({"error":"Could not retrieve resume PDF"}), 404
+    
+#     # 2: Build prompt (direct instruction prompt). Provide the model with the 
+#     # full resume and job descriptin in the prompt, and instruct it to rewrite 
+#     # the resume to align with the job.
+#     keyword_list = ", ".join(keywords) if keywords else "None"  # Allows the user to generate a resume without selecting any keywords
+#     system_msg = "You are a professional resume writer. Rewrite resumes to match job descriptions"
+#     user_msg = (
+#         f"Here is the candidate's original resume:\n```{raw_resume}```\n\n"
+#         f"Here is the target job description:\n```{jd_text}```\n\n"
+#         "Please rewrite the resume to optimize it for this job posting."
+#         "Include and emphasize these keywords if relevant: "
+#         f"{keyword_list}. "
+#         "Use only facts from the original resume -- do not invent new experiences."
+#     )
+
+#     # 3: Call OpenAI API
+#     try:
+#         response = openai.chat.completions.create(
+#             model="gpt-4o-mini",
+#             messages=[
+#                 {"role":"system", "content": system_msg},
+#                 {"role":"user", "content": user_msg}
+#             ],
+#             temperature=0.7,  # Allow GPT to be creative without it just making shit up all the time
+#             max_tokens = 1200,
+#         )
+#         generated = response.choices[0].message.content
+#     except Exception as e:
+#         return jsonify({"error":f"OpenAI request failed: {str(e)}"}), 500
+    
+#     # 4: Return the plain text of the augmented resume
+#     return jsonify({"generated_resume": generated}), 200
 
 #============================ Embeddings Functionality ====================================================
 

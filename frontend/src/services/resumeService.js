@@ -115,9 +115,26 @@ export async function generateTargetedResume(docID, jobDescription, keywords) {
     const txt = await res.text();
     throw new Error(`Generation failed: ${res.status} ${txt}`);
   }
-  const { generated_resume } = await res.json();
-  return generated_resume;
+  const { generated_resume_html } = await res.json();
+  return generated_resume_html;
 }
+// export async function generateTargetedResume(docID, jobDescription, keywords) {
+//   const idToken = await auth.currentUser.getIdToken();
+//   const res = await fetch("http://localhost:5001/api/generate_targeted_resume", {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Bearer ${idToken}`,
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify({ docID, job_description: jobDescription, keywords })
+//   });
+//   if (!res.ok) {
+//     const txt = await res.text();
+//     throw new Error(`Generation failed: ${res.status} ${txt}`);
+//   }
+//   const { generated_resume } = await res.json();
+//   return generated_resume;
+// }
 
 /**
  * Persist a generated resume (plain text) to the user’s ResumeLibrary

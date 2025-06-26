@@ -18,11 +18,10 @@ import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../PdfContext";
 import { getSelectedKeywords } from "../../services/keywordService";
 import { generateTargetedResume, saveGeneratedResume, getSimilarityScore } from "../../services/resumeService";
-import TinyDiffEditor from "../TinyDiffEditor/TinyDiffEditor";  // Not using right now, trying new StructuredDiffEditor
-import { toDiffHtml } from "../../utils/diffHtml";  // Not using right now, trying new StructuredDiffEditor
+import TinyDiffEditor from "../TinyDiffEditor/TinyDiffEditor";  
 import { fetchMasterText } from "../../services/resumeService";
 import { resumeTextToHtml } from "../../utils/resumeHtmlFormatter";  // Not using right now, trying new StructuredDiffEditor
-import StructuredResumeEditor from "../StructuredDiffEditor/StructuredResumeEditor";
+import { toDiffHtml } from "../../utils/diffHtml"
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -40,10 +39,9 @@ export default function TailorResume() {
   const [generatedResume, setGeneratedResume] = useState("");  
   const [initialSim, setInitialSim] = useState(null);  // Master Resume vs JD similarity score
   const [postGenSim, setPostGenSim] = useState(null);  // Targeted Resume vs JD similarity scores
-  const [headerActive, setHeaderActive] = useState(false);  // TODO Might not need this
-  const [editorHtml, setEditorHtml] = useState("");  // To enable highlighting changes in targeted resume // TODO Trying new StructuredDiffEditor
   const [masterText, setMasterText] = useState("");  // Used in the diff between master resume and targeted resume (to highlight changes)
-  const editorRef = useRef(null);  // For removing the diff classes (stuff used to highlight changes) from targeted resume text before converting it to PDF // TODO Trying new StructuredDiffEditor
+  const [generatedHtml, setGeneratedHtml] = useState("");  // For targeted resume HTML returned by OpenAI API 
+  const [diffHtml, setDiffHtml] = useState("");
 
   // State variables for the error handling
   const [urlError, setUrlError] = useState("");
@@ -64,16 +62,6 @@ export default function TailorResume() {
     return () => unsubscribe();
   }, []);
 
-  // TODO: Figure out what this was used for (maybe as Reza?)
-  // //if it works clean the error
-  // const handleExplanationReceived = (explanation, skills) => {
-  //   setJdExplanation(explanation);
-  //   // clear error if successful 
-  //   setUrlError("");
-  //   setHighlightTextInput(false);
-  //   // You can handle skills here if needed, or just ignore the parameter
-  // };
-
   useEffect(() => {
     AOS.init({ duration: 700 });
   }, []);
@@ -87,20 +75,14 @@ export default function TailorResume() {
         .catch(console.error);  // If shit goes down, handle it
   }, [masterDocID]);
 
-  // Enables live update of the master resume vs targeted resume changes
-  // Whenever a masterDocID is set or a targeted resume is generated, build the diff-HTML (used for highligting changes in targeted resume)
+  // Compute diff HTML between master resume and generated resume whenever they both become available
   useEffect(() => {
-    if (masterText && generatedResume) {
-      setEditorHtml(toDiffHtml(masterText, generatedResume));
+    if (masterText && generatedHtml) {
+      const masterHtml = resumeTextToHtml(masterText);  // Convert master resume text to HTML
+      const htmlDiff = toDiffHtml(masterHtml, generatedHtml);  // Diff master resume HTML and generated resume HTML
+      setDiffHtml(htmlDiff)
     }
-  }, [masterText, generatedResume]);
-
-  // Push new HTML into the editor on every change  // TODO Trying new StructuredDiffEditor
-  useEffect(() => {
-    if (editorRef.current && editorHtml) {
-      editorRef.current.setContent(editorHtml);
-    }
-}, [editorHtml]);
+  }, [masterText, generatedHtml]);
 
   // function for handling the errors 
   const handleUrlError = (message) => {
@@ -110,32 +92,16 @@ export default function TailorResume() {
     setTimeout(() => setHighlightTextInput(false), 5000);
   };
 
+
+
   const handleGenerateResume = async () => {
-    setIsGenerating(true);
+  setIsGenerating(true);
+  try {
+    const keywords = await getSelectedKeywords();
+    const generatedResumeHtml = await generateTargetedResume(masterDocID, jdContent, keywords);
+    setGeneratedHtml(generatedResumeHtml);
+
     try {
-      const keywords = await getSelectedKeywords();
-      const generatedResume = await generateTargetedResume(masterDocID, jdContent, keywords);
-      setGeneratedResume(generatedResume);
-
-      if (masterText) {  // TODO Trying new StructuredDiffEditor
-        // 0) Strip out any pesky backticks and markdown/plaintext markers from generated resume before formatting
-        let raw = generatedResume.replace(/^```(?:markdown|plaintext)[^\n]*\n/, "").replace(/\n?```$/, "");
-
-        // 1) Format both raw texts into HTML
-        const masterHtml = resumeTextToHtml(masterText);
-        const tailoredHtml = resumeTextToHtml(raw);
-        // const tailoredHtml = resumeTextToHtml(generatedResume);
-
-        // 2) Diff them to highlight additions
-        const diffedHtml = toDiffHtml(masterHtml, tailoredHtml);
-        console.log("⏩ final payload to editor:", diffedHtml)
-        setEditorHtml(diffedHtml);  // This is the text that will be displayed in the TinyMCE editor
-      } else {
-        // Fallback: just display the formatted targeted resume in the TinyMCE editor
-        setEditorHtml(resumeTextToHtml(generatedResume));
-      }
-
-      try {
         const { generated_score } = await getSimilarityScore(
           masterDocID,
           jdContent,
@@ -153,19 +119,8 @@ export default function TailorResume() {
     }
   };
 
-  // const handleDownloadText = () => {
-  //   const blob = new Blob([generatedResume], { type: "text/plain" });
-  //   const url = URL.createObjectURL(blob);
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = "Tailored_Resume.txt";
-  //   a.click();
-  //   URL.revokeObjectURL(url);
-  // };
-  
   const handleDownloadText = () => {
-    const plainText = editorRef.current.getContent({ format: "text" });  // Clean up text (remove classes/objects that were used to implement the diff between master and targeted resume)
-    const blob = new Blob([plainText], { type: "text/plain" });
+    const blob = new Blob([generatedResume], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -173,7 +128,7 @@ export default function TailorResume() {
     a.click();
     URL.revokeObjectURL(url);
   };
-
+  
   const handleDownloadPdf = () => {
     const doc = new jsPDF({ unit: "pt", format: "letter" });
     const lines = doc.splitTextToSize(generatedResume, 540);
@@ -324,25 +279,39 @@ export default function TailorResume() {
           </div>
         )}
 
-        {/* Once a tailored resume has been generated, display generated text in a text edit box */}
-        {generatedResume && (
+        {/* Master Resume -> Targeted RezuMe diff and final resume editor */}
+        {generatedHtml && (
           <div className="tool-section" data-aos="fade-up">
-            <h3>Review and Edit Your Tailored RezuMe</h3>
-            <TinyDiffEditor ref={editorRef} value={editorHtml} onChange={setEditorHtml} />
-            {/* <StructuredResumeEditor masterText={masterText} tailoredText={generatedResume} /> */}
-            <br />
+            {/* 1) DIFF PANE */}
+            <h3>Resume Changes Highlighted</h3>
+            <div
+              className="diff-container"
+              // render the sanitized diffHtml
+              dangerouslySetInnerHTML={{ __html: diffHtml }}
+            />
 
+            {/* 2) EDITOR PANE */}
+            <h3>Edit Your Final Resume</h3>
+            <TinyDiffEditor
+              initialValue={generatedHtml}
+              onEditorChange={setGeneratedHtml}
+            />
+
+            {/* ↓ your Download / Save buttons ↓ */}
             <button onClick={handleDownloadText}>Download as Text</button>
+            <button style={{ marginLeft: 8 }} onClick={handleDownloadPdf}>
+              Download as PDF
+            </button>
+            <button style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>
+              Save to Library
+            </button>
 
-            <button style={{ marginLeft: 8 }} onClick={handleDownloadPdf}>Download as PDF</button>
-
-            <button style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
-
-            {/* Display Targeted Resume vs JD similarity */}
             {postGenSim != null && (
-              <div style={{ marginTop: 12 }}><strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}% </div>
+              <div style={{ marginTop: 12 }}>
+                <strong>Generated Resume vs Job Description Similarity:</strong>{" "}
+                {postGenSim}%
+              </div>
             )}
-
           </div>
         )}
 
