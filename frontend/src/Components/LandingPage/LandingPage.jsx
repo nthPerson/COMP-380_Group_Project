@@ -1,292 +1,254 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useInView } from "react-intersection-observer"; // Hook for detecting when an element is in the viewport
-import { Link } from 'react-router-dom'; // React Router navigation
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion"; // Framer Motion for animation
-import logo_icon from '../Assets/logo_icon.png';
-import aiGif from '../Assets/AI.gif';
-import resumeGif from '../Assets/resume.gif';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./LandingPage.css";
 
+const LandingPage = () => {
+  const navigate = useNavigate();
 
-// Steps for our web app 
-const sections = [
-  {
-    title: 'Upload Your Master Resume',
-    desc: 'Start by uploading your main, complete resume to the application.'
-  },
-  {
-    title: 'Provide a Job Description',
-    desc: 'Either paste the job description text or enter the URL of the job posting.'
-  },
-  {
-    title: 'System Analyzes the Job Posting',
-    desc: 'The application automatically scans the job description to identify key skills and requirements.'
-  },
-  {
-    title: 'AI Generates a Customized Resume',
-    desc: 'The system uses AI to create a tailored resume version optimized for the specific job.'
-  },
-  {
-    title: 'Review and Edit Your Resume',
-    desc: 'Preview the generated resume and make any edits or adjustments you want.'
-  },
-  {
-    title: 'Download Your Customized Resume',
-    desc: 'Once satisfied, download your personalized resume and use it for your job application.'
-  }
-];
-// Landing page itself
-export default function LandingPage() {
-  // Tracks which step in the timeline is "active" based on scroll
-  const [activeSection, setActiveSection] = useState(0);
-
-  // One useInView hook per section
-  const [ref0, inView0] = useInView({ threshold: 0.95 });
-  const [ref1, inView1] = useInView({ threshold: 0.95 });
-
-  // Updates the currently active section based on which part is in view
   useEffect(() => {
-    if (inView0) setActiveSection(0);
-    else if (inView1) setActiveSection(1);
-  }, [inView0, inView1]);
+    // Create floating particles
+    const createParticles = () => {
+      const particlesContainer = document.querySelector('.particles');
+      const particleCount = 50;
 
-  // Animations for hero section based on scroll
-  const heroCompress = useMotionValue(0);// 0 = not scrolled, 1 = fully compressed
-  const heroOverlayOpacity = useTransform(heroCompress, [0, 1], [0, 0.34]); // Overlay fades in with scroll
-
-  // Handles hero compression/animation on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      // Animate compression in the first 350px of scroll
-      const progress = Math.min(1, window.scrollY / 350);
-      heroCompress.set(progress);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [heroCompress]);
-
-  // Animate scale and vertical compression
-  const heroScaleY = useTransform(heroCompress, [0, 1], [1, 0.73]); // Shrinks vertically
-  const heroY = useTransform(heroCompress, [0, 1], [0, -120]); // Moves up
-
-  // State for header styling 
-  const [headerActive, setHeaderActive] = useState(false);
-
-  // Timeline Step Component
-  function TimelineStep({ isActive, stepNumber, title, content }) {
-    return (
-      <motion.div
-        className={`timeline-step${isActive ? " active" : ""}`}
-        style={{
-          marginBottom: 80,
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "row",   // content left, marker right
-          position: "relative"
-        }}
-      >
-
-        <motion.div className="step-content">
-          <h3>{title}</h3>
-          <p>{content}</p>
-        </motion.div>
-        <div className="step-marker">{stepNumber}</div>
-
-      </motion.div>
-    );
-  }
-  // Based on scroll posiiton
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 320) {
-        setHeaderActive(true);
-      } else {
-        setHeaderActive(false);
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const size = Math.random() * 4 + 2;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        
+        particlesContainer.appendChild(particle);
       }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    // Animate skill tags appearing
+    const animateSkills = () => {
+      const skillTags = document.querySelectorAll('.skill-tag');
+      skillTags.forEach((tag, index) => {
+        tag.style.animationDelay = (index * 0.1) + 's';
+      });
+    };
+
+    createParticles();
+    animateSkills();
   }, []);
 
-  // Render component
   return (
-    <>  {/* Header and links for sign up/ login*/}
-      <header className={`site-banner${headerActive ? " banner-active" : ""}`}>
-        <div className="top-line"></div>
-        <div className="banner-content">
-          <div className="banner-left">
-            <img src={logo_icon} alt="Logo icon" className="banner-logo" />
-            <span className="banner-title">
-              <span className="light-blue">Rezu</span>
-              <span className="solid-blue">Me</span>
-            </span>
-          </div>
-          <nav className="banner-nav">
-            <ul>
-              <li><Link to="/signup">Sign Up</Link></li>
-              <li><Link to="/login">Login</Link></li>
-            </ul>
-          </nav>
+    <div className="landing-page">
+      <div className="particles"></div>
+
+      <header className="header">
+        <div className="logo">RezuMe</div>
+        <div className="nav-buttons">
+        <button className="nav-btn" onClick={() => navigate("/signup")}>Sign Up</button>
+        <button className="nav-btn primary" onClick={() => navigate("/login")}>Login</button>
         </div>
       </header>
 
-      {/* Hero section */}
-      <motion.section
-        className="landing-main-content"
-        style={{
-          scaleY: heroScaleY,
-          y: heroY,
-          transformOrigin: "top center",
-          position: "relative",
-          zIndex: 2,
-          willChange: "transform"
-        }}
-      >
-        {/* Overlay that appears as user scrolls */}
-        <motion.div
-          className="hero-overlay"
-          style={{
-            opacity: heroOverlayOpacity,
-            position: "absolute",
-            inset: 0,
-            background: "rgba(0,0,0,0.78)",
-            pointerEvents: "none",
-            zIndex: 5
-          }}
-        />
-        {/* Hero columns for the tagline and resume */}
-        <div className="hero-columns">
-          {/*Left side panel of hero- tagline*/}
-          <div className="hero-left">
-            <h1 style={{ fontWeight: 400 }}>
-              Be the <span className="tagline-highlight">"other candidate"</span> companies look for.
-            </h1>
+      <section className="hero">
+        <div className="hero-content">
+          <h1 className="hero-title">AI-Powered Resume Tailoring That Gets You Hired</h1>
+          <p className="hero-subtitle">
+            Transform your generic resume into a job-specific masterpiece in minutes. 
+            Our AI analyzes job descriptions and crafts personalized resumes that speak 
+            directly to what employers want.
+          </p>
+          <div className="hero-cta">
+            <button className="cta-btn cta-primary">Start Tailoring Now</button>
+            <button className="cta-btn cta-secondary">Watch Demo</button>
           </div>
-          {/* Right side panel of hero- resume graphic(svg)*/}
-          <div className="hero-right">
-            <motion.svg
-              width="400"
-              height="480"
-              viewBox="0 0 400 480"
-              className="resume-svg"
-            >
-              {/* Gradient for graphic */}
-              <defs>
-                <linearGradient id="highlight" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="white" stopOpacity="0" />
-                  <stop offset="35%" stopColor="white" stopOpacity="0.25" />
-                  <stop offset="50%" stopColor="white" stopOpacity="0.8" />
-                  <stop offset="65%" stopColor="white" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="white" stopOpacity="0" />
-                </linearGradient>
-              </defs>
 
-              {/* Resume paper */}
-              <rect
-                x="24"
-                y="24"
-                width="352"
-                height="432"
-                rx="26"
-                fill="#fff"
-                stroke="#B4CBEB"
-                strokeWidth="5"
-              />
-
-              {/* Blue text box at the top */}
-              <rect
-                x="114"
-                y="40"
-                width="172"
-                height="44"
-                rx="12"
-                fill="#4A90E2"
-              />
-
-              {/* Simulated lines for text */}
-              {[0, 1, 2, 3, 4, 5].map((line, idx) => (
-                <rect
-                  key={idx}
-                  x="60"
-                  y={170 + idx * 38}
-                  rx="7"
-                  width={220 - idx * 28}
-                  height="24"
-                  fill="#e7effa"
-                />
-              ))}
-
-              {/* Gray button */}
-              <rect
-                x="244"
-                y="380"
-                width="80"
-                height="34"
-                rx="10"
-                fill="#c3d0e8"
-              />
-              <text
-                x={244 + 40}           // Button x + half width
-                y={376 + 22}           // Button y + about 2/3 height (for vertical center)
-                textAnchor="middle"
-                alignmentBaseline="middle"
-                fontSize="18"
-                fill="#233c65"
-                fontFamily="'Fira Sans Condensed', Arial, sans-serif"
-                fontWeight="bold"
-              >
-                Start
-              </text>
-            </motion.svg>
+          <div className="stats">
+            <div className="stat-item">
+              <span className="stat-number">95%</span>
+              <div className="stat-label">More Interviews</div>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">10K+</span>
+              <div className="stat-label">Success Stories</div>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">3x</span>
+              <div className="stat-label">Faster Process</div>
+            </div>
           </div>
         </div>
-        {/* === END HERO COLUMNS === */}
-      </motion.section>
 
-      {/* --- TITLE BETWEEN HERO AND TIMELINE --- */}
-      <div className="how-it-works-title" >
-        <h2>How RezuMe Works</h2>
-      </div>
-
-      {/* ==== TIMELINE SECTION ==== */}
-      <div className="timeline-row" style={{ position: "relative" }}>
-        {/* Right: resume SVG illustration and connector line*/}
-        <div className="hero-right" style={{ position: "relative" }}>
-
-          {/*Resume SVG*/}
-          <motion.svg
-            width="400"
-            height="480"
-            viewBox="0 0 400 480"
-            className="resume-svg"
-          >
-          </motion.svg>
-
-          {/* --- Vertical connector line, connects the 'start' box from resume svg to the timeline line --- */}
-          <div className="vertical-connector" />
+        <div className="ai-demo">
+          <div className="resume-container">
+            <div className="ai-scanner"></div>
+            <div className="resume-doc resume-generic">
+              <div className="resume-header">
+                <div className="resume-name">John Smith</div>
+                <div className="resume-title">Software Developer</div>
+              </div>
+              <div className="resume-section">
+                <div className="section-title">Skills</div>
+                <div className="skill-tags">
+                  <span className="skill-tag">JavaScript</span>
+                  <span className="skill-tag">Python</span>
+                  <span className="skill-tag">SQL</span>
+                </div>
+              </div>
+            </div>
+            <div className="resume-doc resume-tailored">
+              <div className="resume-header">
+                <div className="resume-name">John Smith</div>
+                <div className="resume-title">Senior React Developer</div>
+              </div>
+              <div className="resume-section">
+                <div className="section-title">Technical Skills</div>
+                <div className="skill-tags">
+                  <span className="skill-tag">React.js</span>
+                  <span className="skill-tag">TypeScript</span>
+                  <span className="skill-tag">Node.js</span>
+                  <span className="skill-tag">GraphQL</span>
+                  <span className="skill-tag">AWS</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* Timeline Steps (left side) */}
-        <div className="timeline-side">
-
-          {/*Timeline Steps*/}
-          <div className="timeline-line"></div>
-          {sections.map((step, idx) => (
-            <TimelineStep
-              key={idx}
-              isActive={activeSection === idx}
-              stepNumber={idx + 1}
-              title={step.title}
-              content={step.desc}
-            />
-          ))}
+      <section className="process">
+        <h2 className="process-title">How RezuMe Works</h2>
+        <div className="process-steps">
+          <div className="process-step">
+            <div className="step-number">01</div>
+            <h3 className="step-title">Upload Master Resume</h3>
+            <p className="step-description">
+              Start by uploading your comprehensive resume with all your experience and skills.
+            </p>
+          </div>
+          <div className="process-step">
+            <div className="step-number">02</div>
+            <h3 className="step-title">Add Job Description</h3>
+            <p className="step-description">
+              Paste the job posting or URL, and our AI will analyze the requirements.
+            </p>
+          </div>
+          <div className="process-step">
+            <div className="step-number">03</div>
+            <h3 className="step-title">AI Magic Happens</h3>
+            <p className="step-description">
+              Our advanced AI tailors your resume to match the specific job requirements perfectly.
+            </p>
+          </div>
+          <div className="process-step">
+            <div className="step-number">04</div>
+            <h3 className="step-title">Download & Apply</h3>
+            <p className="step-description">
+              Get your optimized resume and apply with confidence knowing it's perfectly matched.
+            </p>
+          </div>
         </div>
+      </section>
 
-      </div>
+      {/* Enhanced Professional Features Section */}
+      <section className="features">
+        <div className="features-container">
+          <h2 className="features-title">Why Choose RezuMe?</h2>
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon">🎯</div>
+              <h3 className="feature-title">ATS-Optimized</h3>
+              <p className="feature-description">
+                Every resume is optimized to pass Applicant Tracking Systems used by 95% of Fortune 500 companies.
+              </p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">⚡</div>
+              <h3 className="feature-title">Lightning Fast</h3>
+              <p className="feature-description">
+                Get your tailored resume in under 60 seconds. No more hours of manual editing and formatting.
+              </p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">🧠</div>
+              <h3 className="feature-title">Smart AI Analysis</h3>
+              <p className="feature-description">
+                Our AI understands industry-specific keywords and requirements to maximize your match rate.
+              </p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">📊</div>
+              <h3 className="feature-title">Success Analytics</h3>
+              <p className="feature-description">
+                Track your application success rate and get insights on how to improve your job search strategy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Professional Testimonials */}
+      <section className="testimonials">
+        <div className="testimonials-container">
+          <h2 className="testimonials-title">Trusted by Job Seekers Worldwide</h2>
+          <div className="testimonials-grid">
+            <div className="testimonial-card">
+              <div className="testimonial-content">
+                <p>"RezuMe helped me land my dream job at Google. The AI tailoring was spot-on and saved me countless hours."</p>
+              </div>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <div className="author-name">Sarah Chen</div>
+                  <div className="author-role">Software Engineer at Google</div>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="testimonial-content">
+                <p>"The ATS optimization feature is a game-changer. I went from 0 responses to 3 interviews in one week."</p>
+              </div>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <div className="author-name">Marcus Rodriguez</div>
+                  <div className="author-role">Marketing Director</div>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="testimonial-content">
+                <p>"Professional, fast, and incredibly effective. RezuMe transformed my job search completely."</p>
+              </div>
+              <div className="testimonial-author">
+                <div className="author-info">
+                  <div className="author-name">Emily Johnson</div>
+                  <div className="author-role">Product Manager</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    </>
+      {/* Call to Action */}
+      <section className="final-cta">
+        <div className="cta-container">
+          <h2 className="cta-title">Ready to Transform Your Career?</h2>
+          <p className="cta-subtitle">
+            Join thousands of professionals who've already upgraded their job search with RezuMe
+          </p>
+          <button className="cta-btn cta-primary large">Get Started Free Today</button>
+          <div className="cta-features">
+            <span className="cta-feature">✓ No Credit Card Required</span>
+            <span className="cta-feature">✓ 30-Day Money Back Guarantee</span>
+            <span className="cta-feature">✓ Cancel Anytime</span>
+          </div>
+        </div>
+      </section>
+    </div>
   );
-}
+};
+
+export default LandingPage;
