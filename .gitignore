@@ -80,4 +80,4 @@ conda-meta/
 envs/
 
 # embeddings database
-backend/embeddings.db
+backend/data/embeddings.db
