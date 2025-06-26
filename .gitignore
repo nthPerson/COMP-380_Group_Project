@@ -78,3 +78,6 @@ firebase_key.b64
 conda-meta/
 .conda/
 envs/
+
+# embeddings database
+backend/embeddings.db
