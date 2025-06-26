@@ -102,13 +102,16 @@
 }
 .hero-right {
   flex: 0 0 auto;
-  min-width: 0;
+  width: 360px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  position: relative;
-}
+  justify-content: center;
 
+}
+.hero-image {
+  max-width: 100%;
+  height: auto;
+}
 
 .hero-left {
   flex: 1;

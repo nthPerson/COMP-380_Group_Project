@@ -3,9 +3,8 @@ import { useInView } from "react-intersection-observer"; // Hook for detecting w
 import { Link } from 'react-router-dom'; // React Router navigation
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion"; // Framer Motion for animation
 import logo_icon from '../Assets/logo_icon.png';
-import aiGif from '../Assets/AI.gif';
-import resumeGif from '../Assets/resume.gif';
 import "./LandingPage.css";
+import landingPic from "../Assets/LandingPage_pic.png";
 
 // Landing page itself
 export default function LandingPage() {
@@ -114,6 +113,13 @@ export default function LandingPage() {
             </h1>
           </div>
           {/* Right side panel of hero- resume graphic(svg)*/}
+          <div className="hero-right">
+            <img
+            src={landingPic}
+            alt="Person standing in front of a landing page graphic"
+            className="hero-image"
+            />
+          </div>
         </div>
         {/* === END HERO COLUMNS === */}
       </motion.section>
