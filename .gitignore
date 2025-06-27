@@ -81,5 +81,5 @@ envs/
 
 # embeddings database
 backend/data/embeddings.db
-backend/data/embeddings.*
-/COMP-380_Group_Project/backend/data/embeddings.db
+
+
