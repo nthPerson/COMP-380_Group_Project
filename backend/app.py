@@ -19,7 +19,8 @@ from pdf_utils import (
 from resume_utils import (
     extract_resume_profile_llm,
     save_resume_data,
-    save_generated_resume
+    save_generated_resume,
+    save_generated_resume_file
 )
 
 from keyword_utils import (
@@ -32,7 +33,8 @@ from keyword_utils import (
 from llm_utils import (
     generate_targeted_resume,
     compute_similarity_scores,
-    highlight_profile_similarity
+    highlight_profile_similarity,
+    generate_targeted_resume_html
 )
 
 
@@ -147,12 +149,15 @@ def api_generate_targeted_resume():
     Expects JSON: { docID: string, job_description: string, keywords: [string] }
     Returns: { generated_resume: string } (aka just the plain text of the generated resume)
     """
-    return generate_targeted_resume()
+    return generate_targeted_resume_html()  # Currently having OpenAI API generate HTML for use in the resume editor
+    # return generate_targeted_resume()  # Option for plain text response from OpenAI API
 
 # Save the generated resume PDF into the user’s library
 @app.route("/api/save_generated_resume", methods=["POST"])
 @verify_firebase_token
 def api_save_generated_resume():
+    if 'file' in request.files:
+        return save_generated_resume_file()
     return save_generated_resume()
 
 # Retrieve the master resume text for use in the targeted resume text editor (master resume and targeted resume diff to highlight changes)
@@ -162,10 +167,6 @@ def api_download_pdf_ext():
     data = request.get_json() or {}
     text = _download_pdf_as_text(g.firebase_user["uid"], data.get("docID", ""))
     return jsonify({"pdf_text": text}), 200
-# @app.route("/api/download_pdf_text", methods=["POST"])
-# @verify_firebase_token
-# def api_download_pdf_as_text():
-#     return _download_pdf_as_text()
 
 # ====================== Similarity Calculation =======================================
 

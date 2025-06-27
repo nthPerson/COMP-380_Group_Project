@@ -101,7 +101,7 @@ export const saveResume = async (resumeData) => {
  * @param {[string]} keywords  Array of user-selected keywords
  * @returns {Promise<string>}  The generated resume as plain text
  */
-export async function generateTargetedResume(docID, jobDescription, keywords) {
+export async function generateTargetedResumeHtml(docID, jobDescription, keywords) {
   const idToken = await auth.currentUser.getIdToken();
   const res = await fetch("http://localhost:5001/api/generate_targeted_resume", {
     method: "POST",
@@ -118,23 +118,24 @@ export async function generateTargetedResume(docID, jobDescription, keywords) {
   const { generated_resume_html } = await res.json();
   return generated_resume_html;
 }
-// export async function generateTargetedResume(docID, jobDescription, keywords) {
-//   const idToken = await auth.currentUser.getIdToken();
-//   const res = await fetch("http://localhost:5001/api/generate_targeted_resume", {
-//     method: "POST",
-//     headers: {
-//       "Authorization": `Bearer ${idToken}`,
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify({ docID, job_description: jobDescription, keywords })
-//   });
-//   if (!res.ok) {
-//     const txt = await res.text();
-//     throw new Error(`Generation failed: ${res.status} ${txt}`);
-//   }
-//   const { generated_resume } = await res.json();
-//   return generated_resume;
-// }
+
+export async function generateTargetedResume(docID, jobDescription, keywords) {
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch("http://localhost:5001/api/generate_targeted_resume", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${idToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ docID, job_description: jobDescription, keywords })
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Generation failed: ${res.status} ${txt}`);
+  }
+  const { generated_resume } = await res.json();
+  return generated_resume;
+}
 
 /**
  * Persist a generated resume (plain text) to the user’s ResumeLibrary
@@ -152,6 +153,23 @@ export async function saveGeneratedResume(generatedText, fileName="Generated_Res
   if (!res.ok) {
     const err = await res.json();
     throw new Error(err.error || "Failed to save generated resume");
+  }
+  return await res.json();  // { message, docID }
+}
+
+/**
+ * Persist a PDF version of the generated resume to the user’s ResumeLibrary
+ */
+export async function saveGeneratedResumePdf(formData) {
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch("http://localhost:5001/api/save_generated_resume", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${idToken}`},
+    body: formData
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Failed to save generated RezuMe");
   }
   return await res.json();  // { message, docID }
 }

@@ -1,10 +1,10 @@
 import React, { useRef, forwardRef, useImperativeHandle } from 'react';
 import { Editor } from "@tinymce/tinymce-react";
 
-const TinyDiffEditor = forwardRef(function TinyDiffEditor({ value: editorHtml, onChange: setEditorHtml }, ref) {
+const TinyDiffEditor = forwardRef(function TinyDiffEditor({ value: editorHtml, onEditorChange: setEditorHtml }, ref) {
     const editor = useRef(null);
 
-    // Expose ref.current.getContent(...) to parent
+    // Expose ref.current.getContent(...) to parent (currently TailorResume.jsx)
     useImperativeHandle(ref, () => ({
         getContent: opts => editor.current?.getContent(opts),
         setContent: html => editor.current?.setContent(html),
@@ -23,16 +23,10 @@ const TinyDiffEditor = forwardRef(function TinyDiffEditor({ value: editorHtml, o
                 forced_root_block: 'p',
                 height: 600,
                 menubar: false,
-                plugins: [
-                    "lists", 
-                    "link", 
-                    "code", 
-                    "autolink"
-                ],
+                plugins: ["advlist", "autolink", "lists", "link", "image", "charmap", "preview", "anchor", "pagebreak", "code", "table"],
                 toolbar:
-                    "undo redo | formatselect fontsize | bold italic underline | " +
-                    "alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                block_formats: "Paragraph=p;Heading 3=h3;Heading 2=h2;Heading 1=h1",
+                    "undo redo | styles | fontsize | bold italic underline | " +
+                    "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table",   
                 fontsize_formats: "12px 14px 16px 18px 24px",
                 content_style: `
                     body { font-family: Helvetica, Arial, sans-serif; font-size: 12px; }

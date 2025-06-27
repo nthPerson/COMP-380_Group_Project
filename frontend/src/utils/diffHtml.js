@@ -31,7 +31,7 @@ export function toDiffHtml(masterHtml, tailoredHtml) {
     ]
   });
 
-  console.log(result);
+  // console.log(result);
   return result;
 }
 
