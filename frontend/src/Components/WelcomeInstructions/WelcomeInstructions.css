@@ -1,0 +1,73 @@
+.welcome-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (min-width: 1024px) {
+  .welcome-layout {
+    flex-direction: row;
+  }
+}
+
+.welcome-content {
+  flex: 1;
+  padding: 3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.welcome-heading {
+  font-size: 2rem;
+  color: #3498db;
+  margin-bottom: 1.5rem;
+}
+
+.wave {
+  margin-left: 0.5rem;
+}
+
+.instructions-title {
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem;
+  color: #2c3e50;
+}
+
+.instructions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+  text-align: left;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.instruction-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.get-started-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  background: #3498db;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.get-started-btn:hover {
+  background: #2c81ba;
+  transform: scale(1.05);
+}
