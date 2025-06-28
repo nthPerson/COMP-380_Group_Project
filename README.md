@@ -6,7 +6,7 @@
 ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
 ![Contributors](https://img.shields.io/github/contributors/nthPerson/COMP-380_Group_Project)
 
-# Rezume
+# RezuMe
 
 Rezume is a full‑stack application that helps job seekers tailor their resume to specific job descriptions using AI assistance.  Users can maintain a library of PDF resumes, tag one as the **master** resume, provide a job description (via text or URL), select keywords to emphasize, and generate a new resume optimized for that job.  The generated resume can then be edited and exported as a PDF.
 
