@@ -13,4 +13,4 @@ def test_cosine_sim():
 def test_cosine_sim_opposite():
     a = [1, 0]
     b = [-1, 0]
-    assert round(_cosine_sim(a, b), 2) == -1.0
+    assert round(_cosine_sim(a, b), 2) == -10.0

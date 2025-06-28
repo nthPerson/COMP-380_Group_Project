@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-// import { AiOutlineCheckCircle, AiOutlineCloudUpload } from "react-icons/ai";
-// import { MdClear } from "react-icons/md";
-import { auth } from "../../firebase";
-// import { Link } from "react-router-dom";
-import { jsPDF } from "jspdf";  // PDF generation from text
+import { jsPDF } from "jspdf";  // PDF generation from text or HTML
 
+import { auth } from "../../firebase";
 import Sidebar from "../Sidebar/Sidebar";
 import { handleSignout } from "../../services/authHandlers";
 import JdFromUrl from "../JdForm/JdFromUrl";
@@ -16,12 +13,21 @@ import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../PdfContext";
 import { getSelectedKeywords } from "../../services/keywordService";
-import { generateTargetedResume, saveGeneratedResume, getSimilarityScore } from "../../services/resumeService";
+import TinyDiffEditor from "../TinyDiffEditor/TinyDiffEditor";  
+import { fetchMasterText } from "../../services/resumeService";
+import { resumeTextToHtml } from "../../utils/resumeHtmlFormatter";  // Used for master resume <--> generated resume divv viewer
+import { toDiffHtml } from "../../utils/diffHtml"
+import { 
+  generateTargetedResume, // Not currently using this plain text version
+  generateTargetedResumeHtml, 
+  saveGeneratedResumePdf, 
+  getSimilarityScore } from "../../services/resumeService";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./TailorResume.css";
 import "../Sidebar/Sidebar.css";
+
 
 export default function TailorResume() {
   const navigate = useNavigate();
@@ -33,7 +39,9 @@ export default function TailorResume() {
   const [generatedResume, setGeneratedResume] = useState("");  
   const [initialSim, setInitialSim] = useState(null);  // Master Resume vs JD similarity score
   const [postGenSim, setPostGenSim] = useState(null);  // Targeted Resume vs JD similarity scores
-  // const [headerActive, setHeaderActive] = useState(false);  // TODO Might not need this
+  const [masterText, setMasterText] = useState("");  // Used in the diff between master resume and targeted resume (to highlight changes)
+  const [generatedHtml, setGeneratedHtml] = useState("");  // For targeted resume HTML returned by OpenAI API 
+  const [diffHtml, setDiffHtml] = useState("");  // Used to hold the HTML for the {master resume} <--> {generated resume} diff viewr
 
   // State variables for the error handling
   const [urlError, setUrlError] = useState("");
@@ -60,19 +68,26 @@ export default function TailorResume() {
     return () => unsubscribe();
   }, []);
 
-  // TODO: Figure out what this was used for (maybe as Reza?)
-  // //if it works clean the error
-  // const handleExplanationReceived = (explanation, skills) => {
-  //   setJdExplanation(explanation);
-  //   // clear error if successful 
-  //   setUrlError("");
-  //   setHighlightTextInput(false);
-  //   // You can handle skills here if needed, or just ignore the parameter
-  // };
-
   useEffect(() => {
     AOS.init({ duration: 700 });
   }, []);
+
+  // When a masterDocID is set (aka the user tags a master resume), load it's plain text
+  useEffect(() => {
+    if (!masterDocID) return;
+    fetchMasterText(masterDocID)  // Get the text
+        .then(setMasterText)  // Assign masterText with fetched text
+        .catch(console.error);  // If shit goes down, handle it
+  }, [masterDocID]);
+
+  // Compute diff HTML between master resume and generated resume whenever they both become available 
+  // (enables dynamic diff between master resume and text in resume editor window)
+  useEffect(() => {
+    if (!masterText || !generatedHtml) return;    
+    const masterHtml = resumeTextToHtml(masterText).trim().replace(/>\s+</g, "><");
+    const htmlDiff = toDiffHtml(masterHtml, generatedHtml);
+    setDiffHtml(htmlDiff);
+  }, [masterText, generatedHtml]);
 
   // function for handling the errors 
   const handleUrlError = (message) => {
@@ -86,24 +101,34 @@ export default function TailorResume() {
     setIsGenerating(true);
     try {
       const keywords = await getSelectedKeywords();
-      const gen = await generateTargetedResume(masterDocID, jdContent, keywords);
-      setGeneratedResume(gen);
+      const rawHtml = await generateTargetedResumeHtml(masterDocID, jdContent, keywords);
+      const cleanedHtml = rawHtml.trim().replace(/>\s+</g, "><")
+      // console.log("Generated Resume HTML: ", cleanedHtml);
+      setGeneratedHtml(cleanedHtml);
+
+      /** PLAIN TEXT VERSION OF THE RESUME GENERATION (uncomment the two lines below this comment,
+       *  and comment out lines 98 and 99 to re-enable plain text version of resume generation) */ 
+      // const gen = await generateTargetedResume(masterDocID, jdContent, keywords);
+      // setGeneratedResume(gen);
+
+      // Strip out all tags for plain-text for similarity calculation
+      const tmp = document.createElement("div");
+      tmp.innerHTML = cleanedHtml;
+      const plainTextGeneratedResume = tmp.innerText;
+      setGeneratedResume(plainTextGeneratedResume);
+
       try {
-        const { generated_score } = await getSimilarityScore(
-          masterDocID,
-          jdContent,
-          gen
-        );
-        setPostGenSim(generated_score);
-      } catch (e) {
-        console.error("Post-gen similarity failed", e);
+          const { generated_score } = await getSimilarityScore(masterDocID, jdContent, plainTextGeneratedResume);
+          setPostGenSim(generated_score);
+        } catch (e) {
+          console.error("Post-gen similarity failed", e);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Failed to generate resume. See console.");
+      } finally {
+        setIsGenerating(false);
       }
-    } catch (err) {
-      console.error(err);
-      alert("Failed to generate resume. See console.");
-    } finally {
-      setIsGenerating(false);
-    }
   };
 
   const handleDownloadText = () => {
@@ -115,22 +140,52 @@ export default function TailorResume() {
     a.click();
     URL.revokeObjectURL(url);
   };
-
+ 
   const handleDownloadPdf = () => {
-    const doc = new jsPDF({ unit: "pt", format: "letter" });
-    const lines = doc.splitTextToSize(generatedResume, 540);
-    doc.text(lines, 36, 40);
-    doc.save("Tailored_Resume.pdf");
-  };
+    const pdf = new jsPDF({ unit: "pt", format: "letter"});
+    
+    // Build temporary wrapper to get the most recent HTML from the resume editor
+    const wrapper = document.createElement("div");
+    wrapper.style.width = "612px";
+    wrapper.innerHTML = generatedHtml;
+
+    // Render resume HTML using jsPDF to create PDF of final resume
+    pdf.html(wrapper, {
+      callback: () => pdf.save("Tailored_Resume.pdf"),
+      margin: [36,36,36,36],
+      autoPaging: true,
+      html2canvas: { scale: 0.8 }
+    })    
+  }; 
 
   const handleSaveToLibrary = async () => {
     try {
-      await saveGeneratedResume(generatedResume, "Tailored_Resume.pdf");
+      // Generate PDF in-memory
+      const pdf = new jsPDF({ unit: "pt", format: "letter" });
+      const wrapper = document.createElement("div");
+      wrapper.style.width = "612px";
+      wrapper.innerHTML = generatedHtml;
+
+      await pdf.html(wrapper, {
+        margin:[36,36,36,36],
+        autoPaging:true,
+        html2canvas:{ scale:0.8 }
+      });
+
+      // Get PDF ready to send to backend for saving to resume library (aka save to Firebase Cloud Storage)
+      const pdfBlob = pdf.output("blob");  // Get PDF bytes
+      const form = new FormData();  // For container used to transport to backend
+      form.append("file", pdfBlob, "Tailored_Resume.pdf");  // Pack the PDF and a filename into the form
+
+      // Call service layer to send PDF to backend to save in Firebase Storage (or Cloud Storage or Firestore whatever that shit's called)
+      await saveGeneratedResumePdf(form);
+
+      // Refresh Resume Library so the new file will be shown
       await fetchPdfsAndMaster();
-      alert("Saved to your library!");
+      alert("Saved RezuMe to your library!");
     } catch (e) {
       console.error(e);
-      alert("Failed to save generated resume.");
+      alert("Failed to save generated RezuMe :(");
     }
   };
 
@@ -150,15 +205,6 @@ export default function TailorResume() {
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Sign Out Error", err);
-    }
-  };
-
-  const handleSignOutOnClick = async () => {
-    try {
-      await handleSignout();
-      navigate("/", { replace: true });
-    } catch (err) {
-      console.log("Sign Out Error", err);
     }
   };
 
@@ -266,22 +312,28 @@ export default function TailorResume() {
           </div>
         )}
 
-        {/* Once a tailored resume has been generated, display generated text in a text edit box */}
-        {generatedResume && (
+        {/* Master Resume -> Targeted RezuMe diff */}
+        {generatedHtml && (
           <div className="tool-section" data-aos="fade-up">
-            <h3>Your Tailored RezuMe</h3>
-            <textarea
-              rows={15}
-              cols={80}
-              value={generatedResume}
-              onChange={e => setGeneratedResume(e.target.value)}
+             <h3>Resume Changes Highlighted</h3>
+             <div className="diff-container" 
+                dangerouslySetInnerHTML={{ __html: diffHtml }} 
+              />
+          </div>
+        )}
+
+        {/* Final RezuMe Editor */}
+        {generatedHtml && (
+          <div className="tool-section" data-aos="fade-up" >
+             <h3>Edit Your Final Resume</h3>
+             <TinyDiffEditor 
+              value={generatedHtml}
+              onEditorChange={setGeneratedHtml}
             />
-            <br />
 
+            {/* PDF Download / Save buttons */}
             <button onClick={handleDownloadText}>Download as Text</button>
-
             <button style={{ marginLeft: 8 }} onClick={handleDownloadPdf}>Download as PDF</button>
-
             <button style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
 
             {postGenSim != null && (
@@ -295,16 +347,11 @@ export default function TailorResume() {
                 )}
               </div>
             )}
-
           </div>
         )}
 
-        <button className="logout-btn" onClick={handleSignOutOnClick}>Log Out</button>
-
         <div className="logout-container">
-          <button className="logout-btn" onClick={handleSignOut}>
-            Log Out
-          </button>
+          <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
         </div>
       </main>
     </div>

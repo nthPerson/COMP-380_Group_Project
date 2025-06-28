@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@tinymce/tinymce-react": "^6.2.1",
+    "diff": "^8.0.2",
     "firebase": "^11.8.1",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.522.0"

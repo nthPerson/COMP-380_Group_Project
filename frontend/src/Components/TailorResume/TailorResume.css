@@ -1,3 +1,15 @@
+/* ===== Diff Container ===== */
+.diff-container {
+  border: 1px solid #ddd;
+  padding: 12px;
+  background: #fafafa;
+  max-height: 400px;
+  overflow: auto;
+}
+.diff-added {
+  background: #e0ffe0;
+}
+
 /* ===== Layout Container ===== */
 .layout {
   display: flex;

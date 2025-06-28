@@ -20,7 +20,6 @@ export async function sendJobDescription(jdText, idToken) {
       }
   
       const responseData = await response.json();
-      // return await response.json();
       return { // API receive_jd() function returns a bunch of handy stuff (see below):
         job_description: responseData.job_description, // Job description text (might be helpful later when we display highlighted keywords)
         explanation: responseData.explanation,         // Gemini explanation of job description
@@ -53,7 +52,6 @@ export async function sendJobDescriptionUrl(url, idToken) {
     }
 
     const responseData = await response.json();
-    // return await response.json();
     return { // API receive_jd() function returns a bunch of handy stuff (see below):
       job_description: responseData.job_description, // Job description text (might be helpful later when we display highlighted keywords)
       explanation: responseData.explanation,         // Gemini explanation of job description
