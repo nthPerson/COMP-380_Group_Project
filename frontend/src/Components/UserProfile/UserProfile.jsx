@@ -23,8 +23,8 @@ const UserProfile = () => {
     <div className="user-profile-layout">
       <Sidebar user={user} />
       <div className="user-profile-content">
-        <h1>Welcome, {user.displayName || "User"}!</h1>
-        <p>You've been successfully logged in. Start tailoring your resume!</p>
+        <h1>Hello, {user.displayName || "User"}!</h1>
+        <p>Welcome to your profile page!</p>
         <p>Email: {user.email}</p>
       </div>
     </div>
