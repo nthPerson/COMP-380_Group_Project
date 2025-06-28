@@ -47,6 +47,12 @@ export default function TailorResume() {
   const [urlError, setUrlError] = useState("");
   const [highlightTextInput, setHighlightTextInput] = useState(false);
 
+  //GENERATE SIMILARITY SCORE BETWEEN UNALTERED RESUME (versus job description) VERSUS TAILORED RESUME (versus job description)
+  const getSimilarityDifference = () => {
+    if (initialSim == null || postGenSim == null) return null;
+    return postGenSim - initialSim;
+  };
+
   // As soon as we have a master resume set and a job decription, compute the similarity between Master and JD
   useEffect(() => {
     if (!masterDocID || !jdContent) return;
@@ -332,8 +338,13 @@ export default function TailorResume() {
 
             {postGenSim != null && (
               <div style={{ marginTop: 12 }}>
-                <strong>Generated Resume vs Job Description Similarity:</strong>{" "}
-                {postGenSim}%
+                <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}% 
+                {getSimilarityDifference() != null && (
+                  <div style={{ color: getSimilarityDifference() > 0 ? "green" : "black", marginTop: 4 }}>
+                    {getSimilarityDifference() > 0 ? "Percentage Improvement: " : "Percentage Difference: "}
+                    <strong>{Math.abs(getSimilarityDifference()).toFixed(1)}%</strong>
+                  </div>
+                )}
               </div>
             )}
           </div>

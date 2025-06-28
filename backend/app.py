@@ -14,6 +14,7 @@ from pdf_utils import (
     delete_user_pdf, 
     set_master_pdf, 
     get_master_pdf,
+    generate_pdf_link,
     _download_pdf_as_text
 )
 from resume_utils import (
@@ -86,6 +87,11 @@ def api_set_master_pdf():
 @verify_firebase_token
 def api_get_master_pdf():
     return get_master_pdf()
+
+@app.route("/api/get_resume_url", methods = ["GET"])
+@verify_firebase_token
+def get_resume_url():
+    return generate_pdf_link()
 
 #====================== Profile (keyword) Extraction ====================================
 
