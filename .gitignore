@@ -76,3 +76,7 @@ firebase_key.b64
 conda-meta/
 .conda/
 envs/
+
+# __pycache__
+backend/__pycache__
+backend/tests/__pycache__
