@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { auth } from "../../firebase";
 import Sidebar from "../Sidebar/Sidebar";
@@ -58,6 +59,10 @@ export default function UploadResume() {
             <div className="tool-section" data-aos="fade-up">
             <ResumeLibrary showGenerated={false} showUploaded={true} />
             </div>
+
+            <Link to="/addJobDescription" className="get-started-btn">
+              Next: Add a Job Description!
+            </Link>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>

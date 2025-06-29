@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
+import { Link } from "react-router-dom";
 
 import { auth } from "../../firebase";
 import Sidebar from "../Sidebar/Sidebar";
@@ -185,6 +186,10 @@ export default function GenerateAndEditResume() {
                 )}
             </div>
             )}
+
+            <Link to="/resumeArchive" className="get-started-btn">
+              That's It! Check Out All Your RezuMes!
+            </Link>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>

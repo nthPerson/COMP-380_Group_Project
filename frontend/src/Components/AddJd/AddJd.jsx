@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { auth } from "../../firebase";
 import Sidebar from "../Sidebar/Sidebar";
@@ -94,6 +95,10 @@ export default function AddJd() {
                 <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
             </div>
             )}
+
+            <Link to="/selectKeywords" className="get-started-btn">
+              Next: Select Keywords to Emphasize!
+            </Link>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>

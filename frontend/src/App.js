@@ -8,7 +8,7 @@ import LoginOnly   from './Components/LoginOnly/LoginOnly';
 import LandingPage    from './Components/LandingPage/LandingPage';
 import UserProfile    from './Components/UserProfile/UserProfile';
 // import TailorResume   from './Components/TailorResume/TailorResume';  // Being deprecated in favor of Resume Workflow Pages
-import ResumeBuilderForm from './Components/ResumeBuilderForm'; // Added import for ResumeBuilderForm
+import ResumeBuilderForm from './Components/ResumeBuilderForm/ResumeBuilderForm'; // Added import for ResumeBuilderForm
 import { PdfProvider } from './Components/PdfContext';
 import WelcomeInstructions from './Components/WelcomeInstructions/WelcomeInstructions';
 import UploadResume from './Components/UploadResume/UploadResume';

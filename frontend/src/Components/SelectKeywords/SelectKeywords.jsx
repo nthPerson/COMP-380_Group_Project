@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { auth } from "../../firebase";
 import Sidebar from "../Sidebar/Sidebar";
@@ -51,6 +52,10 @@ export default function SelectKeywords() {
             ) : (
             <p>Please upload a job description and select a master resume first.</p>
             )}
+
+            <Link to="/generateEditResume" className="get-started-btn">
+              Next: Generate and Edit Your RezuMe!
+            </Link>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>

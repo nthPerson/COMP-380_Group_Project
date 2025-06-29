@@ -138,3 +138,16 @@
   max-width: 900px;       
   margin: 0 auto;       
 }
+
+/* For the navigation button at the very end of the builder (this was added quickly/recklessly */
+.get-started-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  background: #3498db;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
