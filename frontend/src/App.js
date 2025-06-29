@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import LoginSignup from './Components/LoginSignup/LoginSignup';
 import LoginOnly   from './Components/LoginOnly/LoginOnly';   
@@ -10,10 +10,19 @@ import UserProfile    from './Components/UserProfile/UserProfile';
 import TailorResume   from './Components/TailorResume/TailorResume';
 import ResumeBuilderForm from './Components/ResumeBuilderForm'; // Added import for ResumeBuilderForm
 import { PdfProvider } from './Components/PdfContext';
+import Header from "./Components/Header/Header";
 
 function App() {
+  const { pathname } = useLocation();
+
+  // Specify which paths should NOT show the avatar widget:
+  const hideHeaderOn = ["/", "/login", "/signup", "/landingPage", "/userProfile"];
   return (
+  <>
+    {!hideHeaderOn.includes(pathname) && <Header />}
+
     <PdfProvider>
+     
       <Routes>
         <Route path="/" element={<LandingPage />} />
 
@@ -44,7 +53,7 @@ function App() {
         <Route path="*" element={<Navigate to="/signup" replace />} />
       </Routes>
     </PdfProvider>
-
+    </>
   );
 }
 
