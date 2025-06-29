@@ -18,7 +18,7 @@ import { fetchMasterText } from "../../services/resumeService";
 import { resumeTextToHtml } from "../../utils/resumeHtmlFormatter";  // Used for master resume <--> generated resume divv viewer
 import { toDiffHtml } from "../../utils/diffHtml"
 import { 
-  generateTargetedResume, // Not currently using this plain text version
+  // generateTargetedResume, // Not currently using this plain text version
   generateTargetedResumeHtml, 
   saveGeneratedResumePdf, 
   getSimilarityScore } from "../../services/resumeService";
