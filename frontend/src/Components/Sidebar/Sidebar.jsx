@@ -29,13 +29,6 @@ const Sidebar = ({ user }) => {
 
       <nav className="sidebar-nav">
         <ul>
-          {/* User's Profile */}
-          <li>
-            <Link to="/userProfile" className="sidebar-link">
-              <img src={profile_icon} alt="Profile icon" />
-              <span>{user?.displayName || "User"}'s Profile</span>
-            </Link>
-          </li>
 
           {/* Create Resume */}
           <li>

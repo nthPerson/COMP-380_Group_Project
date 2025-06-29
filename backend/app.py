@@ -33,6 +33,11 @@ from llm_utils import (
     compute_similarity_scores
 )
 
+from user_profile_utils import (
+    upload_profile_picture,
+    get_user_profile
+)
+
 
 app = Flask(__name__) 
 CORS(app)
@@ -165,6 +170,19 @@ def api_similarity_score():
         # Continue to return JSON so CORS can attach headers and frontend doesn't freak out
         return jsonify({"error": str(e)}), 500
 
+# ====================== User Profile Management =======================================
+
+# Update profile info and/or upload profile picture
+@app.route("/api/update_profile", methods=["POST"])
+@verify_firebase_token
+def api_update_profile():
+    return upload_profile_picture()
+
+# Get current user profile metadata
+@app.route("/api/get_profile", methods=["GET"])
+@verify_firebase_token
+def api_get_profile():
+    return get_user_profile()
 
 #  start the server
 if __name__ == "__main__":

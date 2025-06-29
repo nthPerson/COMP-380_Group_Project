@@ -112,3 +112,23 @@
   color: #3498db;
   transform: scale(1.05);
 }
+.status-success {
+  margin-top: 0.5rem;
+  color: #4CAF50;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.status-error {
+  margin-top: 0.5rem;
+  color: #d9534f;
+  background-color: #f8d7da;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+.save-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;           /* space between button & message */
+  margin-top: 1rem;
+}
