@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, g
 from flask_cors import CORS
 import sys
 
@@ -13,12 +13,15 @@ from pdf_utils import (
     list_user_pdfs, 
     delete_user_pdf, 
     set_master_pdf, 
-    get_master_pdf
+    get_master_pdf,
+    generate_pdf_link,
+    _download_pdf_as_text
 )
 from resume_utils import (
     extract_resume_profile_llm,
     save_resume_data,
-    save_generated_resume
+    save_generated_resume,
+    save_generated_resume_file
 )
 
 from keyword_utils import (
@@ -30,7 +33,9 @@ from keyword_utils import (
 
 from llm_utils import (
     generate_targeted_resume,
-    compute_similarity_scores
+    compute_similarity_scores,
+    highlight_profile_similarity,
+    generate_targeted_resume_html
 )
 
 from user_profile_utils import (
@@ -87,6 +92,11 @@ def api_set_master_pdf():
 @verify_firebase_token
 def api_get_master_pdf():
     return get_master_pdf()
+
+@app.route("/api/get_resume_url", methods = ["GET"])
+@verify_firebase_token
+def get_resume_url():
+    return generate_pdf_link()
 
 #====================== Profile (keyword) Extraction ====================================
 
@@ -150,13 +160,26 @@ def api_generate_targeted_resume():
     Expects JSON: { docID: string, job_description: string, keywords: [string] }
     Returns: { generated_resume: string } (aka just the plain text of the generated resume)
     """
-    return generate_targeted_resume()
+    return generate_targeted_resume_html()  # Currently having OpenAI API generate HTML for use in the resume editor
+    # return generate_targeted_resume()  # Option for plain text response from OpenAI API
 
 # Save the generated resume PDF into the user’s library
 @app.route("/api/save_generated_resume", methods=["POST"])
 @verify_firebase_token
 def api_save_generated_resume():
+    if 'file' in request.files:
+        return save_generated_resume_file()
     return save_generated_resume()
+
+# Retrieve the master resume text for use in the targeted resume text editor (master resume and targeted resume diff to highlight changes)
+@app.route("/api/download_pdf_text", methods=["POST"])
+@verify_firebase_token
+def api_download_pdf_ext():
+    data = request.get_json() or {}
+    text = _download_pdf_as_text(g.firebase_user["uid"], data.get("docID", ""))
+    return jsonify({"pdf_text": text}), 200
+
+# ====================== Similarity Calculation =======================================
 
 # Similarity scoring endpoint
 @app.route("/api/similarity_score", methods=["POST"])
@@ -170,6 +193,14 @@ def api_similarity_score():
         # Continue to return JSON so CORS can attach headers and frontend doesn't freak out
         return jsonify({"error": str(e)}), 500
 
+# Similarity highlighting endpoint
+@app.route("/api/highlight_similarity", methods=["POST"])
+@verify_firebase_token
+def api_highlight_similarity():
+    body = request.get_json() or {}
+    resume_items = body.get("resume_items", [])
+    jd_items     = body.get("jd_items", [])
+    return highlight_profile_similarity(resume_items, jd_items)
 # ====================== User Profile Management =======================================
 
 # Update profile info and/or upload profile picture

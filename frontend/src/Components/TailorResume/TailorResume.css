@@ -1,3 +1,15 @@
+/* ===== Diff Container ===== */
+.diff-container {
+  border: 1px solid #ddd;
+  padding: 12px;
+  background: #fafafa;
+  max-height: 400px;
+  overflow: auto;
+}
+.diff-added {
+  background: #e0ffe0;
+}
+
 /* ===== Layout Container ===== */
 .layout {
   display: flex;
@@ -175,6 +187,134 @@
 
 @media (max-width: 480px) {
   .tailor-container {
+    padding: 1rem;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;700&display=swap');
+
+/* === GLOBAL STYLING FOR HOMEPAGE === */
+.homepage-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+  min-height: 100vh;
+  color: #2c3e50;
+}
+
+/* === HEADER SECTION === */
+.homepage-header {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #3498db;
+  margin-bottom: 0.25rem;
+}
+
+.welcome-subtext {
+  font-size: 1.1rem;
+  color: #5a6c7d;
+}
+
+/* === TOOL WRAPPERS === */
+.tool-section {
+  background: #ffffff;
+  padding: 1.5rem;
+  margin: 1.5rem auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+}
+
+/* === DIVIDER STYLE === */
+.homepage-container div[style*="margin: '20px 0'"],
+.homepage-container div[style*='margin: "20px 0"'] {
+  margin: 2rem 0 !important;
+  padding: 1rem;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+  text-align: center;
+}
+
+.homepage-container div[style*="margin: '20px 0'"] strong,
+.homepage-container div[style*='margin: "20px 0"'] strong {
+  color: #3498db;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+/* === EXPLANATION PANEL === */
+.tool-section h3 {
+  color: #2980b9;
+  margin-top: 0;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.tool-section p {
+  color: #34495e;
+  line-height: 1.6;
+  text-align: left;
+  margin: 0;
+}
+
+/* === LOGOUT BUTTON === */
+.logout-btn {
+  display: block;
+  margin: 2rem auto 0;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(135deg, #2980b9, #1f639a);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+
+/* === LOADING STATE === */
+.homepage-container p:only-child {
+  font-size: 1.2rem;
+  color: #7fb3d3;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+/* === RESPONSIVENESS === */
+@media (max-width: 768px) {
+  .homepage-container {
+    padding: 1rem;
+  }
+
+  .welcome-title {
+    font-size: 2rem;
+  }
+
+  .welcome-subtext,
+  .tool-section p {
+    font-size: 1rem;
+  }
+
+  .tool-section {
     padding: 1rem;
   }
 }

@@ -1,5 +1,3 @@
-// src/Components/LoginSignup/LoginSignup.jsx
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginSignup.css";
@@ -28,7 +26,7 @@ export default function LoginSignup() {
   const navigate = useNavigate();
 
   // Regular expressions for validation
-  const emailRegex    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // const emailRegex    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordLengthRegex   = /^.{6,}$/;  // At least 8 characters
   const passwordNumberRegex   = /[0-9]/;  // At least one digit      
   const passwordLowercaseRegex= /[a-z]/;  // At least one lowercase letter
@@ -90,7 +88,8 @@ export default function LoginSignup() {
     try {
       const user = await handleSignup(fullName, email, password);
       console.log("Signed up:", user.email, "| Name:", user.displayName);
-      navigate("/home");
+      // navigate("/home");
+      navigate("/userProfile");
     } catch (err) {
       console.error("Signup failed:", err.code);
     

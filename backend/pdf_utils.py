@@ -3,6 +3,7 @@ from firebase_admin import firestore, storage # Using to record timestamp of PDF
 from firebase_config import db, bucket
 from google.cloud.exceptions import NotFound
 import fitz  # fitz = PyMuPDF, to install: pip install pymupdf
+from datetime import timedelta #pip install timedelta
 
 
 
@@ -106,9 +107,42 @@ def get_master_pdf():
         masterDocID = user_doc.to_dict().get("master_resume")
         return jsonify({"masterDocID": masterDocID}), 200
     else:
-        return jsonify({"masterDocID": None}), 200
+        return jsonify({"masterDocID": None}), 400
 
+#Get signed URL for the PDF. 
+def generate_pdf_link():
+    path = request.args.get("path")
+    if not path:
+        return jsonify({"error" : "Missing path"}), 400
+    
+    try:
+        blob = bucket.blob(path)
+        url = blob.generate_signed_url(
+            version = "v4",
+            expiration=timedelta(minutes=15),
+            method = "GET"
+        )
+        print("Generated signed url:", url)
+        return jsonify ({"url": url}), 200
+    except Exception as e:
+        print("Failed to genereate signed url:", e)
+        return jsonify ({"error": str(e)}), 500
 
+# def _download_pdf_as_text(user_id: str, doc_id: str) -> str:
+#     # Fetch the PDF bytes from Firebase Storage and return as plain text
+#     bucket = storage.bucket()  # Identify Firebase storage bucket for our project
+#     doc = db.collection("users").document(user_id).collection("documents").document(doc_id).get()  # Get document
+#     if doc.exists:
+#         blob_path = doc.to_dict()["storagePath"]
+#         pdf_bytes = bucket.blob(blob_path).download_as_bytes()
+#         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+#         text = "\n".join(page.get_text() for page in doc)
+
+#         return text   
+#     else:
+#         return ""
+    
+    
 # Download a PDF from Firebase Storage and return the text within
 def _download_pdf_as_text(user_id: str, doc_id: str) -> str:
     # Fetch the PDF bytes from Firebase Storage and return as plain text

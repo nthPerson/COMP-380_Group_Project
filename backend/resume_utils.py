@@ -8,6 +8,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, ListFlowabl
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
 from firebase_config import db, bucket
+from werkzeug.utils import secure_filename
 
 from llm_utils import (
     llm_parse_text
@@ -153,7 +154,7 @@ def save_resume_data(resume_data):
         return jsonify({"error": "Failed to save resume data"}), 500
 
 
-# Save targeted resume to the user's Resume Library after it has been generated
+# Save targeted resume (PLAIN TEXT) to the user's Resume Library after it has been generated
 def save_generated_resume():
     """
     Accepts JSON in the following format:
@@ -198,3 +199,28 @@ def save_generated_resume():
     return jsonify({"message":"Generated resume saved","docID":doc_ref.id}), 200
 
 
+# Save targeted resume (PDF) to the user's Resume Library after it has been generated
+def save_generated_resume_file():
+    file_to_save = request.files.get('file')
+    if not file_to_save:
+        return jsonify({"error": "No file part"}), 400
+    
+    # Sanitize filename
+    filename = secure_filename(file_to_save.filename)
+    user_id = g.firebase_user["uid"]
+
+    # Read file and push to Cloud Storage
+    data = file_to_save.read()
+    blob = bucket.blob(f"user_docs/{user_id}/{filename}")
+    blob.upload_from_string(data, content_type="application/pdf")
+
+    # Record file metadata in Firestore
+    doc_ref = db.collection("users").document(user_id).collection("documents").document()
+    doc_ref.set({
+        "fileName": filename,
+        "storagePath": blob.name,
+        "uploadedAt": firestore.SERVER_TIMESTAMP,
+        "generated": True
+    })
+
+    return jsonify({"message": "Generated resume saved", "docID": doc_ref.id}), 200

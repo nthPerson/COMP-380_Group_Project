@@ -2,10 +2,16 @@ import os, json, math
 from dotenv import load_dotenv
 import openai
 from flask import request, g, jsonify
+# from functools import lru_cache
 
 from pdf_utils import (
     _download_pdf_as_text
 )
+from embeddings_db import (
+    get_embedding_from_db,
+    save_embedding_to_db
+)
+
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
@@ -118,18 +124,71 @@ def llm_parse_text(text: str, mode: str) -> dict:
     return json.loads(response.choices[0].message.content)
 
 
-""" Augmented resume generation using user's master resume, job description, and selected keywords
-    Here's the plan:
-        1. Pull master resume from Firebase Storage
-        2. Build OpenAI API prompt with resume, JD, and selected keywords
-        3. Call openai.chat.completions to rewrite the resume
-        4. Return the raw generated text
+""" 
+Augmented resume generation using user's master resume, job description, and selected keywords
+RETURNS FORMATTED HTML FOR USE IN RESUME EDITOR
+"""
+def generate_targeted_resume_html():
+    data = request.get_json() or {}          # Request from frontend must contain:
+    doc_id = data.get("docID")               # master resume (docID),
+    jd_text = data.get("job_description", "")# job description (dob_description),
+    keywords = data.get("keywords", [])      # but keywords (keywords) are optional
+
+    if not doc_id or not jd_text:
+        return jsonify({"error":"docID and job_description are required"}), 400
+    
+    # Step 1 (as described above the function definition): download resume as plain text
+    user_id = g.firebase_user["uid"]
+    raw_resume = _download_pdf_as_text(user_id, doc_id)
+    if raw_resume is None:
+        return jsonify({"error":"Could not retrieve resume PDF"}), 404
+    
+    # 2: Build prompt (direct instruction prompt). Provide the model with the 
+    # full resume and job descriptin in the prompt, and instruct it to rewrite 
+    # the resume to align with the job.
+    keyword_list = ", ".join(keywords) if keywords else "None"  # Allows the user to generate a resume without selecting any keywords
+    system_msg = (
+        "You are a professional resume writer. Insert keyword(s) into given resume to match given job posting. " \
+        "Return only VALID HTML (no markdown, no backticks). Use:" \
+        " • <h1>, <h2>, <h3> for section titles" \
+        " • <p> for paragraphs" \
+        " • <ul><li> for bullet lists"
+    )
+    user_msg = (
+        f"Here is the candidates original resume:\n```{raw_resume}```\n\n"
+        f"Here is the target job description:\n```{jd_text}```\n\n"
+        f"Include an emphasize these keywords if relevant:"
+        f"{keyword_list}."
+        f"Use only facts from the original resume -- do not invent new experiences, education, or skills."
+    )
+
+    # 3: Call OpenAI API
+    try:
+        response = openai.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role":"system", "content": system_msg},
+                {"role":"user", "content": user_msg}
+            ],
+            temperature=0.7,  # Allow GPT to be creative without it just making shit up all the time
+            max_tokens = 1200,
+        )
+        generated_html = response.choices[0].message.content
+    except Exception as e:
+        return jsonify({"error":f"OpenAI request failed: {str(e)}"}), 500
+    
+    # 4: Return the HTML of the augmented resume
+    return jsonify({"generated_resume_html": generated_html}), 200
+
+""" 
+Augmented resume generation using user's master resume, job description, and selected keywords
+RETURNS PLAIN TEXT
 """
 def generate_targeted_resume():
     data = request.get_json() or {}          # Request from frontend must contain:
     doc_id = data.get("docID")               # master resume (docID),
     jd_text = data.get("job_description", "")# job description (dob_description),
-    keywords = data.get("keywords", [])      # but keywords (uh, keywords) are optional
+    keywords = data.get("keywords", [])      # but keywords (keywords) are optional
 
     if not doc_id or not jd_text:
         return jsonify({"error":"docID and job_description are required"}), 400
@@ -174,13 +233,35 @@ def generate_targeted_resume():
 
 #============================ Embeddings Functionality ====================================================
 
-# Helper function that calls OpenAI API Embeddings to get a single embedding vector from text
-def _get_embedding(text: str):
+# # Helper function that calls OpenAI API Embeddings to get a single embedding vector from text
+# def _get_embedding(text: str):
+#     response = openai.embeddings.create(
+#         input=[text],
+#         model=EMBED_MODEL
+#     )
+#     return response.data[0].embedding
+
+# Get an embedding from the embedding db if it exists, call OpenAI API to create embedding if it does not exist
+def _get_embedding(text: str) -> list[float]:
+    # Try local embeddings db first
+    cached = get_embedding_from_db(text)
+    if cached is not None:  # If the embedding was found in the db, return so the OpenAI API is not called (saves the time and the money)
+        return cached
+    
+    # If the embedding doesn't exist in the db, hit up OpenAI API once
     response = openai.embeddings.create(
         input=[text],
         model=EMBED_MODEL
     )
-    return response.data[0].embedding
+    embedding_vector = response.data[0].embedding
+
+    # Save the embedding to the db for future use
+    save_embedding_to_db(text, embedding_vector)  # save_embedding_to_db([word_that_we_want_to_embed], [actual_embedding_for_the_word])
+    return embedding_vector
+
+# Embed a list of texts, using the embeddings db for repeated items
+def get_embeddings(text_list: list[str]) -> list[list[float]]:
+    return [_get_embedding(text) for text in text_list]
 
 # Calculate cosine similarity between two vectors
 def _cosine_sim(a: list, b: list) -> float:
@@ -239,3 +320,56 @@ def compute_similarity_scores():
 
     return jsonify(result), 200
 
+# Similarity highlighting mask
+def highlight_profile_similarity(resume_items: list[str], jd_items: list[str], threshold: float = 0.4):
+    """
+    Return two parallel lists of booleans:
+      - matched_resume[i] = does resume_items[i] match any jd_items?
+      - matched_jd[j]     = does jd_items[j] match any resume_items?
+    Uses cosine similarity >= threshold.
+    """
+    # Get all the embeddings in one shot (uses cached embeddings)
+    resume_embeds = get_embeddings(resume_items)
+    jd_embeds = get_embeddings(jd_items)
+
+    # Build full similarity matrix (resume x jd)
+    sim_scores: list[list[float]] = []
+    for res_emb in resume_embeds:
+        row = []
+        for jd_emb in jd_embeds:
+            row.append(round(_cosine_sim(res_emb, jd_emb), 4)) # Note: the 4 in there is for the number of digits in each element of the matrix
+        sim_scores.append(row)
+
+    # Boolean masks
+    matched_resume = [ any(score >= threshold for score in row) for row in sim_scores ]
+    # Transpose sim_scores to get jd -> resume cosim
+    matched_jd = []
+    for col_idx in range(len(jd_embeds)):
+        col = [ sim_scores[row_idx][col_idx] for row_idx in range(len(resume_embeds)) ]
+        matched_jd.append(any(score >= threshold for score in col))
+
+    return jsonify({
+        "matched_resume": matched_resume,
+        "matched_jd": matched_jd,
+        "sim_scores": sim_scores
+    }), 200
+
+
+#Helper Function to make highlight_profile_similarity testable without flask!
+#right now it returns a jsonify(..) which only work into a flask route so this helper function just returns python data
+
+def highlight_similarity_raw(resume_items: list[str], jd_items: list[str], threshold: float = 0.7):
+    resume_embeds=get_embeddings(resume_items)
+    jd_embeds= get_embeddings(jd_items)
+
+    matched_resume = []
+    for res_emb in resume_embeds:
+        matched = any(_cosine_sim(res_emb, jd_emb) >= threshold for jd_emb in jd_embeds)
+        matched_resume.append(matched)
+
+    matched_jd = []
+    for jd_emb in jd_embeds:
+        matched = any(_cosine_sim(jd_emb, res_emb) >= threshold for res_emb in resume_embeds)
+        matched_jd.append(matched)
+
+    return matched_resume, matched_jd
