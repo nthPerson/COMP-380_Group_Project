@@ -78,6 +78,26 @@
   transform: scale(1.1);
 }
 
+/* ===== "Tailor Resume" Section ===== */
+.subnav {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-sublink {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: #5a6c7d;
+}
+
+.sidebar-sublink:hover {
+  color: #3498db;
+}
+
 /* ===== Mobile View ===== */
 @media (max-width: 768px) {
   .sidebar {

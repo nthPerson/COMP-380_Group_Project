@@ -54,12 +54,34 @@ const Sidebar = ({ user }) => {
             </Link>
           </li>
 
-          {/* Tailor Resume */}
+          {/* Tailor Resume
           <li>
             <Link to="/tailorResume" className="sidebar-link">
               <img src={magicwand_icon} alt="Tailor icon" />
               <span>Tailor Resume</span>
             </Link>
+          </li> */}
+
+          {/* Tailor Resume Workflow */}
+          <li>
+            <div className="sidebar-link">
+              <img src={magicwand_icon} alt="Tailor icon" />
+              <span>Tailor Resume</span>
+            </div>
+            <u1 className="subnav">
+              <li>
+                <Link to="/uploadResume" className="sidebar-sublink">Upload Resume</Link>
+              </li>
+              <li>
+                <Link to="/addJobDescription" className="sidebar-sublink">Add Job Description</Link>
+              </li>
+              <li>
+                <Link to="/selectKeywords" className="sidebar-sublink">Select Keywords</Link>
+              </li>
+              <li>
+                <Link to="/generateEditResume" className="sidebar-sublink">Generate &amp; Edit</Link>
+              </li>
+            </u1>
           </li>
 
           {/* Resume Archive */}
