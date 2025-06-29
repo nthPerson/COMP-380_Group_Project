@@ -14,7 +14,7 @@ const Sidebar = ({ user }) => {
 
   const onClick = async () => {
     await handleSignout();
-    navigate("/login");
+    navigate("/");
   };
 
   return (
