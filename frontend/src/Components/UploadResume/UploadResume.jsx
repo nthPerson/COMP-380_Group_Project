@@ -9,6 +9,8 @@ import UploadPdf from "../UploadPdf/UploadPdf";
 import ResumeLibrary from "../ResumeLibrary/ResumeLibrary";
 import { usePdf } from "../PdfContext";
 
+import { getProfile } from "../../services/profileService";
+
 import "../TailorResume/TailorResume.css";
 import "../Sidebar/Sidebar.css";
 
@@ -17,13 +19,51 @@ export default function UploadResume() {
     const [user, setUser] = useState(null);
     const { fetchPdfsAndMaster } = usePdf();
 
+    const [profile, setProfile] = useState({ username: "", photoURL: "" });
+
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, u => setUser(u));
         return () => unsub();
     }, []);
 
+    
+  useEffect(() => {
+    // mirror UserProfile/Header: listen for auth, then getProfile, then kick off PDFs
+    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+      setUser(fbUser);
+
+      if (fbUser) {
+        // 1) load Firestore profile (same as UserProfile)
+        try {
+          const p = await getProfile();
+          setProfile({
+            username: p.username || fbUser.displayName || "User",
+            photoURL: p.photoURL || "", 
+          });
+        } catch (err) {
+          console.error("UploadResume: getProfile failed", err);
+        }
+
+        // 2) now that we’ve fully initialized the user + profile,
+        //    fetch PDFs and the master PDF.
+        try {
+          await fetchPdfsAndMaster();
+        } catch (err) {
+          console.error("UploadResume: fetchPdfsAndMaster failed", err);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [fetchPdfsAndMaster]);
+
     // Refresh list on first visit
-    useEffect(() => { fetchPdfsAndMaster(); }, [fetchPdfsAndMaster]);
+    useEffect(() => {
+        if (user) {
+            fetchPdfsAndMaster();
+        }
+    }, [user, fetchPdfsAndMaster]);
+    // useEffect(() => { fetchPdfsAndMaster(); }, [fetchPdfsAndMaster]);
 
     const handleSignOut = async () => {
         await auth.signOut();

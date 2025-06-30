@@ -26,6 +26,7 @@ export function PdfProvider({ children }) {
 
       // Fetch both PDF list and master resume 
     const fetchPdfsAndMaster = useCallback(async () => {
+        if (!auth.currentUser) return;
         setLoading(true);
         try {
             const pdfList = await listUserPdfs();  // Fetches list of user docs from Firestore

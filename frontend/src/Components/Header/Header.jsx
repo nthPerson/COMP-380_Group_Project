@@ -8,7 +8,11 @@ import defaultAvatar from "../Assets/blank-avatar.png";
 
 export default function Header() {
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState({ username: "", photoURL: "" });
+  // const [profile, setProfile] = useState({ username: "", photoURL: "" });
+  const [profile, setProfile] = useState({
+    username: "",
+    photoURL: defaultAvatar
+  });
 
   // 1) Wait for auth, then load Firestore profile
   useEffect(() => {
@@ -19,7 +23,8 @@ export default function Header() {
           const p = await getProfile();
           setProfile({
             username: p.username || fbUser.displayName || "User",
-            photoURL: p.photoURL || defaultAvatar,
+            // photoURL: p.photoURL || defaultAvatar,
+            photoURL: p.photoURL || defaultAvatar
           });
         } catch (e) {
           console.error("Header: could not fetch profile", e);
