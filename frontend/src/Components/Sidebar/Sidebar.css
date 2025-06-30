@@ -10,6 +10,11 @@
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   z-index: 1002;
   transition: all 0.3s ease;
+  
+  position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; 
 }
 
 /* ===== Brand Header ===== */
@@ -107,6 +112,10 @@
     padding: 1rem 0;
     box-shadow: none;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
   }
 
   .sidebar-header {

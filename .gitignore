@@ -83,3 +83,8 @@ envs/
 backend/data/embeddings.db
 
 
+
+
+# __pycache__
+backend/__pycache__
+backend/tests/__pycache__

@@ -38,6 +38,11 @@ from llm_utils import (
     generate_targeted_resume_html
 )
 
+from user_profile_utils import (
+    upload_profile_picture,
+    get_user_profile
+)
+
 
 app = Flask(__name__) 
 CORS(app)
@@ -196,6 +201,19 @@ def api_highlight_similarity():
     resume_items = body.get("resume_items", [])
     jd_items     = body.get("jd_items", [])
     return highlight_profile_similarity(resume_items, jd_items)
+# ====================== User Profile Management =======================================
+
+# Update profile info and/or upload profile picture
+@app.route("/api/update_profile", methods=["POST"])
+@verify_firebase_token
+def api_update_profile():
+    return upload_profile_picture()
+
+# Get current user profile metadata
+@app.route("/api/get_profile", methods=["GET"])
+@verify_firebase_token
+def api_get_profile():
+    return get_user_profile()
 
 #  start the server
 if __name__ == "__main__":

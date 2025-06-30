@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import LoginSignup from './Components/LoginSignup/LoginSignup';
 import LoginOnly   from './Components/LoginOnly/LoginOnly';   
@@ -18,9 +18,17 @@ import GenerateAndEditResume from './Components/GenerateAndEditResume/GenerateAn
 import ResumeArchive from './Components/ResumeArchive/ResumeArchive';
 import { TargetedResumeProvider } from './Components/TargetedResumeContext';
 
+import Header from "./Components/Header/Header";
 
 function App() {
+  const { pathname } = useLocation();
+
+  // Specify which paths should NOT show the avatar widget:
+  const hideHeaderOn = ["/", "/login", "/signup", "/landingPage", "/userProfile"];
   return (
+  <>
+    {!hideHeaderOn.includes(pathname) && <Header />}
+
     <PdfProvider>
     <TargetedResumeProvider>
         <Routes>
@@ -63,7 +71,7 @@ function App() {
         </Routes>
     </TargetedResumeProvider>
     </PdfProvider>
-
+    </>
   );
 }
 
