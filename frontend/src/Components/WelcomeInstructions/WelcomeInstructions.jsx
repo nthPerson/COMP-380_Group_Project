@@ -69,10 +69,17 @@ export default function WelcomeInstructions() {
           ))}
         </ol>
 
-        {/* Get Started Button */}
-        <Link to="/tailorResume" className="get-started-btn">
-          Click Here to Get Started!
-        </Link>
+        {/* Get Started Buttons */}
+        <div>
+          <h2>Get Started Here!</h2>
+          <Link to="/uploadResume" className="get-started-btn">
+              Have a Resume? Click here to get started!
+          </Link>
+          <Link to="/createResume" className="get-started-btn">
+              Don't Have a Resume? Click Here to Get Started!
+          </Link>
+        </div>
+        
       </main>
     </div>
   );

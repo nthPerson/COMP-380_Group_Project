@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '.././firebase';
-import Sidebar from './Sidebar/Sidebar';
-import './Sidebar/Sidebar.css';
+import { auth } from '../../firebase';
+import Sidebar from '../Sidebar/Sidebar';
+import '../Sidebar/Sidebar.css';
 import { ChevronLeft, ChevronRight, Plus, Trash2, User, Briefcase, GraduationCap, Award, FileText } from 'lucide-react';
 import './ResumeBuilderForm.css'; // Import your CSS file for styling
-import { saveResume } from "../services/resumeService"; // Import the saveResume function from your service file
+import { saveResume } from "../../services/resumeService"; // Import the saveResume function from your service file
+import { Link } from "react-router-dom";  // For the link at the very end of builder to navigate to Upload Resume page
 
 
 const ResumeBuilderForm = () => {
@@ -707,12 +708,12 @@ const ResumeBuilderForm = () => {
       </div>
       </div>
 
-      <button
+      {/* <button
         onClick={handleSaveResume}
         className="w-full py-3 px-6 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
       >
         Save Resume
-      </button>
+      </button> */}
     </div>
   );
 
@@ -788,6 +789,11 @@ const ResumeBuilderForm = () => {
           {currentStep === steps.length - 1 ? 'Save Resume' : 'Next'}
           {currentStep !== steps.length - 1 && <ChevronRight size={16} />}
         </button>
+
+        {/* Navigation to Start Tailoring */}
+        <Link to="/uploadResume" className="get-started-btn">
+            Click Here to Start Tailoring Your New Resume!
+        </Link>
       </div>
     </div>
     </div>

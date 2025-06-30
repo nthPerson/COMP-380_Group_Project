@@ -83,6 +83,26 @@
   transform: scale(1.1);
 }
 
+/* ===== "Tailor Resume" Section ===== */
+.subnav {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-sublink {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: #5a6c7d;
+}
+
+.sidebar-sublink:hover {
+  color: #3498db;
+}
+
 /* ===== Mobile View ===== */
 @media (max-width: 768px) {
   .sidebar {
@@ -111,4 +131,17 @@
   .sidebar-link span {
     font-size: 0.8rem;
   }
+}
+
+/* ===== Get Started Buttons/Navigation between Tailor Resume pages ===== */
+.get-started-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  background: #3498db;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.3s ease, background 0.3s ease;
 }

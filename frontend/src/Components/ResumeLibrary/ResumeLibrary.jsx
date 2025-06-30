@@ -8,7 +8,7 @@ import ResumeViewerModal from "./ResumeViewerModal";
 import { getResumeSignedUrl } from "../../services/resumeService.js";
 
 // Import PDF manipulation methods from PdfContext.js (made available by the PdfProvider)
-function ResumeLibrary() {
+function ResumeLibrary({ showGenerated = true, showUploaded = true }) {
   const {
     pdfs,
     masterDocID,
@@ -31,6 +31,12 @@ function ResumeLibrary() {
     }
   };
 
+  const filtered = pdfs.filter(pdf => {
+    if (pdf.generated && !showGenerated) return false;
+    if (!pdf.generated && !showUploaded) return false;
+    return true;
+  });
+
   return (
     <div className="tool-section" data-aos="fade-up">
       <h2>Your Uploaded Resumes</h2>
@@ -41,7 +47,7 @@ function ResumeLibrary() {
       )}
       {loading ? (
         <p>Loading...</p>
-      ) : pdfs.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <p>No resumes uploaded yet.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
@@ -51,7 +57,7 @@ function ResumeLibrary() {
             </div>
           )}
 
-          {pdfs.map((pdf) => (
+          {filtered.map((pdf) => (
             <li
               key={pdf.docID}
               style={{
