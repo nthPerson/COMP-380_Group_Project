@@ -40,7 +40,8 @@ export default function LoginOnly() {
       const user = await handleLogin(email, password);
       console.log("Logged in:", user.email);
       // navigate("/home", { replace: true });
-      navigate("/userProfile", { replace: true });
+      // navigate("/userProfile", { replace: true });
+      navigate("/welcome", { replace: true });
     } catch (err) {
       console.error("Login failed:", err.message);
 

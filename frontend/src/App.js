@@ -10,6 +10,7 @@ import UserProfile    from './Components/UserProfile/UserProfile';
 import TailorResume   from './Components/TailorResume/TailorResume';
 import ResumeBuilderForm from './Components/ResumeBuilderForm'; // Added import for ResumeBuilderForm
 import { PdfProvider } from './Components/PdfContext';
+import WelcomeInstructions from './Components/WelcomeInstructions/WelcomeInstructions';
 import Header from "./Components/Header/Header";
 
 function App() {
@@ -36,8 +37,11 @@ function App() {
         {/* <Route path="/home" element={<Homepage />} /> */}
         <Route path="/home" element={<TailorResume />} />
 
-        {/* 5) User Profile */}
+        {/* 5) Landing Page */}
         <Route path="/landingPage" element={<LandingPage />} />
+
+        {/* 5) Welcome & Instructions */}
+        <Route path='/welcome' element={<WelcomeInstructions />} />
 
         {/* 6) User Profile */}
         <Route path="/userProfile" element={<UserProfile />} />
@@ -46,7 +50,7 @@ function App() {
         <Route path="/tailorResume" element={<TailorResume />} />
 
         {/* 9) Create Resume */}
-        <Route path="/createResume" element={<ResumeBuilderForm />} /> {/* Added route for Create Resume */}
+        <Route path="/createResume" element={<ResumeBuilderForm />} />
 
 
         {/* 8) Anything else → redirect to “/signup” */}

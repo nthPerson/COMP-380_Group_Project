@@ -30,6 +30,15 @@ const Sidebar = ({ user }) => {
       <nav className="sidebar-nav">
         <ul>
 
+          {/* Welcome page */}
+          <li>
+            <Link to="/welcome" className="sidebar-link">
+              <img src={logo_icon} alt="Welcome icon" />
+              <span>Welcome</span>
+            </Link>
+          </li>
+
+
           {/* Create Resume */}
           <li>
             <Link to="/createResume" className="sidebar-link">

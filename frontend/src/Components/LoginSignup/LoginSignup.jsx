@@ -89,7 +89,8 @@ export default function LoginSignup() {
       const user = await handleSignup(fullName, email, password);
       console.log("Signed up:", user.email, "| Name:", user.displayName);
       // navigate("/home");
-      navigate("/userProfile");
+      // navigate("/userProfile");
+      navigate("/welcome");
     } catch (err) {
       console.error("Signup failed:", err.code);
     
