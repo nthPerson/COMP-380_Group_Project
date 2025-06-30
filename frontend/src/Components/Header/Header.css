@@ -1,0 +1,29 @@
+.app-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 60px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
+
+.header-username {
+  font-weight: 500;
+  color: #333;
+}
