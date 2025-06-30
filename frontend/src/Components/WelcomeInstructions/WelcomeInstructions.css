@@ -71,3 +71,46 @@
   background: #2c81ba;
   transform: scale(1.05);
 }
+
+.button-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  max-width: 100%;
+}
+
+.get-started-btn {
+  display: inline-block;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  background: #3498db;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.3s ease, background 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.or-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2c3e50;
+  white-space: nowrap;
+}
+
+/* Stack vertically on small screens */
+@media (max-width: 800px) {
+  .button-options {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .or-text {
+    margin: 0.5rem 0;
+  }
+}
