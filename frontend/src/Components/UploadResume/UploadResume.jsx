@@ -53,11 +53,11 @@ export default function UploadResume() {
             </header>
 
             <div className="tool-section" data-aos="fade-up">
-            <UploadPdf />
+                <UploadPdf />
             </div>
 
             <div className="tool-section" data-aos="fade-up">
-            <ResumeLibrary showGenerated={false} showUploaded={true} />
+                <ResumeLibrary showGenerated={false} showUploaded={true} />
             </div>
 
             <Link to="/addJobDescription" className="get-started-btn">
@@ -65,7 +65,7 @@ export default function UploadResume() {
             </Link>
 
             <div className="logout-container">
-            <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
+                <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
             </div>
         </main>
         </div>
