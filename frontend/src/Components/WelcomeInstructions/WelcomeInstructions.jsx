@@ -72,14 +72,16 @@ export default function WelcomeInstructions() {
         {/* Get Started Buttons */}
         <div>
           <h2>Get Started Here!</h2>
-          <Link to="/uploadResume" className="get-started-btn">
+          <div className = "button-options">
+            <Link to="/uploadResume" className="get-started-btn">
               Have a Resume? Click here to get started!
           </Link>
+          <span className = "or-text">or</span>
           <Link to="/createResume" className="get-started-btn">
               Don't Have a Resume? Click Here to Get Started!
           </Link>
         </div>
-        
+      </div>
       </main>
     </div>
   );
