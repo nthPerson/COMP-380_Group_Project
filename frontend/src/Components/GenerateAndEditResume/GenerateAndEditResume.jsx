@@ -176,6 +176,11 @@ export default function GenerateAndEditResume() {
                 {postGenSim != null && (
                 <div style={{ marginTop: 12 }}>
                     <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
+                    {initialSim != null && (
+                    <div style={{ marginTop: 4 }}>
+                        Original Unaltered Resume vs Job Description Similarity: {initialSim}%
+                    </div>
+                    )}
                     {getDifference() != null && (
                     <div style={{ color: getDifference() > 0 ? "green" : "black", marginTop: 4 }}>
                         {getDifference() > 0 ? "Percentage Improvement: " : "Percentage Difference: "}
