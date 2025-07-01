@@ -172,7 +172,7 @@ export default function UserProfile() {
                 <Link to="/createResume" className="button">
                   Create Resume
                 </Link>
-                <Link to="/tailorResume" className="button">
+                <Link to="/uploadResume" className="button">
                   Tailor Resume
                 </Link>
               </div>

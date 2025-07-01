@@ -1,0 +1,114 @@
+
+  .layout {
+    display: flex;
+    height: 100vh;
+  }
+  .archive-container {
+    flex: 1;
+    max-width: 900px;
+    margin-left: 300px;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+    z-index: 1;
+  }
+  .header {
+    margin-bottom: 20px;
+  }
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid #3498db;
+    padding-left: 10px;                 
+    background: #f5f8fa;   
+    margin-bottom: 20px;
+  }
+  .tab {
+    position: relative;
+    padding: 8px 16px;
+    margin-right: 4px;
+    background: transparent;
+    border: 2px solid transparent;         
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+  }
+  .tab:hover {
+    color:  #3498db;
+  }
+  .tab.active {
+    background: #f5f8fa;    /* same as your .tabs background */
+    border-color:  #3498db; /* your existing top/left/right border */
+    border-bottom: none;    /* hide its own bottom */
+    margin-bottom: -2px;     /* lift up over the blue line */
+    z-index: 3;
+    
+    /* optional if you previously zeroed the bottom corners */
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  
+  
+  /* make non-active tabs sit under the page line */
+  .tab:not(.active) {
+    z-index: 1;
+  }
+  .tab-content {
+    min-height: 200px;
+  }
+  .resume-list {
+    list-style: none;
+    padding: 0;
+  }
+  .resume-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+  }
+  .actions-bar {
+    margin-top: 20px;
+    min-height: 48px;
+    display: flex;
+    gap: 8px;
+  }
+  /* disabled state */
+  .actions-bar button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none !important;
+  }
+  
+  /* glow when enabled (i.e. .has-selection on the parent) */
+  .actions-bar.has-selection button {
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.6);
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .actions-bar.has-selection button:hover {
+    box-shadow: 0 0 12px rgba(52, 152, 219, 0.8);
+  }
+  .logout-container {
+    margin-top: 40px;
+  }
+  .logout-btn {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .logout-btn:hover {
+    background: #c82333;
+  }
+  
