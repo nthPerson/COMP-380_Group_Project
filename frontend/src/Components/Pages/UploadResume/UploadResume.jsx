@@ -60,6 +60,15 @@ export default function UploadResume() {
             <ResumeLibrary showGenerated={false} showUploaded={true} />
             </div>
 
+            {/* This section adds in the explaination for the master resume */}
+            <div className="tool-section" data-aos="fade-up">
+                <ResumeLibrary showGenerated={false} showUploaded={true} />
+                <p style={{ marginTop: "12px", fontSize: "0.95rem", color: "#444" }}>
+                    <strong>Note:</strong> The <em>Master Resume</em> will be analyzed by the system to generate a tailored resume based on the job description you select.
+                </p>
+            </div>
+
+
             <Link to="/addJobDescription" className="get-started-btn">
               Next: Add a Job Description!
             </Link>
