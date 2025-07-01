@@ -25,4 +25,5 @@ yarn-error.log*
 src/Components/GuidedResumeBuilder 2.jsx
 
 # embeddings database
-embeddings.db
+backend/embeddings.db
+backend/data/embeddings.db

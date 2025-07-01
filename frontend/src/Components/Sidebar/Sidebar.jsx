@@ -61,7 +61,7 @@ const Sidebar = ({ user }) => {
               <img src={magicwand_icon} alt="Tailor icon" />
               <span>Tailor Resume</span>
             </div>
-            <u1 className="subnav">
+            <ul className="subnav">
               <li>
                 <Link to="/uploadResume" className="sidebar-sublink">Upload Resume</Link>
               </li>
@@ -74,7 +74,7 @@ const Sidebar = ({ user }) => {
               <li>
                 <Link to="/generateEditResume" className="sidebar-sublink">Generate &amp; Edit</Link>
               </li>
-            </u1>
+            </ul>
           </li>
 
           {/* Resume Archive */}
