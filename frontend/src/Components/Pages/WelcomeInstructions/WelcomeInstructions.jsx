@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
 import "./WelcomeInstructions.css";
+import Sidebar from "../../Sidebar/Sidebar";
+import "../../Sidebar/Sidebar.css";
 
 const steps = [
   {
@@ -43,6 +45,9 @@ export default function WelcomeInstructions() {
 
   return (
     <div className="landing">
+
+      <Sidebar user={user} />
+
       <main className="content">
         <h1 className="heading">
           Welcome, {user.displayName || "User"} <span className="wave">👋</span>
