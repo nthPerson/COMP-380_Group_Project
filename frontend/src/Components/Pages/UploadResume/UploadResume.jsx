@@ -56,10 +56,6 @@ export default function UploadResume() {
             <UploadPdf />
             </div>
 
-            <div className="tool-section" data-aos="fade-up">
-            <ResumeLibrary showGenerated={false} showUploaded={true} />
-            </div>
-
             {/* This section adds in the explaination for the master resume */}
             <div className="tool-section" data-aos="fade-up">
                 <ResumeLibrary showGenerated={false} showUploaded={true} />
