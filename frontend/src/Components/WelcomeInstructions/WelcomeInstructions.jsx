@@ -1,87 +1,72 @@
 import { auth } from "../../firebase";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-
-import Sidebar from "../Sidebar/Sidebar";
-import "../Sidebar/Sidebar.css";
-import "./WelcomeInstructions.css"
 import { Link } from "react-router-dom";
+import "./WelcomeInstructions.css";
+
 const steps = [
-    {
-        title: "Upload Your Master Resume",
-        desc: "Start by uploading your main, complete resume to the application."
-    },
-    {
-        title: "Provide a Job Description",
-        desc: "Either paste the job description text or enter the URL of the job posting."
-    },
-    {
-        title: "Select Keywords to Emphasize",
-        desc: "Choose the skills or keywords you want to highlight in your tailored resume."
-    },
-    {
-        title: "Generate a Targeted Resume",
-        desc: "Let RezuMe craft a custom resume using your master resume and the job details."
-    },
-    {
-        title: "Review and Edit",
-        desc: "Make any changes you'd like in the built-in editor."
-    },
-    {
-        title: "Export Your New Resume",
-        desc: "Download the final PDF or save it back to your library."
-    }
+  {
+    title: "Upload Your Master Resume",
+    desc: "Start by uploading your full resume to the app",
+  },
+  {
+    title: "Provide a Job Description",
+    desc: "Paste the job description text or enter its URL",
+  },
+  {
+    title: "Pick Keywords to Emphasize",
+    desc: "Select the skills or terms you want highlighted",
+  },
+  {
+    title: "Generate Your Tailored Resume",
+    desc: "RezuMe will craft a custom version for you",
+  },
+  {
+    title: "Review & Tweak",
+    desc: "Make edits in the built-in editor as you like",
+  },
+  {
+    title: "Export & Share",
+    desc: "Download the PDF or save it back to your library",
+  },
 ];
 
 export default function WelcomeInstructions() {
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        const unsub = onAuthStateChanged(auth, (u) => setUser(u));
-        return () => unsub();
-    }, []);
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => setUser(u));
+    return () => unsub();
+  }, []);
 
-    if (!user) return <p>Loading...</p>;
+  if (!user) return <p className="loading">Loading…</p>;
 
   return (
-    <div className="welcome-layout">
-
-      {/* Sidebar */}
-      <Sidebar user={user} />
-      <main className="welcome-content">
-
-        {/* Title */}
-        <h1 className="welcome-heading">
-          Welcome to RezuMe, {user.displayName || "User"}! <span className="wave">👋</span>
+    <div className="landing">
+      <main className="content">
+        <h1 className="heading">
+          Welcome, {user.displayName || "User"} <span className="wave">👋</span>
         </h1>
-        <h2 className="instructions-title">How to Tailor Your RezuMe</h2>
+        <h2 className="subheading">Getting Started with RezuMe</h2>
 
-        {/* Instructions List */}
-        <ol className="instructions-list">
-          {steps.map((step, idx) => (
-            <li key={idx} className="instruction-item">
-              <div className="instruction-icon" aria-hidden="true">🔹</div>
-              <div>
-                <h3>{step.title}</h3>
-                <p>{step.desc}</p>
-              </div>
+        <ol className="stepsList">
+          {steps.map((step, i) => (
+            <li key={i}>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
             </li>
           ))}
         </ol>
 
-        {/* Get Started Buttons */}
-        <div>
-          <h2>Get Started Here!</h2>
-          <div className = "button-options">
-            <Link to="/uploadResume" className="get-started-btn">
-              Have a Resume? Click here to get started!
+        <div className="actions">
+          <Link to="/uploadResume" className="button primaryButton">
+            Upload Resume
           </Link>
-          <span className = "or-text">or</span>
-          <Link to="/createResume" className="get-started-btn">
-              Don't Have a Resume? Click Here to Get Started!
+          <span className="orText">or</span>
+          <Link to="/createResume" className="button secondaryButton">
+            Create New Resume
           </Link>
         </div>
-      </div>
       </main>
     </div>
   );
