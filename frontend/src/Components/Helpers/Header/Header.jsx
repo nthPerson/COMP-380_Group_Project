@@ -8,7 +8,7 @@ import defaultAvatar from "../../Assets/blank-avatar.png";
 
 export default function Header() {
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState({ username: "", photoURL: "" });
+  const [profile, setProfile] = useState({ username: "", photoURL: defaultAvatar });
 
   // 1) Wait for auth, then load Firestore profile
   useEffect(() => {
