@@ -1,24 +1,28 @@
 import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
-import LoginSignup from './Components/LoginSignup/LoginSignup';
-import LoginOnly   from './Components/LoginOnly/LoginOnly';   
-// import Homepage    from './Components/Homepage/Homepage';     
-// import ForgotPassword    from './Components/ForgotPassword/ForgotPassword';  // Not currently being used
-import LandingPage    from './Components/LandingPage/LandingPage';
-import UserProfile    from './Components/UserProfile/UserProfile';
-// import TailorResume   from './Components/TailorResume/TailorResume';  // Being deprecated in favor of Resume Workflow Pages
-import ResumeBuilderForm from './Components/ResumeBuilderForm/ResumeBuilderForm'; // Added import for ResumeBuilderForm
+import Header from "./Components/Helpers/Header/Header";
 import { PdfProvider } from './Components/PdfContext';
-import WelcomeInstructions from './Components/WelcomeInstructions/WelcomeInstructions';
-import UploadResume from './Components/UploadResume/UploadResume';
-import AddJd from './Components/AddJd/AddJd';
-import SelectKeywords from './Components/SelectKeywords/SelectKeywords';
-import GenerateAndEditResume from './Components/GenerateAndEditResume/GenerateAndEditResume';
-import ResumeArchive from './Components/ResumeArchive/ResumeArchive';
 import { TargetedResumeProvider } from './Components/TargetedResumeContext';
+import SelectKeywords from './Components/Helpers/SelectKeywords/SelectKeywords';
 
-import Header from "./Components/Header/Header";
+/* ===== Pages ===== */
+import LandingPage    from './Components/Pages/LandingPage/LandingPage';
+import LoginSignup from './Components/Pages/LoginSignup/LoginSignup';
+import LoginOnly   from './Components/Pages/LoginOnly/LoginOnly';   
+import UserProfile    from './Components/Pages/UserProfile/UserProfile';
+import WelcomeInstructions from './Components/Pages/WelcomeInstructions/WelcomeInstructions';
+import UploadResume from './Components/Pages/UploadResume/UploadResume';
+import ResumeBuilderForm from './Components/Pages/ResumeBuilderForm/ResumeBuilderForm'; // Added import for ResumeBuilderForm
+import AddJd from './Components/Pages/AddJd/AddJd';
+import GenerateAndEditResume from './Components/Pages/GenerateAndEditResume/GenerateAndEditResume';
+import ResumeArchive from './Components/Pages/ResumeArchive/ResumeArchive';
+
+
+
+
+
+
 
 function App() {
   const { pathname } = useLocation();
