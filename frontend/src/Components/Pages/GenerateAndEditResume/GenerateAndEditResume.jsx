@@ -20,6 +20,7 @@ import { resumeTextToHtml } from "../../../utils/resumeHtmlFormatter";
 import { toDiffHtml } from "../../../utils/diffHtml";
 
 import "../../Sidebar/Sidebar.css";
+import "../TailorResume/TailorResume.css";
 
 export default function GenerateAndEditResume() {
     const navigate = useNavigate();

@@ -12,6 +12,7 @@ import { getSimilarityScore } from "../../../services/resumeService";
 import { useTargetedResume } from "../../TargetedResumeContext";
 
 import "../../Sidebar/Sidebar.css";
+import "../TailorResume/TailorResume.css";
 
 export default function AddJd() {
     const navigate = useNavigate();

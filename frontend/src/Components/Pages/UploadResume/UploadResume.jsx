@@ -10,6 +10,7 @@ import ResumeLibrary from "../../Helpers/ResumeLibrary/ResumeLibrary";
 import { usePdf } from "../../PdfContext";
 
 import "../../Sidebar/Sidebar.css";
+import "../TailorResume/TailorResume.css";
 
 export default function UploadResume() {
     const navigate = useNavigate();
