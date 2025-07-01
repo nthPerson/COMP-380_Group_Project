@@ -1,116 +1,146 @@
-.welcome-layout {
+/* full-page landing container */
+.landing {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 1rem;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
-  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f8fbff 0%, #e4f2ff 100%);
+  font-family: 'Fira Sans Condensed', sans-serif;
 }
 
-@media (min-width: 1024px) {
-  .welcome-layout {
-    flex-direction: row;
-  }
-}
-
-.welcome-content {
-  flex: 1;
-  padding: 3rem;
-  max-width: 800px;
-  margin: 0 auto;
-  color: #2c3e50;
+/* content wrapper */
+.content {
+  max-width: 600px;
+  width: 100%;
   text-align: center;
+  color: #344153;
 }
 
-.welcome-heading {
-  font-size: 2rem;
-  color: #3498db;
-  margin-bottom: 1.5rem;
+/* loading state */
+.loading {
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.25rem;
+  color: #667085;
 }
 
+/* main heading */
+.heading {
+  font-size: 2.5rem;
+  color: #1e3a8a;
+  margin-bottom: 0.25rem;
+}
+
+/* wave emoji */
 .wave {
+  display: inline-block;
   margin-left: 0.5rem;
+  transform: rotate(10deg);
 }
 
-.instructions-title {
-  font-size: 1.5rem;
-  margin: 2rem 0 1rem;
-  color: #2c3e50;
+/* subheading */
+.subheading {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: #334155;
 }
 
-.instructions-list {
+/* numbered vertical list */
+.stepsList {
+  counter-reset: step;
   list-style: none;
   padding: 0;
-  margin: 0 0 2.5rem;
+  margin: 0 0 3rem;
   text-align: left;
 }
 
-.instruction-item {
+.stepsList li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.stepsList li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  background: #1e40af;
+  color: #fff;
+  border-radius: 50%;
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
 }
 
-.instruction-icon {
-  font-size: 1.5rem;
-  margin-right: 0.75rem;
+.stepsList h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  color: #1f2937;
 }
 
-.get-started-btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: white;
-  background: #3498db;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: transform 0.3s ease, background 0.3s ease;
+.stepsList p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #475569;
 }
 
-.get-started-btn:hover {
-  background: #2c81ba;
-  transform: scale(1.05);
-}
-
-.button-options {
+/* action buttons */
+.actions {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 1rem;
-  max-width: 100%;
 }
 
-.get-started-btn {
-  display: inline-block;
-  padding: 1rem 1.5rem;
+.button {
+  padding: 0.75rem 1.5rem;
   font-size: 1.1rem;
   font-weight: 600;
-  color: white;
-  background: #3498db;
-  border-radius: 8px;
+  border-radius: 0.75rem;
   text-decoration: none;
-  transition: transform 0.3s ease, background 0.3s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
-.or-text {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #2c3e50;
+.button:hover {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+.primaryButton {
+  background: #1e3a8a;
+  color: #fff;
+}
+
+.secondaryButton {
+  background: #e2e8f0;
+  color: #1e3a8a;
+}
+
+.orText {
+  font-size: 1.1rem;
+  color: #64748b;
   white-space: nowrap;
 }
 
-/* Stack vertically on small screens */
-@media (max-width: 800px) {
-  .button-options {
-    flex-direction: column;
-    align-items: center;
+/* mobile adjustments */
+@media (max-width: 480px) {
+  .landing {
+    padding: 2rem 1rem;
   }
 
-  .or-text {
-    margin: 0.5rem 0;
+  .heading {
+    font-size: 2rem;
+  }
+
+  .subheading {
+    font-size: 1.5rem;
   }
 }
