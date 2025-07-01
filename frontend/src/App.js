@@ -1,10 +1,7 @@
-import React from 'react';
+import React, {useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-
-import Header from "./Components/Helpers/Header/Header";
-import { PdfProvider } from './Components/PdfContext';
-import { TargetedResumeProvider } from './Components/TargetedResumeContext';
-import SelectKeywords from './Components/Helpers/SelectKeywords/SelectKeywords';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 /* ===== Pages ===== */
 import LandingPage    from './Components/Pages/LandingPage/LandingPage';
@@ -18,13 +15,19 @@ import AddJd from './Components/Pages/AddJd/AddJd';
 import GenerateAndEditResume from './Components/Pages/GenerateAndEditResume/GenerateAndEditResume';
 import ResumeArchive from './Components/Pages/ResumeArchive/ResumeArchive';
 
-
-
-
-
+/* ===== Helpers ===== */
+import Header from "./Components/Helpers/Header/Header";
+import { PdfProvider } from './Components/PdfContext';
+import { TargetedResumeProvider } from './Components/TargetedResumeContext';
+import SelectKeywords from './Components/Helpers/SelectKeywords/SelectKeywords';
 
 
 function App() {
+  // Global initialization of AOS animation library so components using "data-aos" 
+  // are visible without first visiting the UserProfile page
+  useEffect(() => {
+    AOS.init({ duration: 700 });
+  }, []);
   const { pathname } = useLocation();
 
   // Specify which paths should NOT show the avatar widget:
