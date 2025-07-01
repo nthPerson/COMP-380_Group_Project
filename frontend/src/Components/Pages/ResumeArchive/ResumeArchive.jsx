@@ -9,7 +9,7 @@ import { usePdf } from "../../PdfContext";
 import { getResumeSignedUrl } from "../../../services/resumeService";
 
 import "../../Sidebar/Sidebar.css";
-
+import "../TailorResume/TailorResume.css";
 export default function ResumeArchive() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
