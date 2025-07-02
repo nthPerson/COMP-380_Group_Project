@@ -10,7 +10,7 @@ import JdFromText from "../../Helpers/JdForm/JdFromText";
 import { usePdf } from "../../PdfContext";
 import { getSimilarityScore } from "../../../services/resumeService";
 import { useTargetedResume } from "../../TargetedResumeContext";
-import InfoBox from "../../Helpers/InfoBox/InfoBox";
+import InfoBox from "../../UI/InfoBox/InfoBox";
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";

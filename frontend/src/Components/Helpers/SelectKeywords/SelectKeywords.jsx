@@ -9,7 +9,7 @@ import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../../PdfContext";
 import { useTargetedResume } from "../../TargetedResumeContext";
 
-import InfoBox from "../../Helpers/InfoBox/InfoBox";
+import InfoBox from "../../UI/InfoBox/InfoBox";
 import "../../Sidebar/Sidebar.css";
 
 

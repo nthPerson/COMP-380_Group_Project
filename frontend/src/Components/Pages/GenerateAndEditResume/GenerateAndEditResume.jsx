@@ -19,7 +19,7 @@ import {
 import { resumeTextToHtml } from "../../../utils/resumeHtmlFormatter";
 import { toDiffHtml } from "../../../utils/diffHtml";
 
-import InfoBox from "../../Helpers/InfoBox/InfoBox";
+import InfoBox from "../../UI/InfoBox/InfoBox";
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
