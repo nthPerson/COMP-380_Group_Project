@@ -19,6 +19,8 @@ import {
 import { resumeTextToHtml } from "../../../utils/resumeHtmlFormatter";
 import { toDiffHtml } from "../../../utils/diffHtml";
 
+import InfoBox from "../../Helpers/InfoBox/InfoBox";
+
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
 
@@ -148,47 +150,21 @@ export default function GenerateAndEditResume() {
         </aside>
         <main className="tailor-container">
             <header className="header">
-  <h1 className="welcome-title">Generate & Edit Resume</h1>
-
-  <div
-    style={{
-      background: "white",
-      padding: "1rem",
-      borderRadius: "8px",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-      maxWidth: "900px",
-      margin: "1rem auto",
-      fontSize: "1rem",
-      color: "#333",
-      lineHeight: "1.6",
-      textAlign: "left",
-    }}
-  >
-    <ul
-      style={{
-        listStylePosition: "inside",
-        paddingLeft: "0",
-        margin: "0",
-        lineHeight: "1.5",
-      }}
-    >
-      <li style={{ marginBottom: "0.25rem", maxWidth: "700px" }}>
-        <strong>This resume</strong> will be customized to <strong>match the job description more closely</strong><br />
-        <span style={{ paddingLeft: "1.5rem", display: "inline-block" }}>
-            by highlighting and incorporating the keywords you selected.
-        </span>
-      </li>
-      <li style={{ marginBottom: "0.25rem", maxWidth: "700px" }}>
-        After generation, you can <strong>edit the content</strong> to make it your own.
-      </li>
-      <li style={{ maxWidth: "700px" }}>
-        You can <strong>save the final version to your library</strong> or <strong>download it to your computer</strong> as a text or PDF file.
-      </li>
-    </ul>
-  </div>
-</header>
-
-
+                <h1 className="welcome-title">Generate & Edit Resume</h1>
+                <InfoBox
+                    items={[
+                        <>
+                        <strong>This resume</strong> will be customized to <strong>match the job description more closely</strong> by highlighting and incorporating the keywords you selected.
+                        </>,
+                        <>
+                        After generation, you can <strong>edit the content</strong> to make it your own.
+                        </>,
+                        <>
+                        You can <strong>save the final version to your library</strong> or <strong>download it to your computer</strong> as a text or PDF file.
+                        </>
+                    ]}
+                />
+            </header>
 
             {masterDocID && jdContent && (
             <div className="tool-section" data-aos="fade-up">
