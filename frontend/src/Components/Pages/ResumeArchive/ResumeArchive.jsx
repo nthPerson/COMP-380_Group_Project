@@ -27,7 +27,7 @@ export default function ResumeArchive() {
         return () => unsub();
     }, []);
 
-    const uploaded = pdfs.filter(p => !p.generated);
+    const uploaded = pdfs.filter(p => !p.generated && !p.created);
     const generated = pdfs.filter(p => p.generated);
     const created = pdfs.filter((p) => p.created);
 
