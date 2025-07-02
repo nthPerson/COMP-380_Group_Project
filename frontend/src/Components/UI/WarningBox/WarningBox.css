@@ -1,0 +1,36 @@
+/* WarningBox.css */
+/* A white container with a pulsing yellow border to draw gentle attention */
+
+.warning-box {
+  background: white;
+  padding: 1.5rem;               /* match InfoBox padding */
+  border-radius: 8px;
+  max-width: 900px;              /* same width as InfoBox */
+  margin: 0.5rem auto;
+  animation: pulseYellow 2s ease-in-out infinite;
+}
+
+.warning-box__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+  color: #92400e;                /* a dark amber */
+}
+
+.warning-box__content {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* pulse the yellow glow around the box */
+@keyframes pulseYellow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 10px 5px rgba(250, 204, 21, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5);
+  }
+}
