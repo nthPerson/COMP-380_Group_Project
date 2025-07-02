@@ -1,5 +1,5 @@
-from backend.llm_utils import _cosine_sim 
-# from llm_utils import _cosine_sim 
+# from backend.llm_utils import _cosine_sim 
+from llm_utils import _cosine_sim 
 #unit testing (starting at llm_utils)-- you must do pip install pytest if you haven't yet
 #test highlight profile similarity function
 
@@ -13,4 +13,7 @@ def test_cosine_sim():
 def test_cosine_sim_opposite():
     a = [1, 0]
     b = [-1, 0]
-    assert round(_cosine_sim(a, b), 2) == -10.0
+    assert round(_cosine_sim(a, b), 2) == -1.0
+
+def test_cosine_sim_identical():
+    assert _cosine_sim([1, 0, 0], [1, 0, 0]) == 1.0

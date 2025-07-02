@@ -1,6 +1,8 @@
 from llm_utils import highlight_similarity_raw
 
+
 def test_highlight_similarity_basic():
+    from llm_utils import highlight_similarity_raw
     resume_items = ["python", "sql"]
     jd_items = ["python", "c++"]
 
