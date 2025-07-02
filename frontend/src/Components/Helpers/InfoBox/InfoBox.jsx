@@ -7,12 +7,11 @@ export default function InfoBox({ title, items }) {
       {title && <h2>{title}</h2>}
       <ul>
         {items.map((item, idx) => (
-          <li key={idx}>
-            <div className="bullet-wrap">{item}</div>
+          <li key={idx} className="info-box__item">
+            {item}
           </li>
         ))}
       </ul>
     </div>
   );
 }
-

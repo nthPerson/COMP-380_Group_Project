@@ -9,6 +9,7 @@ import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../../PdfContext";
 import { useTargetedResume } from "../../TargetedResumeContext";
 
+import InfoBox from "../../Helpers/InfoBox/InfoBox";
 import "../../Sidebar/Sidebar.css";
 
 
@@ -42,41 +43,21 @@ export default function SelectKeywords() {
             <Sidebar user={user} />
         </aside>
         <main className="tailor-container">
-            <header className="header">
-                <h1 className="welcome-title" 
-                style={{ marginBottom: "1.75rem" }}>Select Keywords</h1> {/*you can adjust to make the space between title and box smaller or bigger*/}
-
-                <div
-                    style={{
-                    background: "white",
-                    padding: "1rem",
-                    borderRadius: "8px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                    maxWidth: "900px",
-                    margin: "0 auto",
-                    fontSize: "1rem",
-                    color: "#333",
-                    lineHeight: "1.6",
-                    textAlign: "left",
-                    }}
-                >
-                    <ul
-                        style={{
-                            listStylePosition: "inside",
-                            paddingLeft: "0",
-                            margin: "0",
-                            lineHeight: "1.5",
-                        }}
-                    >
-                        <li>
-                            <strong>Select keywords</strong> to include in your tailored resume to increase its relevance to the job description.
-                        </li>
-                        <li>
-                            <strong>Skills highlighted in yellow</strong> are ones that match between your resume and the job description.
-                        </li>
-                        </ul>
-                </div>
-            </header>
+             <header className="header">
+          <h1 className="welcome-title" style={{ marginBottom: "1.75rem" }}>
+            Select Keywords
+          </h1>
+          <InfoBox
+            items={[
+              <>
+                <strong>Select keywords</strong> to include in your tailored resume to increase its relevance to the job description.
+              </>,
+              <>
+                <strong>Skills highlighted in yellow</strong> are ones that match between your resume and the job description.
+              </>
+            ]}
+          />
+        </header>
 
 
             {masterDocID && jdContent ? (

@@ -10,9 +10,11 @@ import JdFromText from "../../Helpers/JdForm/JdFromText";
 import { usePdf } from "../../PdfContext";
 import { getSimilarityScore } from "../../../services/resumeService";
 import { useTargetedResume } from "../../TargetedResumeContext";
+import InfoBox from "../../Helpers/InfoBox/InfoBox";
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
+
 
 export default function AddJd() {
     const navigate = useNavigate();
@@ -70,42 +72,21 @@ export default function AddJd() {
         </aside>
         <main className="tailor-container">
             <header className="header">
-                <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>
-                    Add Job Description
-                </h1>
-
-  {/* Explanation Box */}
-  <div
-    style={{
-      background: "white",
-      padding: "1rem",
-      borderRadius: "8px",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-      maxWidth: "875px",
-      margin: "1rem auto",
-      fontSize: "1rem",
-      color: "#333",
-      lineHeight: "1.6",
-      textAlign: "left",
-    }}
-  >
-    <ul
-      style={{
-        listStylePosition: "inside",
-        paddingLeft: "0",
-        margin: "0",
-        lineHeight: "1.5",
-      }}
-    >
-      <li>
+  <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>
+    Add Job Description
+  </h1>
+  <InfoBox
+    items={[
+      <>
         <strong>Paste a job description</strong> so the system can extract required skills, qualifications, and responsibilities.
-      </li>
-      <li>
+      </>,
+      <>
         Use either a URL <strong>or</strong> the full job posting text — whatever you prefer.
-      </li>
-    </ul>
-  </div>
+      </>
+    ]}
+  />
 </header>
+
 
 
             <ToolSection title="Paste a Job Description (URL)" delay={100}>
