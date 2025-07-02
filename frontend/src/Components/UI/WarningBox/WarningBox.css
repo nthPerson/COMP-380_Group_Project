@@ -1,36 +1,42 @@
 /* WarningBox.css */
-/* A white container with a pulsing yellow border to draw gentle attention */
+/* Matches InfoBox width + padding, but with a gentle yellow pulse */
 
 .warning-box {
-  background: white;
-  padding: 1.5rem;               /* match InfoBox padding */
+  /* width & centering */
+  width: 100%;
+  max-width: 900px;     /* same cap as InfoBox */
+  margin: 0.5rem auto;    /* same vertical gap as InfoBox */
+
+  /* background, border & shadow */
+  background-color: #fffbea;
   border-radius: 8px;
-  max-width: 900px;              /* same width as InfoBox */
-  margin: 0.5rem auto;
-  animation: pulseYellow 2s ease-in-out infinite;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* padding inside — equal top/bottom and left/right */
+  /* you can tweak these two values independently if you want */
+  padding: 1rem;
+
+  /* pulse animation */
+  animation: warning-pulse 2s ease-in-out infinite;
+  
+  /* center text horizontally */
+  text-align: center;
 }
 
-.warning-box__title {
-  margin: 0 0 0.75rem;
-  font-size: 1.25rem;
-  color: #92400e;                /* a dark amber */
-}
-
-.warning-box__content {
-  font-size: 1rem;
+/* paragraph reset & font sizing */
+.warning-box__message {
+  margin: 0;          /* remove default <p> margins */
+  font-size: 1rem;    /* same as InfoBox text */
+  line-height: 1.5;   /* comfortable reading */
   color: #333;
-  line-height: 1.6;
 }
 
-/* pulse the yellow glow around the box */
-@keyframes pulseYellow {
-  0% {
-    box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5);
+/* pulse keyframes */
+@keyframes warning-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 223, 0, 0.5);
   }
-  70% {
-    box-shadow: 0 0 10px 5px rgba(250, 204, 21, 0.5);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5);
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 223, 0, 0);
   }
 }
