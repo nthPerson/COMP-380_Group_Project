@@ -151,19 +151,21 @@ export default function GenerateAndEditResume() {
         <main className="tailor-container">
             <header className="header">
                 <h1 className="welcome-title">Generate & Edit Resume</h1>
-                <InfoBox
-                    items={[
-                        <>
-                        <strong>This resume</strong> will be customized to <strong>match the job description more closely</strong> by highlighting and incorporating the keywords you selected.
-                        </>,
-                        <>
-                        After generation, you can <strong>edit the content</strong> to make it your own.
-                        </>,
-                        <>
-                        You can <strong>save the final version to your library</strong> or <strong>download it to your computer</strong> as a text or PDF file.
-                        </>
-                    ]}
-                />
+<InfoBox
+  items={[
+    <>
+      <strong>This resume</strong> will be customized to <strong>match the job description more closely</strong> by highlighting and incorporating the keywords you selected.
+    </>,
+    <>
+      After generation, you can <strong>edit the content</strong> to make it your own.
+    </>,
+    <>
+      You can <strong>save the final version to your library</strong> or <strong>download it to your computer</strong> as a text or PDF file.
+    </>
+  ]}
+/>
+
+
             </header>
 
             {masterDocID && jdContent && (
