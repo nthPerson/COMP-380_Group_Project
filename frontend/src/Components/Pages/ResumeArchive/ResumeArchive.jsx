@@ -8,8 +8,10 @@ import ResumeViewerModal from "../../Helpers/ResumeLibrary/ResumeViewerModal";
 import { usePdf } from "../../PdfContext";
 import { getResumeSignedUrl } from "../../../services/resumeService";
 
+import "./ResumeArchive.css";
 import "../../Sidebar/Sidebar.css";
-import "../TailorResume/TailorResume.css";
+import "../UserProfile/UserProfile.css";
+
 export default function ResumeArchive() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -18,6 +20,7 @@ export default function ResumeArchive() {
     const [selected, setSelected] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedResumeUrl, setSelectedResumeUrl] = useState(null);
+    const [activeTab, setActiveTab] = useState("uploaded");
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, (u) => setUser(u));
@@ -26,6 +29,7 @@ export default function ResumeArchive() {
 
     const uploaded = pdfs.filter(p => !p.generated);
     const generated = pdfs.filter(p => p.generated);
+    const created = pdfs.filter((p) => p.created);
 
     const toggle = docID => {
         setSelected(prev =>
@@ -47,6 +51,8 @@ export default function ResumeArchive() {
             const a = document.createElement("a");
             a.href = url;
             a.download = pdf.fileName;
+            a.target = "_blank";               // ← open in new tab
+            a.rel = "noopener noreferrer";     // ← security best practice
             a.click();
         }
     };
@@ -67,64 +73,112 @@ export default function ResumeArchive() {
     if (!user) {
         return (
             <p className="loading-text">
-                <span className="spinner"/> Loading...
+                <span className="spinner" /> Loading...
             </p>
         );
     }
-    
-    const renderList = items => (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-        {items.map(pdf => (
-            <li key={pdf.docID} style={{ border: "1px solid #ccc", borderRadius: 8, padding: 10, marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <label>
-                <input type="checkbox" checked={selected.includes(pdf.docID)} onChange={() => toggle(pdf.docID)} />{' '}
-                {pdf.fileName}
-            </label>
-            <span>
-                <button onClick={() => handleView(pdf.storagePath)} style={{ marginRight: 8 }}>View</button>
-            </span>
-            </li>
-        ))}
+
+    const renderList = (items) => (
+        <ul className="resume-list">
+            {items.map((pdf) => (
+                <li key={pdf.docID} className="resume-item">
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={selected.includes(pdf.docID)}
+                            onChange={() => toggle(pdf.docID)}
+                        />{' '}
+                        {pdf.fileName}
+                    </label>
+                    <div className="actions">
+                        <button onClick={() => handleView(pdf.storagePath)}>View</button>
+                    </div>
+                </li>
+            ))}
         </ul>
     );
-
     return (
         <div className="layout">
-        <aside className="sidebar">
-            <Sidebar user={user} />
-        </aside>
-        <main className="tailor-container">
-            <header className="header">
-            <h1 className="welcome-title">Resume Archive</h1>
-            </header>
+            <aside className="sidebar">
+                <Sidebar user={user} />
+            </aside>
+            <main className="archive-container">
+                <header className="header">
+                    <h1 className="welcome-title">RezuMe Archive</h1>
+                </header>
 
-            <div className="tool-section" data-aos="fade-up">
-            <h2>Uploaded Resumes</h2>
-            {renderList(uploaded)}
-            </div>
 
-            <div className="tool-section" data-aos="fade-up">
-            <h2>Tailored RezuMes</h2>
-            {renderList(generated)}
-            </div>
+                <div className="tabs-actions-container">
+                    <div className="tabs">
+                        <button
+                            className={`tab ${activeTab === "uploaded" ? "active" : ""}`}
+                            onClick={() => setActiveTab("uploaded")}
 
-            {selected.length > 0 && (
-            <div className="tool-section" data-aos="fade-up">
-                <button onClick={handleDownload}>Download</button>
-                <button style={{ marginLeft: 8 }} onClick={handleDeleteSelected}>Delete</button>
-            </div>
-            )}
+                        >
+                            Uploaded Resumes
+                        </button>
+                        <button
+                            className={`tab ${activeTab === "created" ? "active" : ""}`}
+                            onClick={() => setActiveTab("created")}
+                        >
+                            Created RezuMes
+                        </button>
+                        <button
+                            className={`tab ${activeTab === "tailored" ? "active" : ""}`}
+                            onClick={() => setActiveTab("tailored")}
+                        >
+                            Tailored RezuMes
+                        </button>
+                    </div>
 
-            <div className="logout-container">
-            <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
-            </div>
-        </main>
+                    <div className={`actions-bar button-row ${selected.length > 0 ? "has-selection" : ""}`}>
+                    <div className="button-group-right">
+                        <button type="button" className="button" onClick={handleDownload} disabled={selected.length === 0}>
+                            Download
+                        </button>
+                        <button type="button" className="button" onClick={handleDeleteSelected} disabled={selected.length === 0}>
+                            Delete
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                    <div className="tool-section resume-archive-panel">
+                        <div className="tab-content">
+                            {activeTab === "uploaded" && (
+                                uploaded.length > 0
+                                    ? renderList(uploaded)
+                                    : <p className="empty-message">No uploaded resumes.</p>
+                            )}
 
-        <ResumeViewerModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            pdfUrl={selectedResumeUrl}
-        />
+                            {activeTab === "created" && (
+                                created.length > 0
+                                    ? renderList(created)
+                                    : <p className="empty-message">No created RezuMes.</p>
+                            )}
+
+                            {activeTab === "tailored" && (
+                                generated.length > 0
+                                    ? renderList(generated)
+                                    : <p className="empty-message">No tailored RezuMes.</p>
+                            )}
+                        </div>
+                    </div>
+                     
+
+
+                <div className="logout-container">
+                    <button className="logout-btn" onClick={handleSignOut}>
+                        Log Out
+                    </button>
+                </div>
+
+                <ResumeViewerModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    pdfUrl={selectedResumeUrl}
+                />
+            </main>
         </div>
     );
 }
+

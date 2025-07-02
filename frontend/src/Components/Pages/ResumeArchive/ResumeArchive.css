@@ -172,3 +172,9 @@
 .logout-btn:hover {
   background: #c82333;
 }
+/* show the no‐entry cursor and muted style on disabled buttons */
+.actions-bar .button:disabled {
+  cursor: not-allowed;       /* crossed‐circle on hover */
+  opacity: 0.5;               /* dim it so it reads “inactive” */
+  box-shadow: none !important;/* remove any glow */
+}
