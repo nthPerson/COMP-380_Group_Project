@@ -10,6 +10,8 @@ import { usePdf } from "../../PdfContext";
 import { useTargetedResume } from "../../TargetedResumeContext";
 
 import InfoBox from "../../UI/InfoBox/InfoBox";
+import WarningBox from "../../UI/WarningBox/WarningBox";
+
 import "../../Sidebar/Sidebar.css";
 
 
@@ -60,11 +62,15 @@ export default function SelectKeywords() {
         </header>
 
 
-            {masterDocID && jdContent ? (
-            <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
-            ) : (
-            <p>Please upload a job description and select a master resume first.</p>
-            )}
+            {/* ---- this is the only place WarningBox ever appears ---- */}
+        {masterDocID && jdContent ? (
+          <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
+        ) : (
+          <WarningBox>
+            Please upload a job description and select a master resume first.
+          </WarningBox>
+
+        )}
 
             <Link to="/generateEditResume" className="get-started-btn">
               Next: Generate and Edit Your RezuMe!
