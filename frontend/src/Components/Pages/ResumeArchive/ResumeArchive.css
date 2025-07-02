@@ -72,6 +72,11 @@
 /* Make the panel fill the space between tabs and logout */
 .resume-archive-panel {
   flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+
+  /* add this: */
+  justify-content: flex-start !important;
   overflow: hidden; /* panel itself won’t scroll */
 }
 
