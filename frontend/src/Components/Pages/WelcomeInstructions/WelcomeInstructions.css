@@ -1,0 +1,146 @@
+/* full-page landing container */
+.landing {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 1rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fbff 0%, #e4f2ff 100%);
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+/* content wrapper */
+.content {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  color: #344153;
+}
+
+/* loading state */
+.loading {
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.25rem;
+  color: #667085;
+}
+
+/* main heading */
+.heading {
+  font-size: 2.5rem;
+  color: #1e3a8a;
+  margin-bottom: 0.25rem;
+}
+
+/* wave emoji */
+.wave {
+  display: inline-block;
+  margin-left: 0.5rem;
+  transform: rotate(10deg);
+}
+
+/* subheading */
+.subheading {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: #334155;
+}
+
+/* numbered vertical list */
+.stepsList {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 3rem;
+  text-align: left;
+}
+
+.stepsList li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.stepsList li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  background: #1e40af;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.stepsList h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.stepsList p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+/* action buttons */
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.button:hover {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+.primaryButton {
+  background: #1e3a8a;
+  color: #fff;
+}
+
+.secondaryButton {
+  background: #e2e8f0;
+  color: #1e3a8a;
+}
+
+.orText {
+  font-size: 1.1rem;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* mobile adjustments */
+@media (max-width: 480px) {
+  .landing {
+    padding: 2rem 1rem;
+  }
+
+  .heading {
+    font-size: 2rem;
+  }
+
+  .subheading {
+    font-size: 1.5rem;
+  }
+}
