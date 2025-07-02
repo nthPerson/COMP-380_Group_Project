@@ -24,10 +24,6 @@ export default function UserProfile() {
     email: "",
   });
 
-  useEffect(() => {
-    AOS.init({ duration: 700 });
-  }, []);
-
   // → Wait for Firebase auth, then load Firestore profile
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
