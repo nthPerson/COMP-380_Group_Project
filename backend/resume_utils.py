@@ -146,6 +146,7 @@ def save_resume_data(resume_data):
             "storagePath": blob.name,
             "uploadedAt": firestore.SERVER_TIMESTAMP,
             "resumeID": resume_id,
+            "created": True
         })
 
         return jsonify({"message": "Resume saved successfully!", "resumeID": resume_id, "pdfFile": file_name}), 200
