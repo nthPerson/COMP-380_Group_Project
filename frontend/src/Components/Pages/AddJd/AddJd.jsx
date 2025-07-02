@@ -71,21 +71,21 @@ export default function AddJd() {
             <Sidebar user={user} />
         </aside>
         <main className="tailor-container">
-            <header className="header">
-  <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>
-    Add Job Description
-  </h1>
-  <InfoBox
-    items={[
-      <>
-        <strong>Paste a job description</strong> so the system can extract required skills, qualifications, and responsibilities.
-      </>,
-      <>
-        Use either a URL <strong>or</strong> the full job posting text — whatever you prefer.
-      </>
-    ]}
-  />
-</header>
+        <header className="header">
+          <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>
+            Add Job Description
+          </h1>
+          <InfoBox
+            items={[
+              <>
+                <strong>Paste a job description</strong> so the system can extract required skills, qualifications, and responsibilities.
+              </>,
+              <>
+                Use either a URL <strong>or</strong> the full job posting text — whatever you prefer.
+              </>
+            ]}
+          />
+        </header>
 
 
 

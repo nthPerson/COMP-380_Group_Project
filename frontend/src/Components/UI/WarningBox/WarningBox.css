@@ -6,6 +6,7 @@
   width: 100%;
   max-width: 900px;     /* same cap as InfoBox */
   margin: 0.5rem auto;    /* same vertical gap as InfoBox */
+  max-height: max-content;
 
   /* background, border & shadow */
   background-color: #fffbea;
