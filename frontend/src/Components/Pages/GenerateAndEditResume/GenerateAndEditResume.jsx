@@ -19,6 +19,8 @@ import {
 import { resumeTextToHtml } from "../../../utils/resumeHtmlFormatter";
 import { toDiffHtml } from "../../../utils/diffHtml";
 
+import InfoBox from "../../UI/InfoBox/InfoBox";
+
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
 
@@ -148,7 +150,23 @@ export default function GenerateAndEditResume() {
         </aside>
         <main className="tailor-container">
             <header className="header">
-            <h1 className="welcome-title">Generate &amp; Edit Resume</h1>
+                <h1 className="welcome-title">Generate & Edit Resume</h1>
+<InfoBox
+  items={[
+    <>
+      <strong>This resume</strong> will be customized to <strong>match the job description more closely</strong> by highlighting and incorporating the keywords you selected.
+    </>,
+    <>
+      After generation, you can <strong>edit the content</strong> to make it your own.
+    </>,
+    <>
+      You can <strong>save the final version to your library</strong> or <strong>download it to your computer</strong> as a text or PDF file.
+    </>
+  ]}
+/>
+
+
+
             </header>
 
             {masterDocID && jdContent && (
@@ -176,6 +194,11 @@ export default function GenerateAndEditResume() {
                 {postGenSim != null && (
                 <div style={{ marginTop: 12 }}>
                     <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
+                    {initialSim != null && (
+                    <div style={{ marginTop: 4 }}>
+                        Original Unaltered Resume vs Job Description Similarity: {initialSim}%
+                    </div>
+                    )}
                     {getDifference() != null && (
                     <div style={{ color: getDifference() > 0 ? "green" : "black", marginTop: 4 }}>
                         {getDifference() > 0 ? "Percentage Improvement: " : "Percentage Difference: "}

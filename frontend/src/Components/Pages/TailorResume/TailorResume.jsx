@@ -363,9 +363,14 @@ export default function TailorResume() {
 
             {postGenSim != null && (
               <div style={{ marginTop: 12 }}>
-                <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}% 
+                <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
+                 {initialSim != null && (
+                  <div style={{ marginTop: 4, fontWeight: "normal" }}>
+                    Original Resume vs Job Description Similarity: {initialSim}%
+                  </div>
+                )}
                 {getSimilarityDifference() != null && (
-                  <div style={{ color: getSimilarityDifference() > 0 ? "green" : "black", marginTop: 4 }}>
+                  <div style={{ color: getSimilarityDifference() > 0 ? "green" : "red", marginTop: 4 }}>
                     {getSimilarityDifference() > 0 ? "Percentage Improvement: " : "Percentage Difference: "}
                     <strong>{Math.abs(getSimilarityDifference()).toFixed(1)}%</strong>
                   </div>

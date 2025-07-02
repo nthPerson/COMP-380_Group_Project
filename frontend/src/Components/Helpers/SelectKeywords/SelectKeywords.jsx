@@ -9,6 +9,7 @@ import ProfileExtractor from "../ProfileExtractor/ProfileExtractor";
 import { usePdf } from "../../PdfContext";
 import { useTargetedResume } from "../../TargetedResumeContext";
 
+import InfoBox from "../../UI/InfoBox/InfoBox";
 import "../../Sidebar/Sidebar.css";
 
 
@@ -42,9 +43,22 @@ export default function SelectKeywords() {
             <Sidebar user={user} />
         </aside>
         <main className="tailor-container">
-            <header className="header">
-            <h1 className="welcome-title">Select Keywords</h1>
-            </header>
+             <header className="header">
+          <h1 className="welcome-title" style={{ marginBottom: "1.75rem" }}>
+            Select Keywords
+          </h1>
+          <InfoBox
+            items={[
+              <>
+                <strong>Select keywords</strong> to include in your tailored resume to increase its relevance to the job description.
+              </>,
+              <>
+                <strong>Skills highlighted in yellow</strong> are ones that match between your resume and the job description.
+              </>
+            ]}
+          />
+        </header>
+
 
             {masterDocID && jdContent ? (
             <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
