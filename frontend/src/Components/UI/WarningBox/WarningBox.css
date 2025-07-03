@@ -1,0 +1,43 @@
+/* WarningBox.css */
+/* Matches InfoBox width + padding, but with a gentle yellow pulse */
+
+.warning-box {
+  /* width & centering */
+  width: 100%;
+  max-width: 900px;     /* same cap as InfoBox */
+  margin: 0.5rem auto;    /* same vertical gap as InfoBox */
+  max-height: max-content;
+
+  /* background, border & shadow */
+  background-color: #fffbea;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* padding inside — equal top/bottom and left/right */
+  /* you can tweak these two values independently if you want */
+  padding: 1rem;
+
+  /* pulse animation */
+  animation: warning-pulse 2s ease-in-out infinite;
+  
+  /* center text horizontally */
+  text-align: center;
+}
+
+/* paragraph reset & font sizing */
+.warning-box__message {
+  margin: 0;          /* remove default <p> margins */
+  font-size: 1rem;    /* same as InfoBox text */
+  line-height: 1.5;   /* comfortable reading */
+  color: #333;
+}
+
+/* pulse keyframes */
+@keyframes warning-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 223, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 223, 0, 0);
+  }
+}

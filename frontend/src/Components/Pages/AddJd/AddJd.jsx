@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
-import JdFromUrl from "../../Helpers/JdForm/JdFromUrl";
-import JdFromText from "../../Helpers/JdForm/JdFromText";
+import UnifiedJdInput from "../../Helpers/JdForm/UnifiedJdInput";
 import { usePdf } from "../../PdfContext";
 import { getSimilarityScore } from "../../../services/resumeService";
 import { useTargetedResume } from "../../TargetedResumeContext";
+import InfoBox from "../../UI/InfoBox/InfoBox";
+import NavigationButton from "../../UI/NavigationButton/NavigationButton";
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
+
 
 export default function AddJd() {
     const navigate = useNavigate();
@@ -58,66 +59,99 @@ export default function AddJd() {
     if (!user) {
         return (
             <p className="loading-text">
-                <span className="spinner"/> Loading...
+                <span className="spinner" /> Loading...
             </p>
         );
     }
 
     return (
         <div className="layout">
-        <aside className="sidebar">
+            
             <Sidebar user={user} />
-        </aside>
-        <main className="tailor-container">
-            <header className="header">
-            <h1 className="welcome-title">Add Job Description</h1>
-            </header>
+            
+            <main className="tailor-container">
+                <header className="header">
+                    <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>
+                        Add Job Description
+                    </h1>
+                    <InfoBox
+                        items={[
+                            <>
+                                <strong>Paste a job description</strong> so the system can extract required skills, qualifications, and responsibilities.
+                            </>,
+                            <>
+                                Use either a URL <strong>or</strong> the full job posting text — whatever you prefer.
+                            </>
+                        ]}
+                    />
+                </header>
+            
+            {/* <div className="tool-section" data-aos="fade-up">
+                <UnifiedJdInput
+                    user={user}
+                    onExplanationReceived={handleExplanationReceived}
+                    onError={handleUrlError}
+                    onFocus={clearErrorState}
+                />
+                <h2>Job Description Summary</h2>
+                {jdExplanation && (
+                    <p>{jdExplanation}</p>
+                )}
 
-            <ToolSection title="Paste a Job Description (URL)" delay={100}>
-            <JdFromUrl user={user} onExplanationReceived={handleExplanationReceived} onError={handleUrlError} />
+                {initialSim != null && (
+                    <span>
+                        <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
+                    </span>
+                )}
+            </div> */}
+
+            <ToolSection title="Paste a Job Description" delay={100} extraClass={highlightTextInput ? "highlighted-section" : ""}>
+            <UnifiedJdInput
+              user={user}
+              onExplanationReceived={handleExplanationReceived}
+              onError={handleUrlError}
+              onFocus={clearErrorState}
+            />
             {urlError && <div className="url-error-message">{urlError}</div>}
             </ToolSection>
 
-            <div className="divider"><strong>&mdash; OR &mdash;</strong></div>
+                {jdExplanation && (
+                    <ToolSection title="Job Description Summary" delay={300}>
+                        <p>{jdExplanation}</p>
+                    </ToolSection>
+                )}
 
-            <ToolSection title="Paste a Job Description (Text)" delay={200} extraClass={highlightTextInput ? "highlighted-section" : ""}>
-            <JdFromText user={user} onExplanationReceived={handleExplanationReceived} onFocus={clearErrorState} />
-            </ToolSection>
+                {initialSim != null && (
+                    <div className="tool-section" data-aos="fade-up">
+                        <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
+                    </div>
+                )}
 
-            {jdExplanation && (
-            <ToolSection title="Gemini's Explanation" delay={300}>
-                <p>{jdExplanation}</p>
-            </ToolSection>
-            )}
+                <div className="nav-buttons-row">
+                    <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>
+                    <NavigationButton to="/selectKeywords" disabled={!(masterDocID && jdContent)}>
+                        Next: Select Keywords to Emphasize!
+                    </NavigationButton>
+                </div>
 
-            {initialSim != null && (
-            <div className="tool-section" data-aos="fade-up">
-                <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
-            </div>
-            )}
-
-            <Link to="/selectKeywords" className="get-started-btn">
-              Next: Select Keywords to Emphasize!
-            </Link>
-
-            <div className="logout-container">
-            <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
-            </div>
-        </main>
+                <div className="logout-container">
+                    <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
+                </div>
+            </main>
         </div>
     );
-    }
+}
 
-    function ToolSection({ title, delay = 0, extraClass = "", children }) {
+function ToolSection({ title, delay = 0, extraClass = "", children }) {
     return (
         <section
-        className={`tool-section ${extraClass}`.trim()}
-        data-aos="fade-up"
-        data-aos-delay={delay}
-        data-aos-offset="120"
+            className={`tool-section ${extraClass}`.trim()}
+            data-aos="fade-up"
+            data-aos-delay={delay}
+            data-aos-offset="120"
         >
-        <h2>{title}</h2>
-        {children}
+            <h2>{title}</h2>
+            {children}
         </section>
     );
 

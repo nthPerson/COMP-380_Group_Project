@@ -11,13 +11,16 @@ import { usePdf } from "../../PdfContext";
 import { useTargetedResume } from "../../TargetedResumeContext";
 import { getSelectedKeywords } from "../../../services/keywordService";
 import {
-  getSimilarityScore,
-  generateTargetedResumeHtml,
-  saveGeneratedResumePdf,
-  fetchMasterText
+    getSimilarityScore,
+    generateTargetedResumeHtml,
+    saveGeneratedResumePdf,
+    fetchMasterText
 } from "../../../services/resumeService";
 import { resumeTextToHtml } from "../../../utils/resumeHtmlFormatter";
 import { toDiffHtml } from "../../../utils/diffHtml";
+
+import InfoBox from "../../UI/InfoBox/InfoBox";
+import NavigationButton from "../../UI/NavigationButton/NavigationButton";
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
@@ -44,11 +47,11 @@ export default function GenerateAndEditResume() {
         if (!masterDocID || !jdContent) return;
         getSimilarityScore(masterDocID, jdContent).then(({ master_score }) => setInitialSim(master_score)).catch(console.error);
     }, [masterDocID, jdContent]);
-    
+
 
     useEffect(() => {
         if (!masterDocID) return;
-            fetchMasterText(masterDocID).then(setMasterText).catch(console.error);
+        fetchMasterText(masterDocID).then(setMasterText).catch(console.error);
     }, [masterDocID]);
 
     useEffect(() => {
@@ -88,7 +91,7 @@ export default function GenerateAndEditResume() {
         wrapper.innerHTML = generatedHtml;
         pdf.html(wrapper, {
             callback: () => pdf.save("Tailored_Resume.pdf"),
-            margin: [36,36,36,36],
+            margin: [36, 36, 36, 36],
             autoPaging: true,
             html2canvas: { scale: 0.8 }
         });
@@ -110,7 +113,7 @@ export default function GenerateAndEditResume() {
             const wrapper = document.createElement("div");
             wrapper.style.width = "612px";
             wrapper.innerHTML = generatedHtml;
-            await pdf.html(wrapper, { margin:[36,36,36,36], autoPaging:true, html2canvas:{scale:0.8} });
+            await pdf.html(wrapper, { margin: [36, 36, 36, 36], autoPaging: true, html2canvas: { scale: 0.8 } });
             const blob = pdf.output("blob");
             const form = new FormData();
             form.append("file", blob, "Tailored_Resume.pdf");
@@ -136,65 +139,88 @@ export default function GenerateAndEditResume() {
     if (!user) {
         return (
             <p className="loading-text">
-                <span className="spinner"/> Loading...
+                <span className="spinner" /> Loading...
             </p>
         );
     }
 
     return (
         <div className="layout">
-        <aside className="sidebar">
+            
             <Sidebar user={user} />
-        </aside>
-        <main className="tailor-container">
-            <header className="header">
-            <h1 className="welcome-title">Generate &amp; Edit Resume</h1>
-            </header>
+            
+            <main className="tailor-container">
+                <header className="header">
+                    <h1 className="welcome-title">Generate & Edit Resume</h1>
+                    <InfoBox
+                        items={[
+                            <>
+                                <strong>This resume</strong> will be customized to <strong>match the job description more closely</strong> by highlighting and incorporating the keywords you selected.
+                            </>,
+                            <>
+                                After generation, you can <strong>edit the content</strong> to make it your own.
+                            </>,
+                            <>
+                                You can <strong>save the final version to your library</strong> or <strong>download it to your computer</strong> as a text or PDF file.
+                            </>
+                        ]}
+                    />
 
-            {masterDocID && jdContent && (
-            <div className="tool-section" data-aos="fade-up">
-                <button onClick={handleGenerateResume} disabled={isGenerating}>
-                {isGenerating ? "Generating..." : "Generate Targeted Resume"}
-                </button>
-            </div>
-            )}
 
-            {generatedHtml && (
-            <div className="tool-section" data-aos="fade-up">
-                <h3>Resume Changes Highlighted</h3>
-                <div className="diff-container" dangerouslySetInnerHTML={{ __html: diffHtml }} />
-            </div>
-            )}
 
-            {generatedHtml && (
-            <div className="tool-section" data-aos="fade-up">
-                <h3>Edit Your Final Resume</h3>
-                <TinyDiffEditor value={generatedHtml} onEditorChange={setGeneratedHtml} />
-                <button onClick={handleDownloadText}>Download as Text</button>
-                <button onClick={handleDownloadPdf}>Download as PDF</button>
-                <button style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
-                {postGenSim != null && (
-                <div style={{ marginTop: 12 }}>
-                    <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
-                    {getDifference() != null && (
-                    <div style={{ color: getDifference() > 0 ? "green" : "black", marginTop: 4 }}>
-                        {getDifference() > 0 ? "Percentage Improvement: " : "Percentage Difference: "}
-                        <strong>{Math.abs(getDifference()).toFixed(1)}%</strong>
+                </header>
+
+                {masterDocID && jdContent && (
+                    <div className="tool-section" data-aos="fade-up">
+                        <button onClick={handleGenerateResume} disabled={isGenerating}>
+                            {isGenerating ? "Generating..." : "Generate Targeted Resume"}
+                        </button>
                     </div>
-                    )}
-                </div>
                 )}
-            </div>
-            )}
 
-            <Link to="/resumeArchive" className="get-started-btn">
-              That's It! Check Out All Your RezuMes!
-            </Link>
+                {generatedHtml && (
+                    <div className="tool-section" data-aos="fade-up">
+                        <h3>Resume Changes Highlighted</h3>
+                        <div className="diff-container" dangerouslySetInnerHTML={{ __html: diffHtml }} />
+                    </div>
+                )}
 
-            <div className="logout-container">
-            <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
-            </div>
-        </main>
+                {generatedHtml && (
+                    <div className="tool-section" data-aos="fade-up">
+                        <h3>Edit Your Final Resume</h3>
+                        <TinyDiffEditor value={generatedHtml} onEditorChange={setGeneratedHtml} />
+                        <button onClick={handleDownloadText}>Download as Text</button>
+                        <button onClick={handleDownloadPdf}>Download as PDF</button>
+                        <button style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
+                        {postGenSim != null && (
+                            <div style={{ marginTop: 12 }}>
+                                <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
+                                {initialSim != null && (
+                                    <div style={{ marginTop: 4 }}>
+                                        Original Unaltered Resume vs Job Description Similarity: {initialSim}%
+                                    </div>
+                                )}
+                                {getDifference() != null && (
+                                    <div style={{ color: getDifference() > 0 ? "green" : "black", marginTop: 4 }}>
+                                        {getDifference() > 0 ? "Percentage Improvement: " : "Percentage Difference: "}
+                                        <strong>{Math.abs(getDifference()).toFixed(1)}%</strong>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )}
+                <div className="nav-buttons-row">
+                    <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>
+                    <NavigationButton to="/resumeArchive" disabled={!user}>
+                        That's It! Check Out All Your RezuMes!
+                    </NavigationButton>
+                </div>
+
+                <div className="logout-container">
+                    <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
+                </div>
+            </main>
         </div>
     );
 

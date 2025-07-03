@@ -11,7 +11,7 @@ const ResumeViewerModal = ({ isOpen, onClose, pdfUrl }) => {
       style={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.8)",
-          zIndex: 1000,
+          zIndex: 5000,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

@@ -1,0 +1,192 @@
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.archive-container {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
+  flex: 1;
+  max-width: 900px;
+  margin-left: 300px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+/* ===== Tabs ===== */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #3498db;
+  padding-left: 10px;
+  background: #f5f8fa;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
+  position: relative;
+  padding: 8px 16px;
+  margin-right: 4px;
+  background: transparent;
+  border: 2px solid transparent;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.tab:hover {
+  color: #3498db;
+}
+
+.tab.active {
+  background: #f5f8fa;
+  border-color: #3498db;
+  border-bottom: none;
+  margin-bottom: -2px;
+  z-index: 3;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.tab:not(.active) {
+  z-index: 1;
+}
+
+/* ===== Panel (white card) ===== */
+.tool-section,
+.resume-archive-panel {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make the panel fill the space between tabs and logout */
+.resume-archive-panel {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+
+  /* add this: */
+  justify-content: flex-start !important;
+  overflow: hidden; /* panel itself won’t scroll */
+}
+
+/* Only the list inside scrolls */
+.resume-archive-panel .tab-content {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.3) ;
+  padding-right: 12px; 
+}
+.resume-archive-panel .tab-content::-webkit-scrollbar-track-piece {
+  margin: 40px 0;    /* 40px gap at top & bottom of the track */
+}
+/* Webkit scrollbar styling */
+.resume-archive-panel .tab-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.resume-archive-panel .tab-content::-webkit-scrollbar-track {
+  background: transparent;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.resume-archive-panel .tab-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.resume-archive-panel .tab-content:hover::-webkit-scrollbar-thumb,
+.resume-archive-panel .tab-content:active::-webkit-scrollbar-thumb {
+  opacity: 0.6;
+}
+
+/* ===== Action Buttons ===== */
+.actions-bar {
+  position: static;
+  margin: 0 0 1rem;
+}
+
+/* group buttons and push group to the right */
+.button-group-right {
+  margin-left: auto;
+  display: flex;
+  gap: 1rem;
+}
+
+/* Glow effect when active */
+.actions-bar.has-selection .button {
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.6);
+  transition: box-shadow 0.2s ease;
+}
+.actions-bar.has-selection .button:hover {
+  box-shadow: 0 0 12px rgba(52, 152, 219, 0.8);
+}
+
+/* ===== Lists ===== */
+.resume-list {
+  list-style: none;
+  padding: 0;
+}
+
+.resume-item {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===== Empty state ===== */
+.empty-message {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin: 2rem 0;
+}
+
+/* ===== Logout ===== */
+.logout-container {
+  margin-top: 20px;
+}
+.logout-btn {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.logout-btn:hover {
+  background: #c82333;
+}
+/* show the no‐entry cursor and muted style on disabled buttons */
+.actions-bar .button:disabled {
+  cursor: not-allowed;       /* crossed‐circle on hover */
+  opacity: 0.5;               /* dim it so it reads “inactive” */
+  box-shadow: none !important;/* remove any glow */
+}

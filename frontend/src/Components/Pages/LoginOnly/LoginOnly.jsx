@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../LoginSignup/LoginSignup.css";
-
+import { useNavigate, Link } from "react-router-dom";
+import "../Signup/Signup.css";
+import logo_icon from '../../Assets/logo_icon.png';
 import email_icon from "../../Assets/email_icon.png";
 import password_icon from "../../Assets/password_icon.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -16,8 +16,8 @@ export default function LoginOnly() {
   const [loading, setLoading] = useState(false);
 
   // Field-specific error flags + an error message
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState(false);
 
@@ -27,11 +27,10 @@ export default function LoginOnly() {
 
   // “Login” button handler
   const handleLoginSubmit = async (e) => {
-    e.preventDefault();  
+    e.preventDefault();
     // Clear previous errors
-    setEmailError(false);
-    setPasswordError(false);
-    setErrorMsg("");
+    setEmailError("");
+    setPasswordError("");
 
     if (loading) return;
     setLoading(true);
@@ -47,9 +46,9 @@ export default function LoginOnly() {
 
       switch (err.code) {
         case "empty-fields":
-          if (!email) setEmailError(true);
-          if (!password) setPasswordError(true);
-          setErrorMsg("Please enter both email and password.");
+          if (!email) setEmailError("Please enter your email.");
+          if (!password) setPasswordError("Please enter your password.");
+          setLoading(false);
           break;
 
         case "auth/invalid-email":
@@ -64,7 +63,6 @@ export default function LoginOnly() {
           break;
 
         case "auth/invalid-credential":
-          setPasswordError(true);
           setErrorMsg("Incorrect password or Email.");
           break;
 
@@ -75,113 +73,135 @@ export default function LoginOnly() {
         default:
           setErrorMsg("Login failed. Please try again.");
       }
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="container">
-      {/* Header */}
-      <div className="header">
-        <div className="text">Log In</div>
-        <div className="underline"></div>
-      </div>
-
-      {/* Input fields */}
-      <form className="inputs" onSubmit={handleLoginSubmit} noValidate>
-        {/* Email Input */}
-        <div className={`input ${emailError ? "error" : ""}`}>
-          <img src={email_icon} alt="Email icon" /> {/* Image for email icon */}
-          <input
-            autoFocus
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              // When user types, this function runs
-              setEmail(e.target.value); // Update 'email' state to match what the user typed
-              if (emailError) setEmailError(false);
-              if (errorMsg) setErrorMsg(""); // Error message clears once user starts typing again
-            }}
-            required
-          />
+    <>
+      <header className="site-banner">
+        <div className="top-line"></div>
+        <div className="banner-content">
+          <div className="banner-left">
+            <Link to="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
+              <img src={logo_icon} alt="Logo icon" className="banner-logo" />
+              <span className="banner-title">
+                <span className="light-blue">Rezu</span>
+                <span className="solid-blue">Me</span>
+              </span>
+            </Link>
+          </div>
+        </div>
+      </header>
+      <div className="container">
+        {/* Header */}
+        <div className="header">
+          <div className="text">Log In</div>
+          <div className="underline"></div>
         </div>
 
-        {/* Password with eye toggle */}
-        <div
-          className={`input ${passwordError ? "error" : ""}`}
-          style={{ position: "relative" }}
-        >
-          <img src={password_icon} alt="Password icon" />
+        {/* Input fields */}
+        <form className="inputs" onSubmit={handleLoginSubmit} noValidate>
+          {/* Email Input */}
+          <div className={`input ${emailError ? "error" : ""}`}>
+            <img src={email_icon} alt="Email icon" /> {/* Image for email icon */}
+            <input
+              autoFocus
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                // When user types, this function runs
+                setEmail(e.target.value);
+                if (emailError) setEmailError(false);
+              }}
+              required
+            />
+          </div>
+          {emailError && (
+            <p className="field-error">{emailError}</p>
+          )}
 
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              if (passwordError) setPasswordError(false);
-              if (errorMsg) setErrorMsg("");
-            }}
-            style={{ paddingRight: "2.5rem" }}
-          />
-
-          <span
-            className={`toggle-icon ${passwordError ? "error" : ""}`}
-            onClick={() => setShowPassword((prev) => !prev)}
+          {/* Password with eye toggle */}
+          <div
+            className={`input ${passwordError ? "error" : ""}`}
+            style={{ position: "relative" }}
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
-          </span>
-        </div>
-   
+            <img src={password_icon} alt="Password icon" />
 
-      {/* Inline error message */}
-      {errorMsg && (
-        <p className={successMsg ? "success-message" : "error-message"}>
-          {errorMsg}
-        </p>
-      )}
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPassword(e.target.value);
+                if (passwordError) setPasswordError(false);
+              }}
+              style={{ paddingRight: "2.5rem" }}
+              required
+            />
 
-      {/* “Forgot Password?” (stub) */}
-      <div className="forgot-password">
-        Forgot Password?
-        <span
-          style={{ cursor: "pointer", color: "var(--primary)" }}
-          onClick={async () => {
-            setEmailError(false);
-            setErrorMsg("");
-            try {
-              await handlePasswordReset(email);
-              setSuccessMsg(true);
-              setErrorMsg("Password reset email sent. Check your inbox.");
-            } catch (err) {
-              if (err.message === "empty-email") {
-                setEmailError(true);
-                setErrorMsg("Please enter your email.");
-              } else if (err.message === "invalid-email-format") {
-                setEmailError(true);
-                setErrorMsg("Please enter a valid email address.");
-              } else {
-                console.error("Password Reset failed", err.message);
-                setErrorMsg("Failed to send reset email. Try again.");
-              }
-            }
-          }}
-        >
-          {" "}
-          Click here!
-        </span>
+            <span
+              className={`toggle-icon ${passwordError ? "error" : ""}`}
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+          {passwordError && (<p className="field-error">{passwordError}</p>
+          )}
+          {/* “Forgot Password?” (stub) */}
+          <div className="forgot-password">
+            Forgot Password?
+            <span
+              style={{ cursor: "pointer", color: "var(--primary)" }}
+              onClick={async () => {
+                setEmailError(false);
+                setErrorMsg("");
+                try {
+                  await handlePasswordReset(email);
+                  setSuccessMsg(true);
+                  setErrorMsg("Password reset email sent. Check your inbox.");
+                } catch (err) {
+                  if (err.message === "empty-email") {
+                    setEmailError(true);
+                    setErrorMsg("Please enter your email.");
+                  } else if (err.message === "invalid-email-format") {
+                    setEmailError(true);
+                    setErrorMsg("Please enter a valid email address.");
+                  } else {
+                    console.error("Password Reset failed", err.message);
+                    setErrorMsg("Failed to send reset email. Try again.");
+                  }
+                }
+              }}
+            >
+
+              {" "}
+              Click here!
+            </span>
+          </div>
+
+
+          <div className="submit-container">
+            <button
+              type="button"
+              className="submit back"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </button>
+            {/* Login button */}
+
+            <button type="submit" className="submit" >
+              Login
+            </button>
+          </div>
+        </form>
+
       </div>
-
-      {/* Login button */}
-      <div className="submit-container">
-        <button type="submit" className="submit" >
-          Login
-        </button>
-      </div>
-      </form>
-
-    </div>
+    </>
   );
 }
