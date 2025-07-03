@@ -17,36 +17,36 @@ import "../../Sidebar/Sidebar.css";
 
 
 export default function SelectKeywords() {
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    const { masterDocID } = usePdf();
-    const { jdContent } = useTargetedResume();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const { masterDocID } = usePdf();
+  const { jdContent } = useTargetedResume();
 
-    useEffect(() => {
-        const unsub = onAuthStateChanged(auth, (u) => setUser(u));
-        return () => unsub();
-    }, []);
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => setUser(u));
+    return () => unsub();
+  }, []);
 
-    const handleSignOut = async () => {
-        await auth.signOut();
-        navigate("/", { replace: true });
-    };
+  const handleSignOut = async () => {
+    await auth.signOut();
+    navigate("/", { replace: true });
+  };
 
-    if (!user) {
-        return (
-            <p className="loading-text">
-                <span className="spinner"/> Loading...
-            </p>
-        );
-    }
-
+  if (!user) {
     return (
-        <div className="layout">
-        <aside className="sidebar">
-            <Sidebar user={user} />
-        </aside>
-        <main className="tailor-container">
-             <header className="header">
+      <p className="loading-text">
+        <span className="spinner" /> Loading...
+      </p>
+    );
+  }
+
+  return (
+    <div className="layout">
+      <aside className="sidebar">
+        <Sidebar user={user} />
+      </aside>
+      <main className="tailor-container">
+        <header className="header">
           <h1 className="welcome-title" style={{ marginBottom: "1.75rem" }}>
             Select Keywords
           </h1>
@@ -63,7 +63,7 @@ export default function SelectKeywords() {
         </header>
 
 
-            {/* ---- this is the only place WarningBox ever appears ---- */}
+        {/* ---- this is the only place WarningBox ever appears ---- */}
         {masterDocID && jdContent ? (
           <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
         ) : (
@@ -73,15 +73,18 @@ export default function SelectKeywords() {
 
         )}
 
-            <NavigationButton to="/generateEditResume">
-              Next: Generate and Edit Your RezuMe!
-            </NavigationButton>
-
-            <div className="logout-container">
-            <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
-            </div>
-        </main>
+        <div className="nav-buttons-row">
+          <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>
+          <NavigationButton to="/generateEditResume" disabled={!(masterDocID && jdContent)}>
+            Next: Generate and Edit Your RezuMe!
+          </NavigationButton>
         </div>
-    );
+
+        <div className="logout-container">
+          <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
+        </div>
+      </main>
+    </div>
+  );
 
 }

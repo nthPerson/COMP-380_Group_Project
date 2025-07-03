@@ -3,7 +3,7 @@
   display: block;
 
   /* fixed width, but never larger than its container */
-  width: 600px;
+  width: 500px;
   max-width: 100%;
   max-height: max-content;
 
@@ -19,11 +19,39 @@
   border-radius: 8px;
   text-decoration: none;
   text-align: center;
+  border: none;
+  cursor: pointer;
 
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .navigation-button:hover {
-  background: #2980b9;
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52,152,219,0.4);
 }
+	/* ===== Disabled State ===== */
+  .navigation-button.disabled,
+  .navigation-button[aria-disabled="true"] {
+    cursor: not-allowed;        /* crossed‐circle */
+    opacity: 0.5;               /* dim it so it reads “inactive” */
+    box-shadow: none !important;/* if you ever add glows later */
+  }
+  
+  /* override hover for disabled */
+  .navigation-button.disabled:hover,
+  .navigation-button[aria-disabled="true"]:hover {
+    background: #3498db; /* same as normal, no darker state */
+    transform: none;
+  }
+  
+  .nav-buttons-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .nav-buttons-row .navigation-button {
+    /* allow them to grow & shrink */
+    flex: 1;
+    width: auto;       /* drop the fixed 600px */
+    max-width: none;   /* let flexbox do the sizing */
+  }

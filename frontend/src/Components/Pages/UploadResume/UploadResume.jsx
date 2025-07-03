@@ -18,7 +18,7 @@ import "../TailorResume/TailorResume.css";
 export default function UploadResume() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const { fetchPdfsAndMaster } = usePdf();
+    const { fetchPdfsAndMaster, masterDocID } = usePdf();
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, u => setUser(u));
@@ -68,7 +68,7 @@ export default function UploadResume() {
             </div>
 
 
-            <NavigationButton to="/addJobDescription">
+            <NavigationButton to="/addJobDescription" disabled={!masterDocID}>
                 Next: Add a Job Description!
             </NavigationButton>
 
