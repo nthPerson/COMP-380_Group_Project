@@ -28,7 +28,7 @@
 /* main heading */
 .heading {
   font-size: 2.5rem;
-  color: #1e3a8a;
+  color: #1f639a;
   margin-bottom: 0.25rem;
 }
 
@@ -69,7 +69,7 @@
   top: 0;
   width: 2rem;
   height: 2rem;
-  background: #1e40af;
+  background: #3498db;
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -101,12 +101,14 @@
 }
 
 .button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1.1rem;
+  padding: 1rem 2.5rem;      /* taller (1rem top/bottom) and wider (2.5rem sides) */
+  font-size: 2rem;         /* bump up font size */
   font-weight: 600;
-  border-radius: 0.75rem;
+  border-radius: 1rem;       /* a bit rounder */
   text-decoration: none;
   transition: transform 0.25s ease, opacity 0.25s ease;
+  min-width: 200px;          /* guarantee they’re at least 200px wide */
+  text-align: center;        /* center the label */
 }
 
 .button:hover {
@@ -115,18 +117,20 @@
 }
 
 .primaryButton {
-  background: #1e3a8a;
+  background: #3498db;
   color: #fff;
 }
 
 .secondaryButton {
-  background: #e2e8f0;
-  color: #1e3a8a;
+  /* background: #e2e8f0;
+  color:#3498db; */
+  background: #3498db;
+  color: #fff;
 }
 
 .orText {
-  font-size: 1.1rem;
-  color: #64748b;
+  font-size: 1.25rem;
+  color: #1f639a;
   white-space: nowrap;
 }
 
