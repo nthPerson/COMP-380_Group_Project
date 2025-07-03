@@ -364,7 +364,7 @@ const ResumeBuilderForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Company *
+                Company 
               </label>
               <input
                 type="text"
@@ -376,7 +376,7 @@ const ResumeBuilderForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Position *
+                Position 
               </label>
               <input
                 type="text"
@@ -388,7 +388,7 @@ const ResumeBuilderForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Start Date *
+                Start Date 
               </label>
               <input
                 type="date"
@@ -470,7 +470,7 @@ const ResumeBuilderForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Institution *
+                Institution 
               </label>
               <input
                 type="text"
@@ -482,7 +482,7 @@ const ResumeBuilderForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Degree *
+                Degree 
               </label>
               <input
                 type="text"
@@ -494,7 +494,7 @@ const ResumeBuilderForm = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Field of Study *
+                Field of Study 
               </label>
               <input
                 type="text"
@@ -771,30 +771,32 @@ const ResumeBuilderForm = () => {
         {renderCurrentStep()}
       </div>
 
-      {/* Navigation Buttons */}
-      <div className="flex justify-between">
-        <button
-          onClick={prevStep}
-          disabled={currentStep === 0}
-          className={`button button-secondary ${currentStep === 0 ? 'button-disabled' : ''}`}
-        >
-          <ChevronLeft size={16} />
-          Previous
-        </button>
+{/* Navigation Buttons */}
+<div className="flex justify-between">
+  <button
+    onClick={prevStep}
+    disabled={currentStep === 0}
+    className={`button button-secondary ${currentStep === 0 ? 'button-disabled' : ''}`}
+  >
+    <ChevronLeft size={16} />
+    Previous
+  </button>
 
-        <button
-          onClick={currentStep === steps.length - 1 ? handleSaveResume : nextStep}
-          className="button button-primary"
-        >
-          {currentStep === steps.length - 1 ? 'Save Resume' : 'Next'}
-          {currentStep !== steps.length - 1 && <ChevronRight size={16} />}
-        </button>
+  <button
+    onClick={currentStep === steps.length - 1 ? handleSaveResume : nextStep}
+    className="button button-primary"
+  >
+    {currentStep === steps.length - 1 ? 'Save Resume' : 'Next'}
+    {currentStep !== steps.length - 1 && <ChevronRight size={16} />}
+  </button>
+</div>
 
-        {/* Navigation to Start Tailoring */}
-        <Link to="/uploadResume" className="get-started-btn">
-            Click Here to Start Tailoring Your New Resume!
-        </Link>
-      </div>
+{/* Separate container for the Get Started button */}
+<div className="button-wrapper">
+  <Link to="/uploadResume" className="get-started-btn">
+    Click Here to Start Tailoring Your New Resume!
+  </Link>
+</div>
     </div>
     </div>
   );
