@@ -5,7 +5,7 @@ import 'aos/dist/aos.css';
 
 /* ===== Pages ===== */
 import LandingPage    from './Components/Pages/LandingPage/LandingPage';
-import LoginSignup from './Components/Pages/LoginSignup/LoginSignup';
+import LoginSignup from './Components/Pages/Signup/Signup';
 import LoginOnly   from './Components/Pages/LoginOnly/LoginOnly';   
 import UserProfile    from './Components/Pages/UserProfile/UserProfile';
 import WelcomeInstructions from './Components/Pages/WelcomeInstructions/WelcomeInstructions';
