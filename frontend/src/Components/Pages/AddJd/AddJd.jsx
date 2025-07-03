@@ -85,6 +85,25 @@ export default function AddJd() {
                         ]}
                     />
                 </header>
+            
+            {/* <div className="tool-section" data-aos="fade-up">
+                <UnifiedJdInput
+                    user={user}
+                    onExplanationReceived={handleExplanationReceived}
+                    onError={handleUrlError}
+                    onFocus={clearErrorState}
+                />
+                <h2>Job Description Summary</h2>
+                {jdExplanation && (
+                    <p>{jdExplanation}</p>
+                )}
+
+                {initialSim != null && (
+                    <span>
+                        <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
+                    </span>
+                )}
+            </div> */}
 
             <ToolSection title="Paste a Job Description" delay={100} extraClass={highlightTextInput ? "highlighted-section" : ""}>
             <UnifiedJdInput

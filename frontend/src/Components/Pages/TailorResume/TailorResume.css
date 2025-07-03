@@ -36,7 +36,9 @@
   margin: 0 auto;
   padding: 2rem;
   max-width: 1200px;
-  background-color: #e6f3ff;
+  /* background-color: #e6f3ff; ORIGINAL */
+  /* background-color: #ffffff; */
+  background: linear-gradient(135deg, #f8fbff 0%, #e4f2ff 100%);
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: grid;
