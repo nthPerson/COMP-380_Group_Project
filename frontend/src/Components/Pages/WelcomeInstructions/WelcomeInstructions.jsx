@@ -20,7 +20,7 @@ const steps = [
     desc: "Select the skills or terms you want highlighted",
   },
   {
-    title: "Generate Your Tailored Resume",
+    title: "Generate Your Tailored RezuMe",
     desc: "RezuMe will craft a custom version for you",
   },
   {
@@ -64,13 +64,15 @@ export default function WelcomeInstructions() {
         </ol>
 
         <div className="actions">
-          <Link to="/uploadResume" className="button primaryButton">
-            Upload Resume
+          <Link to="/createResume" className="button">
+            Create RezuMe
           </Link>
           <span className="orText">or</span>
-          <Link to="/createResume" className="button secondaryButton">
-            Create New Resume
+          <Link to="/uploadResume" className="button">
+            Upload Resume
           </Link>
+          
+          
         </div>
       </main>
     </div>
