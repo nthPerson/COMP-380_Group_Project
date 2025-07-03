@@ -6,8 +6,8 @@ body {
   min-height: 100vh;
 }
 :root {
-  --primary: #4a90e2;
-  --accent:  #50e3e3;
+  --primary: #3498db;
+  --accent:  #9ebbd6;
   --bg:      #f9fafb;
   --text:    #333333;
   --muted:   #777777;
@@ -17,11 +17,11 @@ body {
 /* Container styling (unchanged) */
 .container {
   max-width: 400px;
-  margin: 4rem auto;
+  margin: 8rem auto;
   padding: 2rem;
   background: white;
   border-radius: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 18px rgba(0,0,0,0.05);
   font-family: 'Fira Sans Condensed', sans-serif;
   color: var(--text);
 }
