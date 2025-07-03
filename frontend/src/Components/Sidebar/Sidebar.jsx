@@ -8,6 +8,7 @@ import archive_icon from "../Assets/library_icon.png";
 import magicwand_icon from "../Assets/magic-wand_icon.png";
 import resume_icon from "../Assets/resume_icon.png";
 import logout_icon from "../Assets/logout_icon.png";
+import welcome_icon from "../Assets/hello.png";
 
 const Sidebar = ({ user }) => {
   const navigate = useNavigate();
@@ -194,7 +195,7 @@ const Sidebar = ({ user }) => {
                 title="Welcome"
                 onClick={isMobile ? closeMobileSidebar : undefined}
               >
-                <img src={logo_icon} alt="Welcome icon" />
+                <img src={welcome_icon} alt="Welcome icon" />
                 <span className="nav-text">Welcome</span>
               </Link>
             </li>
