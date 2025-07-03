@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
-import JdFromUrl from "../../Helpers/JdForm/JdFromUrl";
-import JdFromText from "../../Helpers/JdForm/JdFromText";
+import UnifiedJdInput from "../../Helpers/JdForm/UnifiedJdInput";
 import { usePdf } from "../../PdfContext";
 import { getSimilarityScore } from "../../../services/resumeService";
 import { useTargetedResume } from "../../TargetedResumeContext";
@@ -90,19 +88,18 @@ export default function AddJd() {
 
 
 
-            <ToolSection title="Paste a Job Description (URL)" delay={100}>
-            <JdFromUrl user={user} onExplanationReceived={handleExplanationReceived} onError={handleUrlError} />
+            <ToolSection title="Paste a Job Description" delay={100} extraClass={highlightTextInput ? "highlighted-section" : ""}>
+            <UnifiedJdInput
+              user={user}
+              onExplanationReceived={handleExplanationReceived}
+              onError={handleUrlError}
+              onFocus={clearErrorState}
+            />
             {urlError && <div className="url-error-message">{urlError}</div>}
             </ToolSection>
 
-            <div className="divider"><strong>&mdash; OR &mdash;</strong></div>
-
-            <ToolSection title="Paste a Job Description (Text)" delay={200} extraClass={highlightTextInput ? "highlighted-section" : ""}>
-            <JdFromText user={user} onExplanationReceived={handleExplanationReceived} onFocus={clearErrorState} />
-            </ToolSection>
-
             {jdExplanation && (
-            <ToolSection title="Gemini's Explanation" delay={300}>
+            <ToolSection title="Job Description Summary" delay={300}>
                 <p>{jdExplanation}</p>
             </ToolSection>
             )}
