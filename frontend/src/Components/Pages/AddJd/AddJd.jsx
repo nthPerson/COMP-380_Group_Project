@@ -66,9 +66,9 @@ export default function AddJd() {
 
     return (
         <div className="layout">
-            <aside className="sidebar">
-                <Sidebar user={user} />
-            </aside>
+            
+            <Sidebar user={user} />
+            
             <main className="tailor-container">
                 <header className="header">
                     <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>

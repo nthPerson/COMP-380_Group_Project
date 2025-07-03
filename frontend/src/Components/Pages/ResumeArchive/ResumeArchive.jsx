@@ -99,9 +99,9 @@ export default function ResumeArchive() {
     );
     return (
         <div className="layout">
-            <aside className="sidebar">
-                <Sidebar user={user} />
-            </aside>
+            
+            <Sidebar user={user} />
+            
             <main className="archive-container">
                 <header className="header">
                     <h1 className="welcome-title">RezuMe Archive</h1>

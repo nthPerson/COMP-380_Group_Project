@@ -42,9 +42,9 @@ export default function SelectKeywords() {
 
   return (
     <div className="layout">
-      <aside className="sidebar">
-        <Sidebar user={user} />
-      </aside>
+      
+      <Sidebar user={user} />
+      
       <main className="tailor-container">
         <header className="header">
           <h1 className="welcome-title" style={{ marginBottom: "1.75rem" }}>

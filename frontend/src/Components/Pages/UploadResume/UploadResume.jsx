@@ -44,9 +44,9 @@ export default function UploadResume() {
 
     return (
         <div className="layout">
-        <aside className="sidebar">
-            <Sidebar user={user} />
-        </aside>
+        
+        <Sidebar user={user} />
+        
         <main className="tailor-container">
             <header className="header">
             <h1 className="welcome-title">Upload Resume</h1>

@@ -243,9 +243,9 @@ export default function TailorResume() {
 
   return (
     <div className="layout">
-      <aside className="sidebar">
-        <Sidebar user={user} />
-      </aside>
+      
+      <Sidebar user={user} />
+      
       <main className="tailor-container">
         <header className="header" data-aos="fade-down">
           <h1 className="welcome-title">
