@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import NavigationButton from "../../UI/NavigationButton/NavigationButton"; //this already imports Link or utilizes it
 
 import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
@@ -9,13 +10,15 @@ import UploadPdf from "../../Helpers/UploadPdf/UploadPdf";
 import ResumeLibrary from "../../Helpers/ResumeLibrary/ResumeLibrary";
 import { usePdf } from "../../PdfContext";
 
+
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
+
 
 export default function UploadResume() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const { fetchPdfsAndMaster } = usePdf();
+    const { fetchPdfsAndMaster, masterDocID } = usePdf();
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, u => setUser(u));
@@ -41,9 +44,9 @@ export default function UploadResume() {
 
     return (
         <div className="layout">
-        <aside className="sidebar">
-            <Sidebar user={user} />
-        </aside>
+        
+        <Sidebar user={user} />
+        
         <main className="tailor-container">
             <header className="header">
             <h1 className="welcome-title">Upload Resume</h1>
@@ -58,6 +61,8 @@ export default function UploadResume() {
 
             {/* This section adds in the explaination for the master resume */}
             <div className="tool-section" data-aos="fade-up">
+                {/* <UploadPdf /> */}
+
                 <ResumeLibrary showGenerated={false} showUploaded={true} />
                 <p style={{ marginTop: "12px", fontSize: "0.95rem", color: "#444" }}>
                     <strong>Note:</strong> The <em>Master Resume</em> will be analyzed by the system to generate a tailored resume based on the job description you select.
@@ -65,9 +70,9 @@ export default function UploadResume() {
             </div>
 
 
-            <Link to="/addJobDescription" className="get-started-btn">
-              Next: Add a Job Description!
-            </Link>
+            <NavigationButton to="/addJobDescription" disabled={!masterDocID}>
+                Next: Add a Job Description!
+            </NavigationButton>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>

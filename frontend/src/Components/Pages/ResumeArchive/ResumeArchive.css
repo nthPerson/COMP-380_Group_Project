@@ -4,6 +4,8 @@
 }
 
 .archive-container {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
   flex: 1;
   max-width: 900px;
   margin-left: 300px;
@@ -27,6 +29,8 @@
 }
 
 .tab {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
   position: relative;
   padding: 8px 16px;
   margin-right: 4px;
@@ -142,6 +146,8 @@
 }
 
 .resume-item {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 10px;
@@ -153,6 +159,8 @@
 
 /* ===== Empty state ===== */
 .empty-message {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
   text-align: center;
   color: #666;
   font-style: italic;
@@ -164,6 +172,8 @@
   margin-top: 20px;
 }
 .logout-btn {
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
   background: #dc3545;
   color: #fff;
   border: none;
