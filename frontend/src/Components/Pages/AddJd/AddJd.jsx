@@ -113,7 +113,7 @@ export default function AddJd() {
                     <NavigationButton to="/selectKeywords" disabled={!(masterDocID && jdContent)}>
                         Next: Select Keywords to Emphasize!
                     </NavigationButton>
-                </div>‰
+                </div>
 
                 <div className="logout-container">
                     <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
