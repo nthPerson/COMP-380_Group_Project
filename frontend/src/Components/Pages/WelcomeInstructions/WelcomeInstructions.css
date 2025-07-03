@@ -11,7 +11,7 @@
 
 /* content wrapper */
 .content {
-  max-width: 600px;
+  max-width: 900px;
   width: 100%;
   text-align: center;
   color: #344153;
@@ -91,7 +91,7 @@
   color: #475569;
 }
 
-/* action buttons */
+/* ===== action buttons ===== */
 .actions {
   display: flex;
   justify-content: center;
@@ -100,14 +100,15 @@
   gap: 1rem;
 }
 
+/* base button style: more padding, larger text */
 .button {
-  padding: 1rem 2.5rem;      /* taller (1rem top/bottom) and wider (2.5rem sides) */
+  padding: 1.5rem 4rem;      /* taller (1rem top/bottom) and wider (2.5rem sides) */
   font-size: 2rem;         /* bump up font size */
   font-weight: 600;
   border-radius: 1rem;       /* a bit rounder */
   text-decoration: none;
   transition: transform 0.25s ease, opacity 0.25s ease;
-  min-width: 200px;          /* guarantee they’re at least 200px wide */
+  min-width: 300px;          /* guarantee they’re at least 300px wide */
   text-align: center;        /* center the label */
 }
 
@@ -122,17 +123,16 @@
 }
 
 .secondaryButton {
-  /* background: #e2e8f0;
-  color:#3498db; */
   background: #3498db;
   color: #fff;
 }
 
 .orText {
-  font-size: 1.25rem;
-  color: #1f639a;
+  font-size: 1.1rem;
+  color: #64748b;
   white-space: nowrap;
 }
+
 
 /* mobile adjustments */
 @media (max-width: 480px) {
