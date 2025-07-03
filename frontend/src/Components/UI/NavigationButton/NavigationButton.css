@@ -1,0 +1,29 @@
+.navigation-button {
+  /* make it a block so width and margin:auto work */
+  display: block;
+
+  /* fixed width, but never larger than its container */
+  width: 600px;
+  max-width: 100%;
+  max-height: max-content;
+
+  /* center horizontally; you can tweak the vertical margin as you like */
+  margin: 1rem auto;
+
+  /* keep the look you had */
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  background: #3498db;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.navigation-button:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}

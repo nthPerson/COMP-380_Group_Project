@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import NavigationButton from "../../UI/NavigationButton/NavigationButton"; //this already imports Link or utilizes it
 
 import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
@@ -9,8 +10,10 @@ import UploadPdf from "../../Helpers/UploadPdf/UploadPdf";
 import ResumeLibrary from "../../Helpers/ResumeLibrary/ResumeLibrary";
 import { usePdf } from "../../PdfContext";
 
+
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
+
 
 export default function UploadResume() {
     const navigate = useNavigate();
@@ -65,9 +68,9 @@ export default function UploadResume() {
             </div>
 
 
-            <Link to="/addJobDescription" className="get-started-btn">
-              Next: Add a Job Description!
-            </Link>
+            <NavigationButton to="/addJobDescription">
+                Next: Add a Job Description!
+            </NavigationButton>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>

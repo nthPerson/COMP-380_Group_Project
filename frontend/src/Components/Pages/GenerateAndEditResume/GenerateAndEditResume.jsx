@@ -20,6 +20,7 @@ import { resumeTextToHtml } from "../../../utils/resumeHtmlFormatter";
 import { toDiffHtml } from "../../../utils/diffHtml";
 
 import InfoBox from "../../UI/InfoBox/InfoBox";
+import NavigationButton from "../../UI/NavigationButton/NavigationButton";
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
@@ -210,9 +211,9 @@ export default function GenerateAndEditResume() {
             </div>
             )}
 
-            <Link to="/resumeArchive" className="get-started-btn">
+            <NavigationButton to="/resumeArchive">
               That's It! Check Out All Your RezuMes!
-            </Link>
+            </NavigationButton>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
