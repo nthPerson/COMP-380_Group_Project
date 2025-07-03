@@ -1,5 +1,27 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
 .App {
   text-align: center;
+  background-color: white;
+  min-height: 100vh;
+}
+
+/* Ensure all pages have white background */
+.App > * {
+  background-color: white;
 }
 
 .App-logo {
@@ -35,4 +57,19 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Fix for any potential dark overlays or gaps */
+#root {
+  background-color: white;
+  min-height: 100vh;
+}
+
+/* Ensure content area styling */
+.content-area,
+.main-content,
+[class*="content"] {
+  background-color: white;
+  position: relative;
+  z-index: 1;
 }
