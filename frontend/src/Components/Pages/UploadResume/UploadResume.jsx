@@ -68,7 +68,7 @@ export default function UploadResume() {
             </div>
 
 
-            <NavigationButton to="/generateEditResume">
+            <NavigationButton to="/addJobDescription">
                 Next: Add a Job Description!
             </NavigationButton>
 
