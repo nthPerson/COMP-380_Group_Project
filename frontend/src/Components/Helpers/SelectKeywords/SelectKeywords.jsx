@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import NavigationButton from "../../UI/NavigationButton/NavigationButton";
 
 import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
@@ -72,9 +73,9 @@ export default function SelectKeywords() {
 
         )}
 
-            <Link to="/generateEditResume" className="get-started-btn">
+            <NavigationButton to="/generateEditResume">
               Next: Generate and Edit Your RezuMe!
-            </Link>
+            </NavigationButton>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>

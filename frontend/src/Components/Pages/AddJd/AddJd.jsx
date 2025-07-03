@@ -11,6 +11,7 @@ import { usePdf } from "../../PdfContext";
 import { getSimilarityScore } from "../../../services/resumeService";
 import { useTargetedResume } from "../../TargetedResumeContext";
 import InfoBox from "../../UI/InfoBox/InfoBox";
+import NavigationButton from "../../UI/NavigationButton/NavigationButton";
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
@@ -112,9 +113,9 @@ export default function AddJd() {
             </div>
             )}
 
-            <Link to="/selectKeywords" className="get-started-btn">
+             <NavigationButton to="/selectKeywords">
               Next: Select Keywords to Emphasize!
-            </Link>
+            </NavigationButton>
 
             <div className="logout-container">
             <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
