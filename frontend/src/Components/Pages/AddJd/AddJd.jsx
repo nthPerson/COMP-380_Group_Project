@@ -61,80 +61,83 @@ export default function AddJd() {
     if (!user) {
         return (
             <p className="loading-text">
-                <span className="spinner"/> Loading...
+                <span className="spinner" /> Loading...
             </p>
         );
     }
 
     return (
         <div className="layout">
-        <aside className="sidebar">
-            <Sidebar user={user} />
-        </aside>
-        <main className="tailor-container">
-        <header className="header">
-          <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>
-            Add Job Description
-          </h1>
-          <InfoBox
-            items={[
-              <>
-                <strong>Paste a job description</strong> so the system can extract required skills, qualifications, and responsibilities.
-              </>,
-              <>
-                Use either a URL <strong>or</strong> the full job posting text — whatever you prefer.
-              </>
-            ]}
-          />
-        </header>
+            <aside className="sidebar">
+                <Sidebar user={user} />
+            </aside>
+            <main className="tailor-container">
+                <header className="header">
+                    <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>
+                        Add Job Description
+                    </h1>
+                    <InfoBox
+                        items={[
+                            <>
+                                <strong>Paste a job description</strong> so the system can extract required skills, qualifications, and responsibilities.
+                            </>,
+                            <>
+                                Use either a URL <strong>or</strong> the full job posting text — whatever you prefer.
+                            </>
+                        ]}
+                    />
+                </header>
 
 
 
-            <ToolSection title="Paste a Job Description (URL)" delay={100}>
-            <JdFromUrl user={user} onExplanationReceived={handleExplanationReceived} onError={handleUrlError} />
-            {urlError && <div className="url-error-message">{urlError}</div>}
-            </ToolSection>
+                <ToolSection title="Paste a Job Description (URL)" delay={100}>
+                    <JdFromUrl user={user} onExplanationReceived={handleExplanationReceived} onError={handleUrlError} />
+                    {urlError && <div className="url-error-message">{urlError}</div>}
+                </ToolSection>
 
-            <div className="divider"><strong>&mdash; OR &mdash;</strong></div>
+                <div className="divider"><strong>&mdash; OR &mdash;</strong></div>
 
-            <ToolSection title="Paste a Job Description (Text)" delay={200} extraClass={highlightTextInput ? "highlighted-section" : ""}>
-            <JdFromText user={user} onExplanationReceived={handleExplanationReceived} onFocus={clearErrorState} />
-            </ToolSection>
+                <ToolSection title="Paste a Job Description (Text)" delay={200} extraClass={highlightTextInput ? "highlighted-section" : ""}>
+                    <JdFromText user={user} onExplanationReceived={handleExplanationReceived} onFocus={clearErrorState} />
+                </ToolSection>
 
-            {jdExplanation && (
-            <ToolSection title="Gemini's Explanation" delay={300}>
-                <p>{jdExplanation}</p>
-            </ToolSection>
-            )}
+                {jdExplanation && (
+                    <ToolSection title="Gemini's Explanation" delay={300}>
+                        <p>{jdExplanation}</p>
+                    </ToolSection>
+                )}
 
-            {initialSim != null && (
-            <div className="tool-section" data-aos="fade-up">
-                <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
-            </div>
-            )}
+                {initialSim != null && (
+                    <div className="tool-section" data-aos="fade-up">
+                        <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
+                    </div>
+                )}
 
-             <NavigationButton to="/selectKeywords">
-              Next: Select Keywords to Emphasize!
-            </NavigationButton>
+                <div className="nav-buttons-row">
+                    <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>
+                    <NavigationButton to="/selectKeywords" disabled={!(masterDocID && jdContent)}>
+                        Next: Select Keywords to Emphasize!
+                    </NavigationButton>
+                </div>‰
 
-            <div className="logout-container">
-            <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
-            </div>
-        </main>
+                <div className="logout-container">
+                    <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
+                </div>
+            </main>
         </div>
     );
-    }
+}
 
-    function ToolSection({ title, delay = 0, extraClass = "", children }) {
+function ToolSection({ title, delay = 0, extraClass = "", children }) {
     return (
         <section
-        className={`tool-section ${extraClass}`.trim()}
-        data-aos="fade-up"
-        data-aos-delay={delay}
-        data-aos-offset="120"
+            className={`tool-section ${extraClass}`.trim()}
+            data-aos="fade-up"
+            data-aos-delay={delay}
+            data-aos-offset="120"
         >
-        <h2>{title}</h2>
-        {children}
+            <h2>{title}</h2>
+            {children}
         </section>
     );
 
