@@ -62,7 +62,7 @@ export default function UploadFileButton({ onUpload, accept = "*" }) {
       >
         {file ? file.name : "Upload PDF or drag & drop"}
       </div>
-      <button className="save-button upload-btn" onClick={handleUploadClick} disabled={!file}>
+      <button className="save-button upload-btn" onClick={handleUploadClick} disabled={!file} style={{ display: "block",  margin: "0 auto" }}>
         Upload
       </button>
     </div>
