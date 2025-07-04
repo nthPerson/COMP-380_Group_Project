@@ -117,7 +117,7 @@ def llm_parse_text(text: str, mode: str) -> dict:
                 "schema": schema
             }
         },
-        max_tokens=800,
+        max_tokens=2000,
         temperature=0
     )
 
@@ -171,7 +171,7 @@ def generate_targeted_resume_html():
                 {"role":"user", "content": user_msg}
             ],
             temperature=0.7,  # Allow GPT to be creative without it just making shit up all the time
-            max_tokens = 1200,
+            max_tokens = 5000,
         )
         generated_html = response.choices[0].message.content
     except Exception as e:
