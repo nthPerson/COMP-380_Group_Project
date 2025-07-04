@@ -24,6 +24,7 @@ import NavigationButton from "../../UI/NavigationButton/NavigationButton";
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
+import "../UserProfile/UserProfile.css";
 
 export default function GenerateAndEditResume() {
     const navigate = useNavigate();
@@ -189,9 +190,11 @@ export default function GenerateAndEditResume() {
                     <div className="tool-section" data-aos="fade-up">
                         <h3>Edit Your Final Resume</h3>
                         <TinyDiffEditor value={generatedHtml} onEditorChange={setGeneratedHtml} />
-                        <button onClick={handleDownloadText}>Download as Text</button>
-                        <button onClick={handleDownloadPdf}>Download as PDF</button>
-                        <button style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
+                        <div className="button-row" style={{ marginTop: '1rem' }}>
+                        <button className="button" onClick={handleDownloadText}>Download as Text</button>
+                        <button className="button" onClick={handleDownloadPdf}>Download as PDF</button>
+                        <button className="button" style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
+                        </div>
                         {postGenSim != null && (
                             <div style={{ marginTop: 12 }}>
                                 <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
