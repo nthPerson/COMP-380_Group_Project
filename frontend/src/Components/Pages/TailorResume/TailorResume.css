@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@400;700&display=swap');
 
+body {
+  margin: 0;
+  min-height: 200vh;
+  /* fill the entire scrollable page with your blue gradient */
+  background: linear-gradient(135deg, #f8fbff 0%, #e4f2ff 100%);
+}
 /* ===== Diff Container ===== */
 .diff-container {
   border: 1px solid #ddd;
@@ -16,8 +22,6 @@
 .layout {
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
-  background-color: #f5faff;
 }
 
 /* ===== Sidebar Wrapper ===== */
@@ -36,11 +40,7 @@
   margin: 0 auto;
   padding: 2rem;
   max-width: 1200px;
-  /* background-color: #e6f3ff; ORIGINAL */
-  /* background-color: #ffffff; */
-  background: linear-gradient(135deg, #f8fbff 0%, #e4f2ff 100%);
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
@@ -66,10 +66,11 @@
 
 /* ===== Tool Sections ===== */
 .tool-section {
+  gap: 2rem; 
   background: #fff;
   border-radius: 8px;
   padding: 1.5rem;
-  min-height: 260px;
+  min-height: 300px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
   box-sizing: border-box;
@@ -79,7 +80,14 @@
   overflow: auto;
   width: 100%;
 }
-
+.tailor-container .tool-section {
+  /* let it size itself to its children */
+  min-height: auto !important;
+  /* stack from the top down instead of centering */
+  justify-content: flex-start !important;
+  /* let content overflow out if it really gets huge (optional) */
+  overflow: visible;
+}
 .tool-section:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -197,16 +205,16 @@
   }
 }
 
-/* === GLOBAL STYLING FOR HOMEPAGE === */
+/* === GLOBAL STYLING FOR HOMEPAGE === 
 .homepage-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
   font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
   min-height: 100vh;
   color: #2c3e50;
 }
+*/
 
 /* === HEADER SECTION === */
 .homepage-header {
@@ -224,16 +232,6 @@
 .welcome-subtext {
   font-size: 1.1rem;
   color: #5a6c7d;
-}
-
-/* === TOOL WRAPPERS === */
-.tool-section {
-  background: #ffffff;
-  padding: 1.5rem;
-  margin: 1.5rem auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  max-width: 900px;
 }
 
 /* === DIVIDER STYLE === */
@@ -322,3 +320,19 @@
     padding: 1rem;
   }
 }
+.similarity-callout {
+  background: #e6f7ff;            /* a very pale blue highlight */
+  
+  padding: 0.75rem 1rem;          
+  border-radius: 4px;             
+  font-size: 1.1rem;                   
+  margin: 1rem auto;       /* auto left/right to center the block */
+  max-width: 400px;         /* optional — keeps it from going full width */
+  text-align: center;       /* center the text inside */  
+  align-self: center;    
+}
+.similarity-callout strong {
+  color: #1a73e8;                 /* darker blue for the label */
+  font-weight: 700;
+}
+

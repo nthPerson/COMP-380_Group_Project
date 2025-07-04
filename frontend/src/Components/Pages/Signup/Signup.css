@@ -2,7 +2,7 @@
 
 body {
   background: #fff;
-  margin: 0;
+  margin: 6;
   min-height: 100vh;
 }
 :root {
@@ -17,7 +17,7 @@ body {
 /* Container styling (unchanged) */
 .container {
   max-width: 400px;
-  margin: 8rem auto;
+  margin: 3.9rem auto;
   padding: 2rem;
   background: white;
   border-radius: 0.5rem;

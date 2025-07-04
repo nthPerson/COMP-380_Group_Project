@@ -82,7 +82,7 @@ export default function LoginOnly() {
     <>
       <header className="site-banner">
         <div className="top-line"></div>
-        <div className="banner-content">
+        <div className="banner-content" >
           <div className="banner-left">
             <Link to="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
               <img src={logo_icon} alt="Logo icon" className="banner-logo" />
@@ -94,7 +94,7 @@ export default function LoginOnly() {
           </div>
         </div>
       </header>
-      <div className="container">
+      <div className="container" style={{ position: 'relative', top: '4rem' }}>
         {/* Header */}
         <div className="header">
           <div className="text">Log In</div>

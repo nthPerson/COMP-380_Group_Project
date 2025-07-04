@@ -90,6 +90,9 @@
   line-height: 1.5;
   color: #5a6c7d;
 }
+.content .stepsList p {
+  text-align: left;
+}
 
 /* action buttons */
 .actions {

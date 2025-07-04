@@ -16,7 +16,7 @@ import GenerateAndEditResume from './Components/Pages/GenerateAndEditResume/Gene
 import ResumeArchive from './Components/Pages/ResumeArchive/ResumeArchive';
 
 /* ===== Helpers ===== */
-import Header from "./Components/Helpers/Header/Header";
+import Header from './Components/Helpers/Header/Header';
 import { PdfProvider } from './Components/PdfContext';
 import { TargetedResumeProvider } from './Components/TargetedResumeContext';
 import SelectKeywords from './Components/Helpers/SelectKeywords/SelectKeywords';
@@ -35,7 +35,6 @@ function App() {
   return (
   <>
     {!hideHeaderOn.includes(pathname) && <Header />}
-
     <PdfProvider>
     <TargetedResumeProvider>
         <Routes>

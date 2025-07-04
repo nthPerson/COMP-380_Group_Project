@@ -3,7 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import NavigationButton from "../../UI/NavigationButton/NavigationButton"; //this already imports Link or utilizes it
-
+import InfoBox from "../../UI/InfoBox/InfoBox";
 import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
 import UploadPdf from "../../Helpers/UploadPdf/UploadPdf";
@@ -35,49 +35,55 @@ export default function UploadResume() {
 
     if (!user) {
         return (
-            <p className="loading-text"> 
-                <span className="spinner"/> Loading...
+            <p className="loading-text">
+                <span className="spinner" /> Loading...
             </p>
-            
+
         )
     };
 
     return (
         <div className="layout">
-        
-        <Sidebar user={user} />
-        
-        <main className="tailor-container">
-            <header className="header">
-            <h1 className="welcome-title">Upload Resume</h1>
-            <p className="welcome-subtext">
-                You're logged in as <strong>{user.email}</strong>
-            </p>
-            </header>
 
-            <div className="tool-section" data-aos="fade-up">
-            <UploadPdf />
-            </div>
+            <Sidebar user={user} />
 
-            {/* This section adds in the explaination for the master resume */}
-            <div className="tool-section" data-aos="fade-up">
-                {/* <UploadPdf /> */}
+            <main className="tailor-container">
+                <header className="header">
+                    <h1 className="welcome-title">Upload Resume</h1>
+                    <InfoBox
+                        items={[
+                            <>
+                                <strong>Upload your resume</strong> in PDF or DOCX format so its contents can be analyzed.
+                            </>,
+                            <>
+                                Once uploaded, <strong>select one as your “master” resume</strong>—this is the version we’ll tailor to each job.
+                            </>,
+                            <>
+                                You can always <strong>upload additional resumes</strong> later or switch which one is your master before moving on.
+                            </>
+                        ]}
+                    />
+                </header>
 
-                <ResumeLibrary showGenerated={false} showUploaded={true} />
-                <p style={{ marginTop: "12px", fontSize: "0.95rem", color: "#444" }}>
-                    <strong>Note:</strong> The <em>Master Resume</em> will be analyzed by the system to generate a tailored resume based on the job description you select.
-                </p>
-            </div>
+                <div className="tool-section" data-aos="fade-up">
+                    <UploadPdf />
 
 
-            <NavigationButton to="/addJobDescription" disabled={!masterDocID}>
-                Next: Add a Job Description!
-            </NavigationButton>
+                    {/* This section adds in the explaination for the master resume */}
 
-            <div className="logout-container">
-            <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
-            </div>
-        </main>
+                    {/* <UploadPdf /> */}
+
+                    <ResumeLibrary showGenerated={false} showUploaded={true} />
+                    <p style={{ marginTop: "1px", fontSize: "0.95rem", color: "#444" }}>
+                        <strong>Note:</strong> The <em>Master Resume</em> will be analyzed by the system to generate a tailored resume based on the job description you select.
+                    </p>
+                </div>
+
+
+                <NavigationButton to="/addJobDescription" disabled={!masterDocID}>
+                    Next: Add a Job Description!
+                </NavigationButton>
+            </main>
         </div>
     );
 

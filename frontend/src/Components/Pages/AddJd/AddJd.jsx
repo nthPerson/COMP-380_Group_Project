@@ -66,9 +66,9 @@ export default function AddJd() {
 
     return (
         <div className="layout">
-            
+
             <Sidebar user={user} />
-            
+
             <main className="tailor-container">
                 <header className="header">
                     <h1 className="welcome-title" style={{ marginBottom: "0.5rem" }}>
@@ -85,57 +85,42 @@ export default function AddJd() {
                         ]}
                     />
                 </header>
-            
-            {/* <div className="tool-section" data-aos="fade-up">
-                <UnifiedJdInput
-                    user={user}
-                    onExplanationReceived={handleExplanationReceived}
-                    onError={handleUrlError}
-                    onFocus={clearErrorState}
-                />
-                <h2>Job Description Summary</h2>
-                {jdExplanation && (
-                    <p>{jdExplanation}</p>
-                )}
 
-                {initialSim != null && (
-                    <span>
-                        <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
-                    </span>
-                )}
-            </div> */}
+                <ToolSection title="Paste a Job Description" delay={100} extraClass={highlightTextInput ? "highlighted-section" : ""}>
+                    <UnifiedJdInput
+                        user={user}
+                        onExplanationReceived={handleExplanationReceived}
+                        onError={handleUrlError}
+                        onFocus={clearErrorState}
+                    />
+                    {urlError && <div className="url-error-message">{urlError}</div>}
 
-            <ToolSection title="Paste a Job Description" delay={100} extraClass={highlightTextInput ? "highlighted-section" : ""}>
-            <UnifiedJdInput
-              user={user}
-              onExplanationReceived={handleExplanationReceived}
-              onError={handleUrlError}
-              onFocus={clearErrorState}
-            />
-            {urlError && <div className="url-error-message">{urlError}</div>}
-            </ToolSection>
+                    {jdExplanation && (
+                        <>
+                            <h2>Job Description Summary</h2>
+                            <p>{jdExplanation}</p>
+                        </>
+                    )}
 
-                {jdExplanation && (
-                    <ToolSection title="Job Description Summary" delay={300}>
-                        <p>{jdExplanation}</p>
-                    </ToolSection>
-                )}
-
-                {initialSim != null && (
-                    <div className="tool-section" data-aos="fade-up">
-                        <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
-                    </div>
-                )}
+                    {initialSim != null && (
+                        <p className="similarity-callout">
+                            <strong>Master Resume vs Job Description Similarity:</strong> <span style={{
+                                display: 'block',
+                                fontSize: '2.5rem',
+                                fontWeight: '700',
+                                textAlign: "center",
+                                color: "#1a73e8",
+                                marginTop: '0.25rem'
+                            }}>{initialSim}%</span>
+                        </p>
+                    )}
+                </ToolSection>
 
                 <div className="nav-buttons-row">
                     <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>
                     <NavigationButton to="/selectKeywords" disabled={!(masterDocID && jdContent)}>
                         Next: Select Keywords to Emphasize!
                     </NavigationButton>
-                </div>
-
-                <div className="logout-container">
-                    <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
                 </div>
             </main>
         </div>
