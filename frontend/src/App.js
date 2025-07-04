@@ -16,10 +16,11 @@ import GenerateAndEditResume from './Components/Pages/GenerateAndEditResume/Gene
 import ResumeArchive from './Components/Pages/ResumeArchive/ResumeArchive';
 
 /* ===== Helpers ===== */
-import Header from "./Components/Helpers/Header/Header";
+import Header from './Components/Helpers/Header/Header';
 import { PdfProvider } from './Components/PdfContext';
 import { TargetedResumeProvider } from './Components/TargetedResumeContext';
 import SelectKeywords from './Components/Helpers/SelectKeywords/SelectKeywords';
+import ScrollToTop from './Components/Helpers/ScrollToTop/ScrollToTop';
 
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
   return (
   <>
     {!hideHeaderOn.includes(pathname) && <Header />}
-
+    <ScrollToTop />
     <PdfProvider>
     <TargetedResumeProvider>
         <Routes>

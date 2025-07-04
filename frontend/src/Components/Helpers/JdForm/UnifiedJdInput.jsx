@@ -73,7 +73,7 @@ export default function UnifiedJdInput({ user, onExplanationReceived, onFocus, o
       <br />
       <button type="submit" className="navigation-button" style={{
         /* if the parent is a flex container: */
-        alignSelf: "flex-start", margin: 5, width: 150
+        alignSelf: "flex-start", margin: 5, width: 180
       }} disabled={isLoading}>
         {isLoading ? "Processing…" : "Submit"}
       </button>

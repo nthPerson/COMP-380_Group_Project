@@ -144,7 +144,7 @@ export default function LoginSignup() {
           </div>
         </div>
       </header>
-      <div className="container">
+      <div className="container" style={{ position: 'relative', top: '4rem' }}>
         {/* Header */}
         <div className="header">
           <div className="text">Sign up</div>
