@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -11,28 +11,29 @@
   width: 100%;
   padding: 1rem;
   border: 2px dashed #aaa;
+  min-height: 200px; 
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
   margin-bottom: 1rem;
   transition: background 0.2s ease;
+  display: flex;       /* center the content vertically */
+  align-items: center; /* center the content vertically */
+  justify-content: center; /* center horizontally, too */
+  font-size: 1.5rem;
 }
 
 .drop-zone.highlight {
   background-color: #e6f3ff;
 }
 
-.upload-btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #3498db;
-  color: #fff;
-  cursor: pointer;
-}
-
 .upload-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.drop-zone.uploaded {
+  border-color: #7e274a;
+  box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.4);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }

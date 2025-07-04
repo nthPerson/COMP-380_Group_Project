@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./UploadFileBox.css";
+import "../../Pages/UserProfile/UserProfile.css";
 
 export default function UploadFileButton({ onUpload, accept = "*" }) {
   const [file, setFile] = useState(null);
@@ -61,7 +62,7 @@ export default function UploadFileButton({ onUpload, accept = "*" }) {
       >
         {file ? file.name : "Upload PDF or drag & drop"}
       </div>
-      <button className="upload-btn" onClick={handleUploadClick} disabled={!file}>
+      <button className="save-button upload-btn" onClick={handleUploadClick} disabled={!file}>
         Upload
       </button>
     </div>
