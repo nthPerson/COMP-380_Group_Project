@@ -1,163 +1,425 @@
 /* General container styling */
 .resume-builder-container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 24px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Progress bar styling */
-  .progress-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-  }
-  
-  .progress-step {
-    display: flex;
-    align-items: center;
-    flex: 1;
-  }
-  
-  .progress-step-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #d1d5db;
-    background-color: #f9fafb;
-    color: #6b7280;
-    transition: all 0.3s ease;
-  }
-  
-  .progress-step-icon.active {
-    border-color: #2563eb;
-    background-color: #2563eb;
-    color: #ffffff;
-  }
-  
-  .progress-step-title {
-    font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
-               'Segoe UI', Roboto, sans-serif;
-    margin-left: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #6b7280;
-  }
-  
-  .progress-step-title.active {
-    color: #2563eb;
-  }
-  
-  .progress-bar-line {
-    flex: 1;
-    height: 2px;
-    background-color: #d1d5db;
-    margin: 0 16px;
-  }
-  
-  .progress-bar-line.active {
-    background-color: #2563eb;
-  }
-  
-  /* Input field styling */
-  .input-field {
-    font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
-               'Segoe UI', Roboto, sans-serif;
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.3s ease;
-  }
-  
-  .input-field:focus {
-    border-color: #2563eb;
-    outline: none;
-  }
-  
-  /* Button styling */
-  .button {
-    font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
-               'Segoe UI', Roboto, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 24px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .button-primary {
-    background-color: #2563eb;
-    color: #ffffff;
-  }
-  
-  .button-primary:hover {
-    background-color: #1d4ed8;
-  }
-  
-  .button-secondary {
-    background-color: #e5e7eb;
-    color: #6b7280;
-  }
-  
-  .button-secondary:hover {
-    background-color: #d1d5db;
-  }
-  
-  .button-disabled {
-    background-color: #f3f4f6;
-    color: #9ca3af;
-    cursor: not-allowed;
-  }
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-  /* Validation error styling */
+/* Progress bar styling */
+.progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.progress-step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background-color: #f9fafb;
+  color: #6b7280;
+  transition: all 0.3s ease;
+}
+
+.progress-step-icon.active {
+  border-color: #4A90E2; /* Updated to match website color scheme */
+  background-color: #4A90E2; /* Updated to match website color scheme */
+  color: #ffffff;
+}
+
+.progress-step-title {
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  font-family: 'Fira Sans Condensed', sans-serif; /* Updated to match website font */
+}
+
+.progress-step-title.active {
+  color: #4A90E2; /* Updated to match website color scheme */
+}
+
+.progress-bar-line {
+  flex: 1;
+  height: 2px;
+  background-color: #d1d5db;
+  margin: 0 16px;
+}
+
+.progress-bar-line.active {
+  background-color: #4A90E2; /* Updated to match website color scheme */
+}
+
+/* Input field styling */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Fira Sans Condensed', sans-serif; /* Updated to match website font */
+  transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #4A90E2; /* Updated to match website color scheme */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15); /* Added subtle focus shadow */
+}
+
+/* UPDATED NAVIGATION BUTTONS SECTION - Major improvements for styling and layout */
+/* Navigation buttons container - prevents overlap and maintains consistent spacing */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px; /* Added consistent top margin */
+  padding-top: 24px; /* Added padding to separate from content */
+  border-top: 1px solid #e5e7eb; /* Added subtle separator line */
+  gap: 16px; /* Added gap between buttons to prevent overlap */
+}
+
+/* Base button styling - updated to match website theme */
+.button {
+  display: inline-flex; /* Changed from flex to inline-flex for better alignment */
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px; /* Consistent padding */
+  border-radius: 8px; /* Increased border radius for modern look */
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Fira Sans Condensed', sans-serif; /* Updated to match website font */
+  cursor: pointer;
+  transition: all 0.3s ease; /* Enhanced transition for smoother effects */
+  border: none; /* Remove default border */
+  text-decoration: none; /* For link buttons */
+  min-width: 120px; /* Ensure consistent button sizes */
+  position: relative; /* For potential hover effects */
+}
+
+/* Primary button styling - updated to match website color scheme */
+.button-primary {
+  background-color: #4A90E2; /* Updated from aggressive blue to website blue */
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2); /* Added subtle shadow */
+}
+
+.button-primary:hover {
+  background-color: #3a7bd5; /* Darker shade for hover effect */
+  transform: translateY(-1px); /* Subtle lift effect on hover */
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3); /* Enhanced shadow on hover */
+}
+
+.button-primary:active {
+  transform: translateY(0); /* Reset transform on click */
+  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2); /* Reset shadow on click */
+}
+
+/* Secondary button styling - updated to complement website theme */
+.button-secondary {
+  background-color: #f3f6fa; /* Updated to match website background color */
+  color: #4A90E2; /* Updated text color to match theme */
+  border: 1px solid #91c0f2; /* Added border with light blue color */
+}
+
+.button-secondary:hover {
+  background-color: #e8f2ff; /* Lighter blue background on hover */
+  border-color: #4A90E2; /* Darker border on hover */
+  transform: translateY(-1px); /* Consistent hover effect */
+}
+
+/* Disabled button styling - improved visual feedback */
+.button-disabled {
+  background-color: #f9fafb; /* Lighter disabled background */
+  color: #9ca3af; /* Muted text color */
+  cursor: not-allowed;
+  border: 1px solid #e5e7eb; /* Light border for disabled state */
+  opacity: 0.6; /* Added opacity for better disabled indication */
+}
+
+.button-disabled:hover {
+  transform: none; /* Disable hover effects for disabled buttons */
+  box-shadow: none;
+}
+
+/* Icon spacing within buttons - ensures proper alignment */
+.button svg {
+  margin-right: 8px; /* Space between icon and text */
+}
+
+.button svg:last-child {
+  margin-right: 0; /* Remove right margin for trailing icons */
+  margin-left: 8px; /* Add left margin for trailing icons */
+}
+
+/* Special styling for the "Get Started" link button at the end */
+.get-started-btn {
+  display: inline-block;
+  padding: 16px 32px; /* Larger padding for emphasis */
+  font-size: 16px; /* Larger font size */
+  font-weight: 600;
+  font-family: 'Fira Sans Condensed', sans-serif; /* Updated to match website font */
+  color: white;
+  background: linear-gradient(135deg, #6fd0df, #4A90E2); /* Gradient using website colors */
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3); /* Enhanced shadow */
+  border: none;
+}
+
+.get-started-btn:hover {
+  transform: translateY(-2px); /* More pronounced hover effect */
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4); /* Enhanced hover shadow */
+  background: linear-gradient(135deg, #5fc5d4, #3a7bd5); /* Darker gradient on hover */
+}
+
+/* Validation error styling */
 .input-error {
-    border-color: #dc2626; /* Red border for invalid fields */
-    background-color: #fef2f2; /* Light red background */
+  border-color: #dc2626; /* Red border for invalid fields */
+  background-color: #fef2f2; /* Light red background */
 }
 
 .error-message {
-    color: #dc2626; /* Red text for error messages */
-    font-size: 12px;
-    margin-top: 4px;
+  color: #dc2626; /* Red text for error messages */
+  font-size: 12px;
+  font-family: 'Fira Sans Condensed', sans-serif; /* Updated to match website font */
+  margin-top: 4px;
 }
+
 .resume-builder-page {
   display: flex;
-  min-height: 100vh;       /* full viewport height */
+  min-height: 100vh; /* full viewport height */
 }
 
 /* the right-hand panel (your form wizard) */
 .resume-builder-content {
-  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
-               'Segoe UI', Roboto, sans-serif;
-  flex: 1;                
-  padding: 2rem;     
-  max-width: 900px;       
-  margin: 0 auto;       
+  flex: 1;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-/* For the navigation button at the very end of the builder (this was added quickly/recklessly */
-.get-started-btn {
-  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont,
-               'Segoe UI', Roboto, sans-serif;
-  display: inline-block;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: white;
-  background: #3498db;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: transform 0.3s ease, background 0.3s ease;
+/* RESPONSIVE DESIGN - Added media queries for better mobile experience */
+@media (max-width: 768px) {
+  .navigation-buttons {
+      flex-direction: column; /* Stack buttons vertically on mobile */
+      gap: 12px;
+  }
+  
+  .button {
+      width: 100%; /* Full width buttons on mobile */
+      min-width: auto;
+  }
+  
+  .get-started-btn {
+      width: 100%; /* Full width for emphasis button on mobile */
+      text-align: center;
+  }
 }
+
+/* Add these new styles at the end of your existing CSS file */
+
+/* Navigation container fix */
+.flex.justify-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+/* Button wrapper to ensure proper spacing */
+.button-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 2rem;
+}
+
+/* Get started button positioning */
+.get-started-btn {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Font consistency fixes */
+h2.text-2xl,
+h3.text-lg,
+.text-sm.text-gray-600,
+.font-semibold,
+.font-medium {
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+/* Step counter styling */
+.text-sm.text-gray-600 {
+  font-family: 'Fira Sans Condensed', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  color: #4A90E2;
+  margin-top: 0.5rem;
+}
+
+/* Enhanced Add Experience/Education button */
+.flex.items-center.gap-2.px-4.py-2.bg-blue-600 {
+  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
+  transition: all 0.3s ease;
+}
+
+.flex.items-center.gap-2.px-4.py-2.bg-blue-600:hover {
+  background: linear-gradient(135deg, #357ABD, #2868A9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+/* Enhanced delete button */
+.p-1.text-red-600 {
+  background-color: #FEE2E2;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.1);
+}
+
+.p-1.text-red-600:hover {
+  background-color: #FCA5A5;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+/* Add these new styles at the end of your existing CSS file */
+
+/* Skill input and button styling */
+.flex-1.p-2.border.border-gray-300 {
+  border: 1px solid #4A90E2;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+.flex-1.p-2.border.border-gray-300:focus {
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  outline: none;
+}
+
+/* Plus button for adding skills */
+.px-4.py-2.bg-blue-600,
+.px-4.py-2.bg-green-600 {
+  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
+  transition: all 0.3s ease;
+}
+
+.px-4.py-2.bg-blue-600:hover,
+.px-4.py-2.bg-green-600:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+  background: linear-gradient(135deg, #357ABD, #2868A9);
+}
+
+/* Remove (×) button styling */
+.ml-1.text-blue-600,
+.ml-1.text-green-600 {
+  background: rgba(74, 144, 226, 0.1);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.ml-1.text-blue-600:hover,
+.ml-1.text-green-600:hover {
+  background: rgba(74, 144, 226, 0.2);
+  transform: scale(1.1);
+}
+/* Ensure consistent font styling for all text elements */
+.text-sm.text-gray-500,
+.text-sm.text-gray-600,
+.text-gray-700,
+.text-gray-800,
+.font-medium,
+.font-semibold,
+.text-gray-600 {
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+/* Style for tip text */
+p.text-sm.text-gray-500 {
+  font-family: 'Fira Sans Condensed', sans-serif;
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin-top: 0.5rem;
+  line-height: 1.25rem;
+}
+
+/* Review section text styling */
+.bg-gray-50.p-6.rounded-lg {
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+.bg-gray-50.p-6.rounded-lg h3,
+.bg-gray-50.p-6.rounded-lg h4,
+.bg-gray-50.p-6.rounded-lg p {
+  font-family: 'Fira Sans Condensed', sans-serif;
+  margin-bottom: 0.5rem;
+}
+
+/* Style for PDF File Name section */
+label.block.text-sm.font-medium.text-gray-700 {
+  font-family: 'Fira Sans Condensed', sans-serif;
+  font-size: 0.875rem;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+/* Save Resume button styling */
+button.w-full.py-3.px-6.bg-green-600 {
+  background: linear-gradient(135deg, #4A90E2, #357ABD);
+  color: white;
+  font-family: 'Fira Sans Condensed', sans-serif;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.2);
+}
+
+button.w-full.py-3.px-6.bg-green-600:hover {
+  background: linear-gradient(135deg, #357ABD, #2868A9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+
