@@ -320,3 +320,19 @@ body {
     padding: 1rem;
   }
 }
+.similarity-callout {
+  background: #e6f7ff;            /* a very pale blue highlight */
+  
+  padding: 0.75rem 1rem;          
+  border-radius: 4px;             
+  font-size: 1.1rem;                   
+  margin: 1rem auto;       /* auto left/right to center the block */
+  max-width: 400px;         /* optional — keeps it from going full width */
+  text-align: center;       /* center the text inside */  
+  align-self: center;    
+}
+.similarity-callout strong {
+  color: #1a73e8;                 /* darker blue for the label */
+  font-weight: 700;
+}
+

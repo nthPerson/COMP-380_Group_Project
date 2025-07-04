@@ -103,8 +103,15 @@ export default function AddJd() {
                     )}
 
                     {initialSim != null && (
-                        <p>
-                            <strong>Master Resume vs Job Description Similarity:</strong> {initialSim}%
+                        <p className="similarity-callout">
+                            <strong>Master Resume vs Job Description Similarity:</strong> <span style={{
+                                display: 'block',
+                                fontSize: '2.5rem',
+                                fontWeight: '700',
+                                textAlign: "center",
+                                color: "#1a73e8",
+                                marginTop: '0.25rem'
+                            }}>{initialSim}%</span>
                         </p>
                     )}
                 </ToolSection>
