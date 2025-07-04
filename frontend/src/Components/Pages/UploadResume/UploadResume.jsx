@@ -50,21 +50,18 @@ export default function UploadResume() {
         <main className="tailor-container">
             <header className="header">
             <h1 className="welcome-title">Upload Resume</h1>
-            <p className="welcome-subtext">
-                You're logged in as <strong>{user.email}</strong>
-            </p>
             </header>
 
             <div className="tool-section" data-aos="fade-up">
             <UploadPdf />
-            </div>
+           
 
             {/* This section adds in the explaination for the master resume */}
-            <div className="tool-section" data-aos="fade-up">
+         
                 {/* <UploadPdf /> */}
 
                 <ResumeLibrary showGenerated={false} showUploaded={true} />
-                <p style={{ marginTop: "12px", fontSize: "0.95rem", color: "#444" }}>
+                <p style={{ marginTop: "1px", fontSize: "0.95rem", color: "#444" }}>
                     <strong>Note:</strong> The <em>Master Resume</em> will be analyzed by the system to generate a tailored resume based on the job description you select.
                 </p>
             </div>
@@ -73,10 +70,6 @@ export default function UploadResume() {
             <NavigationButton to="/addJobDescription" disabled={!masterDocID}>
                 Next: Add a Job Description!
             </NavigationButton>
-
-            <div className="logout-container">
-            <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
-            </div>
         </main>
         </div>
     );

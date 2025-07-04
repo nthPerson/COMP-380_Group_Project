@@ -64,6 +64,7 @@ export default function SelectKeywords() {
 
 
         {/* ---- this is the only place WarningBox ever appears ---- */}
+        <div className="tool-section" data-aos="fade-up">
         {masterDocID && jdContent ? (
           <ProfileExtractor masterDocID={masterDocID} jdText={jdContent} />
         ) : (
@@ -72,16 +73,13 @@ export default function SelectKeywords() {
           </WarningBox>
 
         )}
+        </div>
 
         <div className="nav-buttons-row">
           <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>
           <NavigationButton to="/generateEditResume" disabled={!(masterDocID && jdContent)}>
             Next: Generate and Edit Your RezuMe!
           </NavigationButton>
-        </div>
-
-        <div className="logout-container">
-          <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
         </div>
       </main>
     </div>

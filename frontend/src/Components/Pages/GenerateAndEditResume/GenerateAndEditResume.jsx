@@ -147,9 +147,9 @@ export default function GenerateAndEditResume() {
 
     return (
         <div className="layout">
-            
+
             <Sidebar user={user} />
-            
+
             <main className="tailor-container">
                 <header className="header">
                     <h1 className="welcome-title">Generate & Edit Resume</h1>
@@ -170,30 +170,30 @@ export default function GenerateAndEditResume() {
 
 
                 </header>
-
+                <div className="tool-section" data-aos="fade-up" data-aos-delay="100">
                 {masterDocID && jdContent && (
-                    <div className="tool-section" data-aos="fade-up">
-                        <button onClick={handleGenerateResume} disabled={isGenerating}>
-                            {isGenerating ? "Generating..." : "Generate Targeted Resume"}
-                        </button>
-                    </div>
+
+                    <button className="navigation-button" onClick={handleGenerateResume} disabled={isGenerating}>
+                        {isGenerating ? "Generating..." : "Generate Targeted Resume"}
+                    </button>
+
                 )}
 
                 {generatedHtml && (
-                    <div className="tool-section" data-aos="fade-up">
+                    <>
                         <h3>Resume Changes Highlighted</h3>
                         <div className="diff-container" dangerouslySetInnerHTML={{ __html: diffHtml }} />
-                    </div>
+                    </>
                 )}
 
                 {generatedHtml && (
-                    <div className="tool-section" data-aos="fade-up">
+                    <>
                         <h3>Edit Your Final Resume</h3>
                         <TinyDiffEditor value={generatedHtml} onEditorChange={setGeneratedHtml} />
                         <div className="button-row" style={{ marginTop: '1rem' }}>
-                        <button className="button" onClick={handleDownloadText}>Download as Text</button>
-                        <button className="button" onClick={handleDownloadPdf}>Download as PDF</button>
-                        <button className="button" style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
+                            <button className="button" onClick={handleDownloadText}>Download as Text</button>
+                            <button className="button" onClick={handleDownloadPdf}>Download as PDF</button>
+                            <button className="button" style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
                         </div>
                         {postGenSim != null && (
                             <div style={{ marginTop: 12 }}>
@@ -211,17 +211,14 @@ export default function GenerateAndEditResume() {
                                 )}
                             </div>
                         )}
-                    </div>
+                    </>
                 )}
+                </div>
                 <div className="nav-buttons-row">
                     <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>
                     <NavigationButton to="/resumeArchive" disabled={!user}>
                         That's It! Check Out All Your RezuMes!
                     </NavigationButton>
-                </div>
-
-                <div className="logout-container">
-                    <button className="logout-btn" onClick={handleSignOut}>Log Out</button>
                 </div>
             </main>
         </div>
