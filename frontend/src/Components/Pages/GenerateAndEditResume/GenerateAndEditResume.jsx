@@ -196,7 +196,7 @@ export default function GenerateAndEditResume() {
                             <button className="button" style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
                         </div>
                         {postGenSim != null && (
-                            <div style={{ marginTop: 12 }}>
+                            <div  className="similarity-callout" style={{ marginTop: 12 }}>
                                 <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
                                 {initialSim != null && (
                                     <div style={{ marginTop: 4 }}>
