@@ -8,7 +8,7 @@
                'Segoe UI', Roboto, sans-serif;
   flex: 1;
   max-width: 900px;
-  margin-left: 300px;
+  margin: 0 auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
