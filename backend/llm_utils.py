@@ -16,8 +16,8 @@ from embeddings_db import (
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
 
-EMBED_MODEL = "text-embedding-3-small"  # 1,536 dimensional vector
-# EMBED_MODEL = "text-embedding-3-large"  # 3072 dimensional vector
+# EMBED_MODEL = "text-embedding-3-small"  # 1,536 dimensional vector
+EMBED_MODEL = "text-embedding-3-large"  # 3072 dimensional vector
 
 # Generic LLM (OpenAI API) resume and job description parsing helper function
 def llm_parse_text(text: str, mode: str) -> dict:
@@ -165,13 +165,14 @@ def generate_targeted_resume_html():
     # 3: Call OpenAI API
     try:
         response = openai.chat.completions.create(
-            model="gpt-4o-mini",
+            # model="gpt-4o-mini",
+            model= "chatgpt-4o-latest",
             messages=[
                 {"role":"system", "content": system_msg},
                 {"role":"user", "content": user_msg}
             ],
             temperature=0.7,  # Allow GPT to be creative without it just making shit up all the time
-            max_tokens = 1200,
+            max_tokens = 6000,
         )
         generated_html = response.choices[0].message.content
     except Exception as e:
