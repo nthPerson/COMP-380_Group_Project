@@ -1,0 +1,49 @@
+/* src/components/UI/GenerateButton/GenerateButton.css */
+
+.generate-box {
+  background: #fff;
+  /* match InfoBox’s max-width */
+  max-width: 1100px;
+  width: 100%;
+  margin: 0.5rem auto;
+  padding: 1rem;
+  border-radius: 8px;
+
+    /* start with no glow */
+  box-shadow: none;
+  transition: box-shadow 0.3s ease;
+}
+
+/* only pulse the border on the edge, no blur spread */
+.generate-box.pulse {
+  animation: generate-pulse 2s ease-in-out infinite;
+}
+
+@keyframes generate-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+  }
+}
+
+
+.generate-button {
+  /* fill the wrapper */
+  width: 100%;
+  padding: 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  background: #3498db;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* keep your disabled look */
+.generate-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
