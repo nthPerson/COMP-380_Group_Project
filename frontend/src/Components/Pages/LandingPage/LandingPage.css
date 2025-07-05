@@ -230,3 +230,74 @@
   margin-bottom: 100;
   font-family: 'Fira Sans Condensed', sans-serif; 
 }
+
+/* mascot video container */
+.mascot-container {
+  background: #fff;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(44, 61, 143, 0.11);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mascot-video {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+
+.mascot-slogan {
+  margin-top: 1rem;
+  font-size: 1.8rem;
+  color: #4A90E2;
+  font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+/* numbered steps list */
+.stepsList {
+  position: relative;
+  margin: 0px auto 0px auto;
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  /* margin: 0 auto 3rem; */
+  max-width: 700px;
+}
+
+.stepsList li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.stepsList li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+  background: #4A90E2;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.stepsList h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  color: #5a6c7d;
+}
+
+.stepsList p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #5a6c7d;
+}
