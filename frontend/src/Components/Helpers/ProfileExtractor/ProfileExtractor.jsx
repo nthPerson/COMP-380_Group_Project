@@ -214,11 +214,11 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                           style={{ backgroundColor: match ? "#ffffcc" : "transparent" }}
                         >
                           <label>
-                            <input
+                            {/* <input
                               type="checkbox"
                               checked={selected.includes(s)}
                               onChange={e => toggleKeyword(s, e.target.checked)}
-                            />{' '}
+                            />{' '} */}
                             {s}
                           </label>
                         </li>
@@ -237,11 +237,11 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                           style={{ backgroundColor: match ? "#ffffcc" : "transparent" }}
                         >
                           <label>
-                            <input
+                            {/* <input
                               type="checkbox"
                               checked={selected.includes(s)}
                               onChange={e => toggleKeyword(s, e.target.checked)}
-                            />{' '}
+                            />{' '} */}
                             {s}
                           </label>
                         </li>
