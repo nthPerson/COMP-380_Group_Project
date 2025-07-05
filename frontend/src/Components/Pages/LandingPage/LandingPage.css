@@ -257,12 +257,10 @@
 
 /* numbered steps list */
 .stepsList {
-  position: relative;
-  margin: 0px auto 0px auto;
   counter-reset: step;
   list-style: none;
   padding: 0;
-  /* margin: 0 auto 3rem; */
+  margin: 0 auto 3rem;
   max-width: 700px;
 }
 
