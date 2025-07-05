@@ -11,10 +11,16 @@
 
 /* content wrapper */
 .content {
-  max-width: 600px;
+  max-width: 900px;
   width: 100%;
-  text-align: center;
+  text-align: center;    /* centers .welcomeBlock */
   color: #5a6c7d;
+}
+
+/* wrap heading + subheading + list as one centered block */
+.welcomeBlock {
+  display: inline-block;  /* shrink-wrap to the widest child */
+  text-align: center;     /* center only the <h1> & <h2> */
 }
 
 /* loading state */
@@ -44,6 +50,7 @@
   font-size: 1.75rem;
   margin-bottom: 2rem;
   color: #5a6c7d;
+  text-align: center;    /* stays centered under the heading */
 }
 
 /* numbered vertical list */
@@ -52,7 +59,9 @@
   list-style: none;
   padding: 0;
   margin: 0 0 3rem;
-  text-align: left;
+  display: inline-block;  /* shrink-wrap so it stays under the headings */
+  text-align: left;       /* left-align each step inside */
+  transform: translateX(-5rem);  /* nudge left under "Welcome" */
 }
 
 .stepsList li {
@@ -89,9 +98,7 @@
   font-size: 1rem;
   line-height: 1.5;
   color: #5a6c7d;
-}
-.content .stepsList p {
-  text-align: left;
+  text-align: left;      /* reinforce left alignment */
 }
 
 /* action buttons */
@@ -107,12 +114,21 @@
   display: inline-block;
   text-decoration: none;
   color: #5a6c7d;
-  padding: 0.75rem 1.5rem;
+
+  /* match step-title size and line-height */
+  font-size: 1.1rem;
+  line-height: 1.2;
+
+  /* extra roomy padding */
+  padding: .7rem 3rem;
+
+  /* guarantee a minimum width */
+  min-width: 17.5rem;
+
   background: #ffffff;
   border: 1.5px solid #ccc;
   border-radius: 8px;
   text-align: center;
-  font-size: 0.95rem;
   cursor: pointer;
   transition: color 0.2s ease, transform 0.2s ease;
 }
@@ -123,7 +139,7 @@
 }
 
 .orText {
-  font-size: 1.1rem;
+  font-size: 1.1rem;  
   color: #5a6c7d;
   white-space: nowrap;
 }

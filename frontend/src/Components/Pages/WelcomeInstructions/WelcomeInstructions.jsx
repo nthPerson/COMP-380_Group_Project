@@ -45,23 +45,25 @@ export default function WelcomeInstructions() {
 
   return (
     <div className="landing">
-
       <Sidebar user={user} />
 
       <main className="content">
-        <h1 className="heading">
-          Welcome, {user.displayName || "User"} <span className="wave">👋</span>
-        </h1>
-        <h2 className="subheading">Getting Started with RezuMe</h2>
+        {/* New wrapper so heading + subheading + list center as one block */}
+        <div className="welcomeBlock">
+          <h1 className="heading">
+            Welcome, {user.displayName || "User"} <span className="wave">👋</span>
+          </h1>
+          <h2 className="subheading">Getting Started with RezuMe</h2>
 
-        <ol className="stepsList">
-          {steps.map((step, i) => (
-            <li key={i}>
-              <h3>{step.title}</h3>
-              <p>{step.desc}</p>
-            </li>
-          ))}
-        </ol>
+          <ol className="stepsList">
+            {steps.map((step, i) => (
+              <li key={i}>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
 
         <div className="actions">
           <Link to="/createResume" className="button">
@@ -71,8 +73,6 @@ export default function WelcomeInstructions() {
           <Link to="/uploadResume" className="button">
             Upload Resume
           </Link>
-          
-          
         </div>
       </main>
     </div>
