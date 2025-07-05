@@ -179,12 +179,12 @@ export default function GenerateAndEditResume() {
 
                 )}
 
-                {generatedHtml && (
+                {/*{generatedHtml && (
                     <>
                         <h3>Resume Changes Highlighted</h3>
                         <div className="diff-container" dangerouslySetInnerHTML={{ __html: diffHtml }} />
                     </>
-                )}
+                )} */}
 
                 {generatedHtml && (
                     <>
