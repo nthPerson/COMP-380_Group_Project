@@ -21,6 +21,9 @@ import { toDiffHtml } from "../../../utils/diffHtml";
 
 import InfoBox from "../../UI/InfoBox/InfoBox";
 import NavigationButton from "../../UI/NavigationButton/NavigationButton";
+import GenerateButton from "../../UI/GenerateButton/GenerateButton";
+import WarningBox from "../../UI/WarningBox/WarningBox";
+
 
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
@@ -61,6 +64,14 @@ export default function GenerateAndEditResume() {
         const htmlDiff = toDiffHtml(masterHtml, generatedHtml);
         setDiffHtml(htmlDiff);
     }, [masterText, generatedHtml]);
+
+        //determine if the generation button should pulse or not
+        // only pulse when...
+        //  • not currently generating
+        //  • you’ve never generated yet
+        //  • AND you _have_ a JD (so no warning) so button does not pulse if the warning sign is up
+        const shouldPulse = !isGenerating && !generatedHtml && Boolean(jdContent);
+
 
     const handleGenerateResume = async () => {
         setIsGenerating(true);
@@ -171,20 +182,33 @@ export default function GenerateAndEditResume() {
 
                 </header>
                 <div className="tool-section" data-aos="fade-up" data-aos-delay="100">
-                {masterDocID && jdContent && (
+                {masterDocID && (
+            <>
+              {!jdContent && (
+                <div className="warning-box">
+                    <p className="warning-box__message">
+                    Please upload a job description before generating a RezuMe.
+                    </p>
+                </div>
+            )}
 
-                    <button className="navigation-button" onClick={handleGenerateResume} disabled={isGenerating}>
-                        {isGenerating ? "Generating..." : "Generate Targeted Resume"}
-                    </button>
 
-                )}
+              {/* always render button, but disable & stop pulse when no JD */}
+              <GenerateButton
+                onClick={handleGenerateResume}
+                disabled={!jdContent || isGenerating}
+                isGenerating={isGenerating}
+                pulse={shouldPulse}
+              />
+            </>
+          )}
 
-                {generatedHtml && (
+                {/*{generatedHtml && (
                     <>
                         <h3>Resume Changes Highlighted</h3>
                         <div className="diff-container" dangerouslySetInnerHTML={{ __html: diffHtml }} />
                     </>
-                )}
+                )}*/}
 
                 {generatedHtml && (
                     <>
