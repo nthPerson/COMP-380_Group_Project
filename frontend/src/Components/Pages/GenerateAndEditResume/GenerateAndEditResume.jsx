@@ -42,6 +42,23 @@ export default function GenerateAndEditResume() {
     const [masterText, setMasterText] = useState("");
     const [diffHtml, setDiffHtml] = useState("");
 
+    const similarityContent = postGenSim != null ? (
+        <div className="similarity-callout" style={{ marginTop: 12 }}>
+            <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
+            {initialSim != null && (
+                <div style={{ marginTop: 4 }}>
+                    Original Unaltered Resume vs Job Description Similarity: {initialSim}%
+                </div>
+            )}
+            {getDifference() != null && (
+                <div style={{ color: getDifference() > 0 ? 'green' : 'black', marginTop: 4 }}>
+                    {getDifference() > 0 ? 'Percentage Improvement: ' : 'Percentage Difference: '}
+                    <strong>{Math.abs(getDifference()).toFixed(1)}%</strong>
+                </div>
+            )}
+        </div>
+    ) : null;
+
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, (u) => setUser(u));
         return () => unsub();
@@ -159,7 +176,7 @@ export default function GenerateAndEditResume() {
     return (
         <div className="layout">
 
-            <Sidebar user={user} />
+            <Sidebar user={user} similarityContent={similarityContent} />
 
             <main className="tailor-container">
                 <header className="header">
@@ -219,22 +236,7 @@ export default function GenerateAndEditResume() {
                             <button className="button" onClick={handleDownloadPdf}>Download as PDF</button>
                             <button className="button" style={{ marginLeft: 8 }} onClick={handleSaveToLibrary}>Save to Library</button>
                         </div>
-                        {postGenSim != null && (
-                            <div  className="similarity-callout" style={{ marginTop: 12 }}>
-                                <strong>Generated RezuMe vs Job Description Similarity:</strong> {postGenSim}%
-                                {initialSim != null && (
-                                    <div style={{ marginTop: 4 }}>
-                                        Original Unaltered Resume vs Job Description Similarity: {initialSim}%
-                                    </div>
-                                )}
-                                {getDifference() != null && (
-                                    <div style={{ color: getDifference() > 0 ? "green" : "black", marginTop: 4 }}>
-                                        {getDifference() > 0 ? "Percentage Improvement: " : "Percentage Difference: "}
-                                        <strong>{Math.abs(getDifference()).toFixed(1)}%</strong>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                        {/* similarity content moved to sidebar */}
                     </>
                 )}
                 </div>

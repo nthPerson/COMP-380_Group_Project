@@ -24,6 +24,20 @@ export default function AddJd() {
     const [urlError, setUrlError] = useState("");
     const [highlightTextInput, setHighlightTextInput] = useState(false);
 
+    const similarityContent = initialSim != null ? (
+        <div className="similarity-callout">
+            <strong>Master Resume vs Job Description Similarity:</strong>
+            <span style={{
+                display: 'block',
+                fontSize: '2.5rem',
+                fontWeight: '700',
+                textAlign: 'center',
+                color: '#1a73e8',
+                marginTop: '0.25rem'
+            }}>{initialSim}%</span>
+        </div>
+    ) : null;
+
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, (u) => setUser(u));
         return () => unsub();
@@ -67,7 +81,7 @@ export default function AddJd() {
     return (
         <div className="layout">
 
-            <Sidebar user={user} />
+            <Sidebar user={user} similarityContent={similarityContent} />
 
             <main className="tailor-container">
                 <header className="header">
@@ -102,18 +116,6 @@ export default function AddJd() {
                         </>
                     )}
 
-                    {initialSim != null && (
-                        <p className="similarity-callout">
-                            <strong>Master Resume vs Job Description Similarity:</strong> <span style={{
-                                display: 'block',
-                                fontSize: '2.5rem',
-                                fontWeight: '700',
-                                textAlign: "center",
-                                color: "#1a73e8",
-                                marginTop: '0.25rem'
-                            }}>{initialSim}%</span>
-                        </p>
-                    )}
                 </ToolSection>
 
                 <div className="nav-buttons-row">

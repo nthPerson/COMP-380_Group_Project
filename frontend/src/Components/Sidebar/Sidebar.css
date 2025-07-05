@@ -551,3 +551,16 @@ body::before {
   z-index: -1;
   pointer-events: none;
 }
+
+/* Similarity box displayed below the nav */
+.sidebar-similarity-box {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+}
+
+.sidebar.collapsed .sidebar-similarity-box {
+  display: none;
+}

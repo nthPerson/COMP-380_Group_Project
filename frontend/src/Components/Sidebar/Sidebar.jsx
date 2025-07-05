@@ -10,7 +10,7 @@ import resume_icon from "../Assets/resume_icon.png";
 import logout_icon from "../Assets/logout_icon.png";
 import welcome_icon from "../Assets/hello.png";
 
-const Sidebar = ({ user }) => {
+const Sidebar = ({ user, similarityContent }) => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -305,6 +305,11 @@ const Sidebar = ({ user }) => {
             </li>
           </ul>
         </nav>
+        {similarityContent && (
+          <div className="sidebar-similarity-box">
+            {similarityContent}
+          </div>
+        )}
       </div>
     </>
   );
