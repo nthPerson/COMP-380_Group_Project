@@ -322,6 +322,7 @@ def compute_similarity_scores():
         return jsonify({"error":"Could not fetch resume text"}), 404
     
     # Calculate similarity between master resume text and JD
+    print(f'JD Text: {jd_text}\n\nResume Text: {master_txt}')
     master_sim = _similarity_from_text(master_txt, jd_text)
 
     result = {"master_score": round(master_sim, 1)}
