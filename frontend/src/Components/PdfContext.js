@@ -107,7 +107,6 @@ export function PdfProvider({ children }) {
 
     // Delete PDF (and refresh list when complete)
     const handleDelete = useCallback(async (docID, fileName) => {
-        if (window.confirm(`Are you sure you want to delete ${fileName}?`)) {
             try {
                 await deleteUserPdf(docID);
                 setStatusMessage(`Deleted file ${fileName}`);
@@ -115,7 +114,7 @@ export function PdfProvider({ children }) {
             } catch {
                 setStatusMessage("Failed to delete file");
             }
-        }
+        
     }, [fetchPdfsAndMaster]);
 
     // Set master PDF (and refresh list when complete)
