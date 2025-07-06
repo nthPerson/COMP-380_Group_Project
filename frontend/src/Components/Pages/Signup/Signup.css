@@ -193,4 +193,88 @@ body {
   color: #4CAF50;
 }
 
+/* Bunny Logo Styles */
+.banner-left {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  height: auto; /* Ensure consistent height */
+  line-height: 1; /* Reset line height to prevent text pushing down */
+}
+
+.banner-logo {
+  width: 55px !important;
+  height: 55px !important;
+  object-fit: contain;
+  margin-right: 5px;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 8px rgba(74, 144, 226, 0.2));
+  vertical-align: middle; /* Ensure vertical alignment */
+  flex-shrink: 0; /* Prevent the logo from shrinking */
+}
+
+.banner-logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 12px rgba(74, 144, 226, 0.3));
+}
+
+.banner-title {
+  font-size: 1.9rem !important;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+  padding: 0; /* Remove all padding */
+  line-height: 1; /* Set consistent line height */
+  display: flex; /* Make the title a flex container */
+  align-items: center; /* Center the text vertically */
+
+}
+
+.light-blue {
+  background: linear-gradient(135deg, #4A90E2 0%, #6FD0DF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.solid-blue {
+  background: linear-gradient(135deg, #6FD0DF 0%, #87CEEB 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .banner-logo {
+    width: 38px !important;
+    height: 38px !important;
+    margin-right: 4px;
+  }
+  
+  .banner-left {
+    gap: 0.2rem;
+  }
+  
+  .banner-title {
+    font-size: 1.6rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-logo {
+    width: 35px !important;
+    height: 35px !important;
+    margin-right: 3px;
+  }
+  
+  .banner-left {
+    gap: 0.1rem;
+  }
+  
+  .banner-title {
+    font-size: 1.4rem !important;
+  }
+}
+
 
