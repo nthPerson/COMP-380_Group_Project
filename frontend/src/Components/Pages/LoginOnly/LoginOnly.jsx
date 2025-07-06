@@ -77,6 +77,36 @@ export default function LoginOnly() {
       setLoading(false);
     }
   };
+  // NEW: pull your forgot-password logic into its own async fn
+  const handleForgotPassword = async () => {
+    // clear any old messages
+    setEmailError("");
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    // 1) fast-fail if there's no email in the field
+    if (!email.trim()) {
+      setEmailError("Please enter your email.");
+      setErrorMsg("Please enter your email.");
+      return;
+    }
+
+    // 2) call your service
+    try {
+      await handlePasswordReset(email);
+      // 3) on success, show a friendly confirmation
+      setSuccessMsg("Reset password link sent to email");
+    } catch (err) {
+      // 4) your existing error cases…
+      if (err.message === "invalid-email-format") {
+        setEmailError("Please enter a valid email address.");
+        setErrorMsg("Please enter a valid email address.");
+      } else {
+        console.error("Password Reset failed", err);
+        setErrorMsg("Failed to send reset email. Try again.");
+      }
+    }
+  };
 
   return (
     <>
@@ -114,7 +144,9 @@ export default function LoginOnly() {
               onChange={(e) => {
                 // When user types, this function runs
                 setEmail(e.target.value);
-                if (emailError) setEmailError(false);
+                if (emailError) setEmailError("");
+                if (errorMsg) setErrorMsg("");
+                if (successMsg) setSuccessMsg("");
               }}
               required
             />
@@ -137,7 +169,9 @@ export default function LoginOnly() {
               onChange={(e) => {
                 setPassword(e.target.value);
                 setPassword(e.target.value);
-                if (passwordError) setPasswordError(false);
+                if (passwordError) setPasswordError("");
+                if (errorMsg) setErrorMsg("");
+                if (successMsg) setSuccessMsg("");
               }}
               style={{ paddingRight: "2.5rem" }}
               required
@@ -157,33 +191,19 @@ export default function LoginOnly() {
             Forgot Password?
             <span
               style={{ cursor: "pointer", color: "var(--primary)" }}
-              onClick={async () => {
-                setEmailError(false);
-                setErrorMsg("");
-                try {
-                  await handlePasswordReset(email);
-                  setSuccessMsg(true);
-                  setErrorMsg("Password reset email sent. Check your inbox.");
-                } catch (err) {
-                  if (err.message === "empty-email") {
-                    setEmailError(true);
-                    setErrorMsg("Please enter your email.");
-                  } else if (err.message === "invalid-email-format") {
-                    setEmailError(true);
-                    setErrorMsg("Please enter a valid email address.");
-                  } else {
-                    console.error("Password Reset failed", err.message);
-                    setErrorMsg("Failed to send reset email. Try again.");
-                  }
-                }
-              }}
+              onClick={handleForgotPassword}
             >
-
               {" "}
               Click here!
             </span>
           </div>
-
+          {/* now render your messages just below the form */}
+          {!emailError && !passwordError && errorMsg && (
+            <p className="field-error">{errorMsg}</p>
+          )}
+          {successMsg && (
+            <p className="field-success">{successMsg}</p>
+          )}
 
           <div className="submit-container">
             <button

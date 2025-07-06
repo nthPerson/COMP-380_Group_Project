@@ -20,8 +20,8 @@
   /* pulse animation */
   animation: warning-pulse 2s ease-in-out infinite;
   
-  /* center text horizontally */
-  text-align: center;
+  /* center text horizontally Added important because someone in tailorcontainer is making things left align*/
+ 
 }
 
 /* paragraph reset & font sizing */
@@ -30,6 +30,8 @@
   font-size: 1rem;    /* same as InfoBox text */
   line-height: 1.5;   /* comfortable reading */
   color: #333;
+  font-weight: bold;
+  text-align: center !important;
 }
 
 /* pulse keyframes */
