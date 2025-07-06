@@ -10,7 +10,8 @@
   }
   
   .bunny-animation-centered {
-    width: 270px !important;
+    /* width: 270px !important; */
+    width: 320px !important;
     height: auto;
     background: transparent !important;
     background-color: transparent !important;
