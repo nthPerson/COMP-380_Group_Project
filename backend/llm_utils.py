@@ -271,6 +271,21 @@ def _cosine_sim(a: list, b: list) -> float:
     norm_b = math.sqrt(sum(y*y for y in b))
     return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
+# Compute the average of each resume item's best similarity against jd_items
+def compute_average_similarity(resume_items: list[str], jd_items: list[str]) -> float:
+    if not resume_items or not jd_items:
+        return 0.0
+
+    resume_embeds = get_embeddings(resume_items)
+    jd_embeds = get_embeddings(jd_items)
+
+    total_similarity = 0.0
+    for res_emb in resume_embeds:
+        max_sim = max(_cosine_sim(res_emb, jd_emb) for jd_emb in jd_embeds)
+        total_similarity += max_sim
+
+    return (total_similarity / len(resume_embeds)) * 100
+
 """ JD <-> Resume similiarity calculation using OpenAI Embeddings and consine similarity
     Here's the plan:
         1. After user tags a master resume and inputs a JD, create embeddings from resume and JD
@@ -306,18 +321,36 @@ def compute_similarity_scores():
     if not master_txt:
         return jsonify({"error":"Could not fetch resume text"}), 404
     
-    # Embed JD and master resume
-    jd_embed = _get_embedding(jd_text)
-    master_embed = _get_embedding(master_txt)
-    master_sim = _cosine_sim(master_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
+    # Parse the master resume and job description into structured profiles
+    try:
+        resume_profile = llm_parse_text(master_txt, mode="resume")
+        jd_profile = llm_parse_text(jd_text, mode="jd")
+    except Exception as e:
+        return jsonify({"error": f"LLM parsing failed: {e}"}), 500
 
-    result = {"master_score": round(master_sim, 1)}
+    def score_profile(profile: dict) -> float:
+        skills = profile.get("skills", [])
+        edu = [e.get("degree", "") for e in profile.get("education", [])]
+        exp = [e.get("job_title", "") for e in profile.get("experience", [])]
 
-    # If the targeted resume has been generated, embed, calculate, and compare that too
+        skill_sim = compute_average_similarity(skills, jd_profile.get("required_skills", []))
+        edu_sim = compute_average_similarity(edu, jd_profile.get("required_education", []))
+        exp_sim = compute_average_similarity(exp, jd_profile.get("required_experience", []))
+
+        return 0.5 * skill_sim + 0.2 * edu_sim + 0.3 * exp_sim
+
+    master_score = score_profile(resume_profile)
+
+    result = {"master_score": round(master_score, 1)}
+
     if generated_text:
-        gen_embed = _get_embedding(generated_text)
-        generated_sim = _cosine_sim(gen_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
-        result["generated_score"] = round(generated_sim, 1)
+        try:
+            gen_profile = llm_parse_text(generated_text, mode="resume")
+        except Exception as e:
+            return jsonify({"error": f"LLM parsing failed: {e}"}), 500
+
+        generated_score = score_profile(gen_profile)
+        result["generated_score"] = round(generated_score, 1)
 
     return jsonify(result), 200
 
