@@ -200,18 +200,23 @@ export default function GenerateAndEditResume() {
     </header>
 
     <div className="tool-section" data-aos="fade-up" data-aos-delay="100">
-        {masterDocID && jdContent && (
-            <button className="navigation-button" onClick={handleGenerateResume} disabled={isGenerating}>
-                {isGenerating ? "Generating..." : "Generate Targeted Resume"}
-            </button>
-        )}
+         {!jdContent && masterDocID && <WarningBox>Please upload a job description before generating a RezuMe.</WarningBox>}
 
-        {generatedHtml && (
+                    {masterDocID && (
+                        <GenerateButton
+                            onClick={handleGenerateResume}
+                            disabled={!jdContent || isGenerating}
+                            isGenerating={isGenerating}
+                            pulse={shouldPulse}
+                        />
+                    )}
+
+        {/*{generatedHtml && (
             <>
                 <h3>Resume Changes Highlighted</h3>
                 <div className="diff-container" dangerouslySetInnerHTML={{ __html: diffHtml }} />
             </>
-        )}
+        )} */}
 
         {generatedHtml && (
             <>
