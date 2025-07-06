@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleSignout } from '../../services/authHandlers';
 
-import logo_icon from "../Assets/logo_icon.png";
-import profile_icon from "../Assets/profile_icon.png";
+import bunnyLogo from '../Assets/Bunny_Icon.png';import profile_icon from "../Assets/profile_icon.png";
 import archive_icon from "../Assets/library_icon.png";
 import magicwand_icon from "../Assets/magic-wand_icon.png";
 import resume_icon from "../Assets/resume_icon.png";
@@ -178,11 +177,13 @@ const Sidebar = ({ user }) => {
         )}
 
         <Link to="/landingPage" className="sidebar-header">
-          <img src={logo_icon} alt="RezuMe Logo" className="sidebar-logo" />
-          <div className="sidebar-title">
-            <span className="light-blue">Rezu</span>
-            <span className="solid-blue">Me</span>
-          </div>
+      <div className="sidebar-container">
+        <img src={bunnyLogo} alt="RezuMe Bunny Logo" className="sidebar-logo" />
+        <div className="sidebar-title">
+          <span className="light-blue">Rezu</span>
+          <span className="solid-blue">Me</span>
+        </div>
+      </div>
         </Link>
 
         <nav className="sidebar-nav">

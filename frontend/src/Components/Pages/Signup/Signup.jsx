@@ -4,7 +4,7 @@ import "./Signup.css";
 import user_icon from "../../Assets/profile_icon.png";
 import email_icon from "../../Assets/email_icon.png";
 import password_icon from "../../Assets/password_icon.png";
-import logo_icon from '../../Assets/logo_icon.png';
+import bunnyLogo from '../../Assets/Bunny_Icon.png';
 import { FaEye, FaEyeSlash } from "react-icons/fa";// Import the FontAwesome eye/eye-slash icons
 import { FaRegCircle, FaCheckCircle } from "react-icons/fa";
 import { handleSignup } from "../../../services/authHandlers";
@@ -135,8 +135,7 @@ export default function LoginSignup() {
         <div className="banner-content">
           <div className="banner-left">
             <Link to="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-              <img src={logo_icon} alt="Logo icon" className="banner-logo" />
-              <span className="banner-title">
+            <img src={bunnyLogo} alt="RezuMe Bunny Logo" className="banner-logo" />              <span className="banner-title">
                 <span className="light-blue">Rezu</span>
                 <span className="solid-blue">Me</span>
               </span>

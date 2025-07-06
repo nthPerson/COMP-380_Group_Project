@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../Signup/Signup.css";
-import logo_icon from '../../Assets/logo_icon.png';
+import bunnyLogo from '../../Assets/Bunny_Icon.png'; // Replace this line
 import email_icon from "../../Assets/email_icon.png";
 import password_icon from "../../Assets/password_icon.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -85,7 +85,7 @@ export default function LoginOnly() {
         <div className="banner-content" >
           <div className="banner-left">
             <Link to="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-              <img src={logo_icon} alt="Logo icon" className="banner-logo" />
+              <img src={bunnyLogo} alt="RezuMe Bunny Logo" className="banner-logo" />
               <span className="banner-title">
                 <span className="light-blue">Rezu</span>
                 <span className="solid-blue">Me</span>
