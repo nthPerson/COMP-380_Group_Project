@@ -11,6 +11,7 @@ from embeddings_db import (
     get_embedding_from_db,
     save_embedding_to_db
 )
+from bs4 import BeautifulSoup
 
 
 load_dotenv()
@@ -271,6 +272,20 @@ def _cosine_sim(a: list, b: list) -> float:
     norm_b = math.sqrt(sum(y*y for y in b))
     return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
+# Extract plain text from an HTML string
+def _html_to_text(html: str) -> str:
+    soup = BeautifulSoup(html, "html.parser")
+    text = soup.get_text(separator=" ")
+    return " ".join(text.split())
+
+# Calculate similarity percentage between two chunks of text
+def _similarity_from_text(text_a: str, text_b: str) -> float:
+    if not text_a or not text_b:
+        return 0.0
+    emb_a = _get_embedding(text_a)
+    emb_b = _get_embedding(text_b)
+    return _cosine_sim(emb_a, emb_b) * 100
+
 """ JD <-> Resume similiarity calculation using OpenAI Embeddings and consine similarity
     Here's the plan:
         1. After user tags a master resume and inputs a JD, create embeddings from resume and JD
@@ -306,17 +321,18 @@ def compute_similarity_scores():
     if not master_txt:
         return jsonify({"error":"Could not fetch resume text"}), 404
     
-    # Embed JD and master resume
-    jd_embed = _get_embedding(jd_text)
-    master_embed = _get_embedding(master_txt)
-    master_sim = _cosine_sim(master_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
+    # Calculate similarity between master resume text and JD
+    master_sim = _similarity_from_text(master_txt, jd_text)
 
     result = {"master_score": round(master_sim, 1)}
 
     # If the targeted resume has been generated, embed, calculate, and compare that too
     if generated_text:
-        gen_embed = _get_embedding(generated_text)
-        generated_sim = _cosine_sim(gen_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
+        if "<" in generated_text and ">" in generated_text:
+            generated_clean = _html_to_text(generated_text)
+        else:
+            generated_clean = generated_text
+        generated_sim = _similarity_from_text(generated_clean, jd_text)
         result["generated_score"] = round(generated_sim, 1)
 
     return jsonify(result), 200
