@@ -37,6 +37,12 @@ from llm_utils import (
     highlight_profile_similarity,
     generate_targeted_resume_html
 )
+from jd_storage import (
+    add_job_description,
+    list_job_descriptions,
+    set_active_jd,
+    get_active_jd
+)
 
 from user_profile_utils import (
     upload_profile_picture,
@@ -60,6 +66,43 @@ def receive_jd():
 @verify_firebase_token
 def receive_jd_url():
     return handle_jd_from_url(request.get_json().get("url", ""))
+
+# Save a job description with a title
+@app.route("/api/save_jd_text", methods=["POST"])
+@verify_firebase_token
+def api_save_jd_text():
+    data = request.get_json() or {}
+    title = data.get("title")
+    jd_text = data.get("jd")
+    if not title or not jd_text:
+        return jsonify({"error": "Missing title or jd"}), 400
+    jd = add_job_description(title, jd_text)
+    return jsonify(jd), 200
+
+# List saved job descriptions
+@app.route("/api/list_jds", methods=["GET"])
+@verify_firebase_token
+def api_list_jds():
+    jds = list_job_descriptions()
+    return jsonify({"jds": jds}), 200
+
+# Set active job description
+@app.route("/api/set_active_jd", methods=["POST"])
+@verify_firebase_token
+def api_set_active_jd():
+    data = request.get_json() or {}
+    jd_id = data.get("id")
+    if not jd_id:
+        return jsonify({"error": "Missing id"}), 400
+    set_active_jd(jd_id)
+    return jsonify({"activeJdID": jd_id}), 200
+
+# Get active job description id
+@app.route("/api/get_active_jd", methods=["GET"])
+@verify_firebase_token
+def api_get_active_jd():
+    active = get_active_jd()
+    return jsonify({"activeJdID": active}), 200
 
 #============================= PDF Management ===========================================
     
