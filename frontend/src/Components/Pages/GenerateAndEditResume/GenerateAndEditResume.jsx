@@ -35,11 +35,10 @@ export default function GenerateAndEditResume() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const { masterDocID, pdfs, fetchPdfsAndMaster } = usePdf();
-    const { jdContent, generatedHtml, setGeneratedHtml } = useTargetedResume();
+    const { jdContent, generatedHtml, setGeneratedHtml, initialSim } = useTargetedResume();
 
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedResume, setGeneratedResume] = useState("");
-    const [initialSim, setInitialSim] = useState(null);
     const [postGenSim, setPostGenSim] = useState(null);
     const [masterText, setMasterText] = useState("");
     const [diffHtml, setDiffHtml] = useState("");
@@ -48,12 +47,6 @@ export default function GenerateAndEditResume() {
         const unsub = onAuthStateChanged(auth, (u) => setUser(u));
         return () => unsub();
     }, []);
-
-    useEffect(() => {
-        if (!masterDocID || !jdContent) return;
-        getSimilarityScore(masterDocID, jdContent).then(({ master_score }) => setInitialSim(master_score)).catch(console.error);
-    }, [masterDocID, jdContent]);
-
 
     useEffect(() => {
         if (!masterDocID) return;
