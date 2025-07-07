@@ -23,7 +23,9 @@ This file implements a **React Context** and Provider for managing state related
 | `jdExplanation`    | string   | Explanation or analysis of the job description. |
 | `setJdExplanation` | function | Updates `jdExplanation`.                        |
 | `generatedHtml`    | string   | Generated HTML content for the targeted resume. |
-| `setGeneratedHtml` | function | Updates `generatedHtml`.                        |
+| `setGeneratedHtml` | function | Updates `generatedHtml`. |
+| `initialSim`       | number?  | Baseline similarity score between the master resume and job description. |
+| `setInitialSim`    | function | Updates `initialSim`. |
 
 ---
 
