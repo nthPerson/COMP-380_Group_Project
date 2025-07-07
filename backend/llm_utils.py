@@ -157,7 +157,8 @@ def generate_targeted_resume_html():
     user_msg = (
         f"Here is the candidates original resume:\n```{raw_resume}```\n\n"
         f"Here is the target job description:\n```{jd_text}```\n\n"
-        f"Include an emphasize these keywords if relevant:"
+        f"Include an emphasize these keywords"
+        # f"Include an emphasize these keywords if relevant:"
         f"{keyword_list}."
         f"Use only facts from the original resume -- do not invent new experiences, education, or skills."
     )
@@ -280,6 +281,14 @@ def _cosine_sim(a: list, b: list) -> float:
 
 def _score_via_llm(resume_text: str, jd_text: str) -> float:
     """Call GPT to rate how well the resume matches the job description."""
+    # system = (
+    #     "You are an expert recruiter. On a scale of 0% to 100%, rate how well the "
+    #     "resume meets the job description. Determine if the resume meets the job "
+    #     "description by verifying the skills, education, and experience contained "
+    #     "in the resume satisfy the requirements in the job description. Be reaonably "
+    #     "strict about keyword matching. Consider a keyword validated if the "
+    #     "language matches exactly or is fairly close. Only reply with a single number. Floats to one decimal place are acceptable."
+    # )
     system = (
         "You are an expert recruiter. On a scale of 0% to 100%, rate how well the "
         "resume meets the job description. Determine if the resume meets the job "
