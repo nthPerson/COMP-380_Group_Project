@@ -155,6 +155,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1.2rem; 
 }
 
 /* ===== Empty state ===== */
@@ -189,4 +190,35 @@
   cursor: not-allowed;       /* crossed‐circle on hover */
   opacity: 0.5;               /* dim it so it reads “inactive” */
   box-shadow: none !important;/* remove any glow */
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;        /* space between date and view button */
+  min-width: 215px; /* adjust as needed so all align, can be 180-240px */
+  justify-content: flex-end;
+}
+
+
+.resume-filename {
+  flex: 1 1 auto;
+  font-family: 'Fira Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.resume-date {
+  min-width: 140px;
+  margin-left: 20px;
+  color: #888;
+  font-size: 0.97em;
+  font-family: inherit;
+  text-align: left;
+  letter-spacing: 0.02em;
+}
+/* 🟢 add or increase gap for .resume-item to fit the date nicely */
+.resume-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem; /* 🟢 */
 }

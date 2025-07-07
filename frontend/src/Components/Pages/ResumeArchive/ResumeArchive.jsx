@@ -12,6 +12,12 @@ import "./ResumeArchive.css";
 import "../../Sidebar/Sidebar.css";
 import "../UserProfile/UserProfile.css";
 
+//date formatter helper function 
+function formatDateTime(dt){
+    if (!dt) return "";
+    const date = typeof dt === "string" ? new Date(dt) : dt?.toDate ? dt.toDate() : new Date(dt); // 🟢
+    return date.toLocaleString([], { dateStyle: "short", timeStyle: "short" }); // 🟢
+}
 export default function ResumeArchive() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -82,21 +88,25 @@ export default function ResumeArchive() {
         <ul className="resume-list">
             {items.map((pdf) => (
                 <li key={pdf.docID} className="resume-item">
-                    <label>
+                    <span className="resume-filename">
                         <input
                             type="checkbox"
                             checked={selected.includes(pdf.docID)}
                             onChange={() => toggle(pdf.docID)}
-                        />{' '}
+                        />{" "}
                         {pdf.fileName}
-                    </label>
+                    </span>
                     <div className="actions">
+                        <span className="resume-date">
+                            {formatDateTime(pdf.createdAt || pdf.uploadedAt)}
+                        </span>
                         <button onClick={() => handleView(pdf.storagePath)}>View</button>
                     </div>
                 </li>
             ))}
         </ul>
     );
+
     return (
         <div className="layout">
             
