@@ -34,7 +34,7 @@ import "./GenerateAndEditResume.css"; // Add this line
 export default function GenerateAndEditResume() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const { masterDocID, fetchPdfsAndMaster } = usePdf();
+    const { masterDocID, pdfs, fetchPdfsAndMaster } = usePdf();
     const { jdContent, generatedHtml, setGeneratedHtml, initialSim } = useTargetedResume();
 
     const [isGenerating, setIsGenerating] = useState(false);
@@ -60,6 +60,11 @@ export default function GenerateAndEditResume() {
         setDiffHtml(htmlDiff);
     }, [masterText, generatedHtml]);
 
+        // Get the master resume file name for naming tailored resumes
+        const masterPdf = pdfs?.find(pdf => pdf.docID === masterDocID); // 🟢
+        const masterName = masterPdf?.fileName?.replace(/\.pdf$/i, '').replace(/\.txt$/i, '') || "Resume"; // 🟢
+        const tailoredPdfName = `Tailored_${masterName}.pdf`; 
+        const tailoredTxtName = `Tailored_${masterName}.txt`; 
         //determine if the generation button should pulse or not
         // only pulse when...
         //  • not currently generating
@@ -97,7 +102,7 @@ export default function GenerateAndEditResume() {
         wrapper.style.width = "612px";
         wrapper.innerHTML = generatedHtml;
         pdf.html(wrapper, {
-            callback: () => pdf.save("Tailored_Resume.pdf"),
+            callback: () => pdf.save(tailoredPdfName),
             margin: [36, 36, 36, 36],
             autoPaging: true,
             html2canvas: { scale: 0.8 }
@@ -109,7 +114,7 @@ export default function GenerateAndEditResume() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "Tailored_Resume.txt";
+        a.download = tailoredTxtName;
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -123,7 +128,7 @@ export default function GenerateAndEditResume() {
             await pdf.html(wrapper, { margin: [36, 36, 36, 36], autoPaging: true, html2canvas: { scale: 0.8 } });
             const blob = pdf.output("blob");
             const form = new FormData();
-            form.append("file", blob, "Tailored_Resume.pdf");
+            form.append("file", blob, tailoredPdfName);
             await saveGeneratedResumePdf(form);
             await fetchPdfsAndMaster();
             alert("Saved RezuMe to your library!");
