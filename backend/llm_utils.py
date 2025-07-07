@@ -282,7 +282,10 @@ def _score_via_llm(resume_text: str, jd_text: str) -> float:
     """Call GPT to rate how well the resume matches the job description."""
     system = (
         "You are an expert recruiter. On a scale of 0% to 100%, rate how well the "
-        "resume meets the job description. Only reply with a single number."
+        "resume meets the job description. Determine if the resume meets the job "
+        "description by verifying the skills, education, and experience contained "
+        "in the resume satisfy these requirements in the job description. Only reply "
+        "with a single number."
     )
     user = f"Resume:\n{resume_text}\n\nJob Description:\n{jd_text}"
 
@@ -292,7 +295,7 @@ def _score_via_llm(resume_text: str, jd_text: str) -> float:
             messages=[{"role": "system", "content": system},
                       {"role": "user", "content": user}],
             temperature=0,
-            max_tokens=10,
+            max_tokens=100,
         )
         content = response.choices[0].message.content.strip()
         # Extract the first number found in the response
