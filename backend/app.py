@@ -41,7 +41,9 @@ from jd_storage import (
     add_job_description,
     list_job_descriptions,
     set_active_jd,
-    get_active_jd
+    get_active_jd,
+    delete_job_description,
+    get_job_description
 )
 
 from user_profile_utils import (
@@ -94,8 +96,10 @@ def api_set_active_jd():
     jd_id = data.get("id")
     if not jd_id:
         return jsonify({"error": "Missing id"}), 400
-    set_active_jd(jd_id)
-    return jsonify({"activeJdID": jd_id}), 200
+    jd = set_active_jd(jd_id)
+    if not jd:
+        return jsonify({"error": "JD not found"}), 404
+    return jsonify({"activeJdID": jd_id, "jd": jd}), 200
 
 # Get active job description id
 @app.route("/api/get_active_jd", methods=["GET"])
@@ -103,6 +107,17 @@ def api_set_active_jd():
 def api_get_active_jd():
     active = get_active_jd()
     return jsonify({"activeJdID": active}), 200
+
+# Delete a job description
+@app.route("/api/delete_jd", methods=["POST"])
+@verify_firebase_token
+def api_delete_jd():
+    data = request.get_json() or {}
+    jd_id = data.get("id")
+    if not jd_id:
+        return jsonify({"error": "Missing id"}), 400
+    delete_job_description(jd_id)
+    return jsonify({"deleted": True}), 200
 
 #============================= PDF Management ===========================================
     

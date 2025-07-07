@@ -135,7 +135,7 @@ export async function setActiveJobDescription(id, idToken) {
     body: JSON.stringify({ id })
   });
   if (!res.ok) throw new Error(await res.text());
-  return await res.json();
+  return await res.json(); // { activeJdID, jd }
 }
 
 export async function getActiveJobDescription(idToken) {
@@ -144,5 +144,18 @@ export async function getActiveJobDescription(idToken) {
   });
   if (!res.ok) throw new Error(await res.text());
   return await res.json();
+}
+
+export async function deleteJobDescription(id, idToken) {
+  const res = await fetch("http://localhost:5001/api/delete_jd", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${idToken}`
+    },
+    body: JSON.stringify({ id })
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json(); // { deleted: true }
 }
 

@@ -21,7 +21,7 @@ export default function AddJd() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const { masterDocID } = usePdf();
-    const { addJd } = useJd();
+    const { addJd, jds, activeJdID } = useJd();
     const { jdExplanation, setJdExplanation, jdContent, setJdContent, initialSim, setInitialSim } = useTargetedResume();
     const [urlError, setUrlError] = useState("");
     const [highlightTextInput, setHighlightTextInput] = useState(false);
@@ -35,6 +35,17 @@ export default function AddJd() {
         if (!masterDocID || !jdContent) return;
         getSimilarityScore(masterDocID, jdContent).then(({ master_score }) => setInitialSim(master_score)).catch(console.error);
     }, [masterDocID, jdContent]);
+
+    useEffect(() => {
+        if (!masterDocID || !activeJdID) return;
+        const jd = jds.find(j => j.id === activeJdID);
+        if (!jd) return;
+        setJdContent(jd.text);
+        setJdExplanation("");
+        getSimilarityScore(masterDocID, jd.text)
+            .then(({ master_score }) => setInitialSim(master_score))
+            .catch(console.error);
+    }, [activeJdID, jds, masterDocID]);
 
     const handleExplanationReceived = (exp, raw) => {
         setJdExplanation(exp);

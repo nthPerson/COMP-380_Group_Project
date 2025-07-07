@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { auth } from "../../firebase";
 import { onIdTokenChanged } from "firebase/auth";
-import { saveJobDescription, listJobDescriptions, setActiveJobDescription, getActiveJobDescription } from "../../services/jobDescriptionService";
+import { saveJobDescription, listJobDescriptions, setActiveJobDescription, getActiveJobDescription, deleteJobDescription } from "../../services/jobDescriptionService";
 
 const JdContext = createContext();
 
@@ -53,10 +53,22 @@ export function JdProvider({ children }) {
     const setActive = async (id) => {
         try {
             const idToken = await auth.currentUser.getIdToken();
-            await setActiveJobDescription(id, idToken);
+            const res = await setActiveJobDescription(id, idToken);
             setActiveJdID(id);
+            return res.jd;
         } catch (e) {
             console.error("Failed to set active JD", e);
+            return null;
+        }
+    };
+
+    const removeJd = async (id) => {
+        try {
+            const idToken = await auth.currentUser.getIdToken();
+            await deleteJobDescription(id, idToken);
+            fetchJdsAndActive();
+        } catch (e) {
+            console.error("Failed to delete JD", e);
         }
     };
 
@@ -67,6 +79,7 @@ export function JdProvider({ children }) {
         addJd,
         setActive,
         fetchJdsAndActive,
+        removeJd,
     };
 
     return (
