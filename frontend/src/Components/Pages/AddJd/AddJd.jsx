@@ -6,6 +6,8 @@ import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
 import UnifiedJdInput from "../../Helpers/JdForm/UnifiedJdInput";
 import { usePdf } from "../../PdfContext";
+import { useJd } from "../../JobDescription/JdContext";
+import JobDescriptionLibrary from "../../JobDescription/JobDescriptionLibrary";
 import { getSimilarityScore } from "../../../services/resumeService";
 import { useTargetedResume } from "../../TargetedResumeContext";
 import InfoBox from "../../UI/InfoBox/InfoBox";
@@ -19,6 +21,7 @@ export default function AddJd() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const { masterDocID } = usePdf();
+    const { addJd, jds, activeJdID } = useJd();
     const { jdExplanation, setJdExplanation, jdContent, setJdContent, initialSim, setInitialSim } = useTargetedResume();
     const [urlError, setUrlError] = useState("");
     const [highlightTextInput, setHighlightTextInput] = useState(false);
@@ -32,6 +35,17 @@ export default function AddJd() {
         if (!masterDocID || !jdContent) return;
         getSimilarityScore(masterDocID, jdContent).then(({ master_score }) => setInitialSim(master_score)).catch(console.error);
     }, [masterDocID, jdContent]);
+
+    useEffect(() => {
+        if (!masterDocID || !activeJdID) return;
+        const jd = jds.find(j => j.id === activeJdID);
+        if (!jd) return;
+        setJdContent(jd.text);
+        setJdExplanation("");
+        getSimilarityScore(masterDocID, jd.text)
+            .then(({ master_score }) => setInitialSim(master_score))
+            .catch(console.error);
+    }, [activeJdID, jds, masterDocID]);
 
     const handleExplanationReceived = (exp, raw) => {
         setJdExplanation(exp);
@@ -113,7 +127,21 @@ export default function AddJd() {
                             }}>{initialSim}%</span>
                         </p>
                     )}
+                    {jdContent && (
+                        <button
+                            type="button"
+                            className="navigation-button"
+                            onClick={() => {
+                                const title = prompt('Job Title');
+                                if (title) addJd(title, jdContent);
+                            }}
+                        >
+                            Save Job Description
+                        </button>
+                    )}
                 </ToolSection>
+
+                <JobDescriptionLibrary />
 
                 <div className="nav-buttons-row">
                     <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>
