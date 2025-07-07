@@ -6,6 +6,8 @@ import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
 import UnifiedJdInput from "../../Helpers/JdForm/UnifiedJdInput";
 import { usePdf } from "../../PdfContext";
+import { useJd } from "../../JobDescription/JdContext";
+import JobDescriptionLibrary from "../../JobDescription/JobDescriptionLibrary";
 import { getSimilarityScore } from "../../../services/resumeService";
 import { useTargetedResume } from "../../TargetedResumeContext";
 import InfoBox from "../../UI/InfoBox/InfoBox";
@@ -19,6 +21,7 @@ export default function AddJd() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const { masterDocID } = usePdf();
+    const { addJd } = useJd();
     const { jdExplanation, setJdExplanation, jdContent, setJdContent, initialSim, setInitialSim } = useTargetedResume();
     const [urlError, setUrlError] = useState("");
     const [highlightTextInput, setHighlightTextInput] = useState(false);
@@ -113,7 +116,21 @@ export default function AddJd() {
                             }}>{initialSim}%</span>
                         </p>
                     )}
+                    {jdContent && (
+                        <button
+                            type="button"
+                            className="navigation-button"
+                            onClick={() => {
+                                const title = prompt('Job Title');
+                                if (title) addJd(title, jdContent);
+                            }}
+                        >
+                            Save Job Description
+                        </button>
+                    )}
                 </ToolSection>
+
+                <JobDescriptionLibrary />
 
                 <div className="nav-buttons-row">
                     <button type="button" className="navigation-button" onClick={() => navigate(-1)} >  &larr; Back </button>

@@ -103,3 +103,46 @@ export async function extractJdProfile(jdText, idToken) {
   if (!res.ok) throw new Error(await res.text());
   return await res.json(); // LLM text : { required_skills: [...], required_education: [...], ... }
 }
+
+export async function saveJobDescription(title, jdText, idToken) {
+  const res = await fetch("http://localhost:5001/api/save_jd_text", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${idToken}`
+    },
+    body: JSON.stringify({ title, jd: jdText })
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json();
+}
+
+export async function listJobDescriptions(idToken) {
+  const res = await fetch("http://localhost:5001/api/list_jds", {
+    headers: { "Authorization": `Bearer ${idToken}` }
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json();
+}
+
+export async function setActiveJobDescription(id, idToken) {
+  const res = await fetch("http://localhost:5001/api/set_active_jd", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${idToken}`
+    },
+    body: JSON.stringify({ id })
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json();
+}
+
+export async function getActiveJobDescription(idToken) {
+  const res = await fetch("http://localhost:5001/api/get_active_jd", {
+    headers: { "Authorization": `Bearer ${idToken}` }
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json();
+}
+
