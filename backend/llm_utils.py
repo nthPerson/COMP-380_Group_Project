@@ -157,10 +157,11 @@ def generate_targeted_resume_html():
     user_msg = (
         f"Here is the candidates original resume:\n```{raw_resume}```\n\n"
         f"Here is the target job description:\n```{jd_text}```\n\n"
-        f"Include an emphasize these keywords"
-        # f"Include an emphasize these keywords if relevant:"
+        f"Include and emphasize these keywords"
+        # f"Include ans emphasize these keywords if relevant:"
         f"{keyword_list}."
-        f"Use only facts from the original resume -- do not invent new experiences, education, or skills."
+        f"Use only facts from the original resume -- do not invent new experiences or education, but add skills given in the list of keywords."
+        # f"Use only facts from the original resume -- do not invent new experiences, education, or skills."
     )
 
     # 3: Call OpenAI API
