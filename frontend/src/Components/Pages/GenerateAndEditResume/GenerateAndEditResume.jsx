@@ -3,6 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import { Link } from "react-router-dom";
+import bunnyVideo from '../../Assets/RezuMe_Bunny_Mascot.mp4';
 
 import { auth } from "../../../firebase";
 import Sidebar from "../../Sidebar/Sidebar";
@@ -28,16 +29,16 @@ import WarningBox from "../../UI/WarningBox/WarningBox";
 import "../../Sidebar/Sidebar.css";
 import "../TailorResume/TailorResume.css";
 import "../UserProfile/UserProfile.css";
+import "./GenerateAndEditResume.css"; // Add this line
 
 export default function GenerateAndEditResume() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const { masterDocID, fetchPdfsAndMaster } = usePdf();
-    const { jdContent, generatedHtml, setGeneratedHtml } = useTargetedResume();
+    const { jdContent, generatedHtml, setGeneratedHtml, initialSim } = useTargetedResume();
 
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedResume, setGeneratedResume] = useState("");
-    const [initialSim, setInitialSim] = useState(null);
     const [postGenSim, setPostGenSim] = useState(null);
     const [masterText, setMasterText] = useState("");
     const [diffHtml, setDiffHtml] = useState("");
@@ -63,12 +64,6 @@ export default function GenerateAndEditResume() {
         const unsub = onAuthStateChanged(auth, (u) => setUser(u));
         return () => unsub();
     }, []);
-
-    useEffect(() => {
-        if (!masterDocID || !jdContent) return;
-        getSimilarityScore(masterDocID, jdContent).then(({ master_score }) => setInitialSim(master_score)).catch(console.error);
-    }, [masterDocID, jdContent]);
-
 
     useEffect(() => {
         if (!masterDocID) return;
@@ -179,53 +174,59 @@ export default function GenerateAndEditResume() {
             <Sidebar user={user} similarityContent={similarityContent} />
 
             <main className="tailor-container">
-                <header className="header">
-                    <h1 className="welcome-title">Generate & Edit Resume</h1>
-                    <InfoBox
-                        items={[
-                            <>
-                                <strong>This resume</strong> will be customized to <strong>match the job description more closely</strong> by highlighting and incorporating the keywords you selected.
-                            </>,
-                            <>
-                                After generation, you can <strong>edit the content</strong> to make it your own.
-                            </>,
-                            <>
-                                You can <strong>save the final version to your library</strong> or <strong>download it to your computer</strong> as a text or PDF file.
-                            </>
-                        ]}
-                    />
-
-
-
-                </header>
-                <div className="tool-section" data-aos="fade-up" data-aos-delay="100">
-                {masterDocID && (
-            <>
-              {!jdContent && (
-                <div className="warning-box">
-                    <p className="warning-box__message">
-                    Please upload a job description before generating a RezuMe.
-                    </p>
-                </div>
-            )}
-
-
-              {/* always render button, but disable & stop pulse when no JD */}
-              <GenerateButton
-                onClick={handleGenerateResume}
-                disabled={!jdContent || isGenerating}
-                isGenerating={isGenerating}
-                pulse={shouldPulse}
-              />
-            </>
-          )}
-
-                {/*{generatedHtml && (
+    <header className="header">
+        <h1 className="welcome-title">Generate & Edit Resume</h1>
+        
+        {/* Centered bunny video under the title */}
+        <div className="centered-bunny-container">
+            <video 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="bunny-animation-centered"
+            >
+                <source src={bunnyVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        {/* Instructions below the video */}
+        <div className="instructions-only">
+            <InfoBox
+                items={[
                     <>
-                        <h3>Resume Changes Highlighted</h3>
-                        <div className="diff-container" dangerouslySetInnerHTML={{ __html: diffHtml }} />
+                        <strong>This resume</strong> will be customized to <strong>match the job description more closely</strong> by highlighting and incorporating the keywords you selected.
+                    </>,
+                    <>
+                        After generation, you can <strong>edit the content</strong> to make it your own.
+                    </>,
+                    <>
+                        You can <strong>save the final version to your library</strong> or <strong>download it to your computer</strong> as a text or PDF file.
                     </>
-                )}*/}
+                ]}
+            />
+        </div>
+    </header>
+
+    <div className="tool-section" data-aos="fade-up" data-aos-delay="100">
+         {!jdContent && masterDocID && <WarningBox>Please upload a job description before generating a RezuMe.</WarningBox>}
+
+                    {masterDocID && (
+                        <GenerateButton
+                            onClick={handleGenerateResume}
+                            disabled={!jdContent || isGenerating}
+                            isGenerating={isGenerating}
+                            pulse={shouldPulse}
+                        />
+                    )}
+
+        {/*{generatedHtml && (
+            <>
+                <h3>Resume Changes Highlighted</h3>
+                <div className="diff-container" dangerouslySetInnerHTML={{ __html: diffHtml }} />
+            </>
+        )} */}
 
                 {generatedHtml && (
                     <>

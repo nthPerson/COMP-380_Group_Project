@@ -153,15 +153,18 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                 etc…
             */}
             {(() => {
-              let offset = 0;
-              const { required_skills, required_education, required_experience, responsibilities } = jdProfile;
-
+              let offset = 0;const { required_skills, required_education, required_experience, responsibilities } = jdProfile;
+              // precompute each section’s length instead of mutating offset
+              const skillsCount = required_skills.length;
+              const eduCount    = required_education.length;
+              const expCount    = required_experience.length;
+              const respCount   = responsibilities.length;
               return (
                 <>
                   <h3>Required Skills</h3>
                   <ul>
                     {required_skills.map((s,i) => {
-                      const match = jdSectionMatches(offset, required_skills.length)[i];
+                      const match = jdSectionMatches(0, skillsCount)[i];
                       return (
                         <li 
                           key={s} 
@@ -179,12 +182,11 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                       );
                     })}
                   </ul>
-                  {offset += required_skills.length}
 
                   <h3>Required Education</h3>
                   <ul>
                     {required_education.map((s,i) => {
-                      const match = jdSectionMatches(offset, required_education.length)[i];
+                      const match = jdSectionMatches(skillsCount, eduCount)[i];
                       return (
                         <li 
                           key={s}
@@ -202,46 +204,44 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                       );
                     })}
                   </ul>
-                  {offset += required_education.length}
 
                   <h3>Required Experience</h3>
                   <ul>
                     {required_experience.map((s,i) => {
-                      const match = jdSectionMatches(offset, required_experience.length)[i];
+                      const match = jdSectionMatches(skillsCount + eduCount, expCount)[i];
                       return (
                         <li 
                           key={s}
                           style={{ backgroundColor: match ? "#ffffcc" : "transparent" }}
                         >
                           <label>
-                            <input
+                            {/* <input
                               type="checkbox"
                               checked={selected.includes(s)}
                               onChange={e => toggleKeyword(s, e.target.checked)}
-                            />{' '}
+                            />{' '} */}
                             {s}
                           </label>
                         </li>
                       );
                     })}
                   </ul>
-                  {offset += required_experience.length}
 
                   <h3>Responsibilities</h3>
                   <ul>
                     {responsibilities.map((s,i) => {
-                      const match = jdSectionMatches(offset, responsibilities.length)[i];
+                      const match = jdSectionMatches(skillsCount + eduCount + expCount, respCount)[i];
                       return (
                         <li 
                           key={s}
                           style={{ backgroundColor: match ? "#ffffcc" : "transparent" }}
                         >
                           <label>
-                            <input
+                            {/* <input
                               type="checkbox"
                               checked={selected.includes(s)}
                               onChange={e => toggleKeyword(s, e.target.checked)}
-                            />{' '}
+                            />{' '} */}
                             {s}
                           </label>
                         </li>
@@ -288,7 +288,6 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                       );
                     })}
                   </ul>
-                  {offset += skills.length}
 
                   <h3>Education</h3>
                   <ul>
@@ -312,7 +311,6 @@ export default function ProfileExtractor ({masterDocID, jdText, jdUrl}) {
                       );
                     })}
                   </ul>
-                  {offset += education.length}
 
                   <h3>Experience</h3>
                   <ul>

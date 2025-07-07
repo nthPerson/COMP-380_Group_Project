@@ -552,6 +552,95 @@ body::before {
   pointer-events: none;
 }
 
+/* Add these styles to Sidebar.css */
+
+.sidebar-logo {
+  width: 60px; /* Increase the width */
+  height: 60px; /* Increase the height */
+  margin-bottom: 1rem; /* Add space below the logo */
+  object-fit: contain; /* Ensure the logo scales properly */
+  transition: all 0.3s ease; /* Add smooth scaling effect */
+}
+
+.sidebar-logo:hover {
+  transform: scale(1.1); /* Slight hover effect */
+  filter: drop-shadow(0 4px 12px rgba(74, 144, 226, 0.3)); /* Add shadow on hover */
+}
+
+.sidebar-title {
+  font-size: 1.8rem; /* Adjust the font size for "RezuMe" */
+  font-weight: bold;
+  margin-top: 0.5rem; /* Add space above the title */
+  text-align: center; /* Center the text */
+}
+
+
+/* Add these styles at the very beginning of your Sidebar.css file */
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the logo and title */
+  padding: 1rem; /* Add padding around the sidebar */
+  text-decoration: none;
+}
+
+.sidebar-logo {
+  width: 80px !important; /* Make it bigger than 60px */
+  height: 80px !important; /* Make it bigger than 60px */
+  margin-bottom: 0.5rem; /* Add space below the logo */
+  object-fit: contain; /* Ensure the logo scales properly */
+  transition: all 0.3s ease; /* Add smooth scaling effect */
+}
+
+.sidebar-logo:hover {
+  transform: scale(1.1); /* Slight hover effect */
+  filter: drop-shadow(0 4px 12px rgba(74, 144, 226, 0.3)); /* Add shadow on hover */
+}
+
+.sidebar-title {
+  font-size: 1.8rem !important; /* Adjust the font size for "RezuMe" */
+  font-weight: bold;
+  margin-top: 0.5rem; /* Add space above the title */
+  text-align: center; /* Center the text */
+}
+
+.light-blue {
+  background: linear-gradient(135deg, #4A90E2 0%, #6FD0DF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.solid-blue {
+  background: linear-gradient(135deg, #6FD0DF 0%, #87CEEB 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (max-width: 768px) {
+  .sidebar-logo {
+    width: 60px; /* Smaller size for tablets */
+    height: 60px;
+  }
+
+  .sidebar-title {
+    font-size: 1.6rem; /* Adjust font size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-logo {
+    width: 50px; /* Smaller size for phones */
+    height: 50px;
+  }
+
+  .sidebar-title {
+    font-size: 1.4rem; /* Adjust font size for phones */
+  }
+}
+
 /* Similarity box displayed below the nav */
 .sidebar-similarity-box {
   background: white;

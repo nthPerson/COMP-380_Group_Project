@@ -1,0 +1,89 @@
+/* GenerateAndEditResume.css */
+
+.centered-bunny-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: transparent !important;
+  }
+  
+  .bunny-animation-centered {
+    /* width: 270px !important; */
+    width: 320px !important;
+    height: auto;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    object-fit: contain;
+    cursor: default;
+    transition: none;
+    opacity: 1;
+    
+    /* Only keep the blend mode to remove white, no color filters */
+    mix-blend-mode: multiply;
+    
+    /* Remove all the color-altering filters */
+    filter: none;
+  }
+  
+  /* Simple floating animation - no hover effects */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .bunny-animation-centered {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Instructions styling - MADE TRANSPARENT */
+  .instructions-only {
+    background: transparent !important; /* Changed from white to transparent */
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 1rem 0;
+    box-shadow: none; /* Removed shadow */
+  }
+  
+  /* Remove any old conflicting styles */
+  .content-with-video {
+    display: none;
+  }
+  
+  /* Make sure header background is transparent too */
+  .header {
+    background: transparent !important;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .bunny-animation-centered {
+      width: 160px !important;
+    }
+    
+    .instructions-only {
+      padding: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .bunny-animation-centered {
+      width: 130px !important;
+    }
+    
+    .instructions-only {
+      padding: 1rem;
+    }
+    
+    .centered-bunny-container {
+      margin: 1rem 0;
+    }
+  }

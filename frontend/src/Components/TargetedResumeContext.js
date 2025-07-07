@@ -6,6 +6,7 @@ export function TargetedResumeProvider({ children }) {
     const [jdContent, setJdContent] = useState("");
     const [jdExplanation, setJdExplanation] = useState("");
     const [generatedHtml, setGeneratedHtml] = useState("");
+    const [initialSim, setInitialSim] = useState(null);
 
     const value = {
         jdContent,
@@ -14,6 +15,8 @@ export function TargetedResumeProvider({ children }) {
         setJdExplanation,
         generatedHtml,
         setGeneratedHtml,
+        initialSim,
+        setInitialSim,
     };
     return (
         <TargetedResumeContext.Provider value={value}>
