@@ -1,4 +1,4 @@
-import os, json, math
+import os, json, math, re
 from dotenv import load_dotenv
 import openai
 from flask import request, g, jsonify
@@ -271,13 +271,38 @@ def _cosine_sim(a: list, b: list) -> float:
     norm_b = math.sqrt(sum(y*y for y in b))
     return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
-""" JD <-> Resume similiarity calculation using OpenAI Embeddings and consine similarity
-    Here's the plan:
-        1. After user tags a master resume and inputs a JD, create embeddings from resume and JD
-        2. Calculate cosine sim to get baseline measurement
-        3. After targeted resume is generated, create embeddings for targeted resume
-        4. Calculate cosine sim again to see if augmented resume performs better against JD
-"""
+"""JD <-> Resume similarity calculation using GPT scoring
+    Instead of cosine similarity on embeddings, ask GPT-3.5-turbo to
+    rate how well the resume aligns with the job description.  GPT
+    responds with a single percentage (0-100) which we return to the
+    frontend.  This provides a user-friendly metric that better matches
+    our resume tailoring workflow."""
+
+def _score_via_llm(resume_text: str, jd_text: str) -> float:
+    """Call GPT to rate how well the resume matches the job description."""
+    system = (
+        "You are an expert recruiter. On a scale of 0% to 100%, rate how well the "
+        "resume meets the job description. Only reply with a single number."
+    )
+    user = f"Resume:\n{resume_text}\n\nJob Description:\n{jd_text}"
+
+    try:
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "system", "content": system},
+                      {"role": "user", "content": user}],
+            temperature=0,
+            max_tokens=10,
+        )
+        content = response.choices[0].message.content.strip()
+        # Extract the first number found in the response
+        match = re.search(r"\d+(?:\.\d+)?", content)
+        return float(match.group()) if match else 0.0
+    except Exception as e:
+        # Bubble up as JSON error to keep API consistent
+        raise RuntimeError(f"OpenAI request failed: {str(e)}")
+
+
 def compute_similarity_scores():
     """
     Expects JSON in the following format:
@@ -306,18 +331,15 @@ def compute_similarity_scores():
     if not master_txt:
         return jsonify({"error":"Could not fetch resume text"}), 404
     
-    # Embed JD and master resume
-    jd_embed = _get_embedding(jd_text)
-    master_embed = _get_embedding(master_txt)
-    master_sim = _cosine_sim(master_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
+    try:
+        master_sim = _score_via_llm(master_txt, jd_text)
+        result = {"master_score": round(master_sim, 1)}
 
-    result = {"master_score": round(master_sim, 1)}
-
-    # If the targeted resume has been generated, embed, calculate, and compare that too
-    if generated_text:
-        gen_embed = _get_embedding(generated_text)
-        generated_sim = _cosine_sim(gen_embed, jd_embed) * 100  # Mulitply by 100 to get the similarity as a percentage
-        result["generated_score"] = round(generated_sim, 1)
+        if generated_text:
+            gen_sim = _score_via_llm(generated_text, jd_text)
+            result["generated_score"] = round(gen_sim, 1)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
     return jsonify(result), 200
 
