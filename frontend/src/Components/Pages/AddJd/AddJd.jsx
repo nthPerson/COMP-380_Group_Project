@@ -19,8 +19,7 @@ export default function AddJd() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const { masterDocID } = usePdf();
-    const { jdExplanation, setJdExplanation, jdContent, setJdContent } = useTargetedResume();
-    const [initialSim, setInitialSim] = useState(null);
+    const { jdExplanation, setJdExplanation, jdContent, setJdContent, initialSim, setInitialSim } = useTargetedResume();
     const [urlError, setUrlError] = useState("");
     const [highlightTextInput, setHighlightTextInput] = useState(false);
 

@@ -10,7 +10,8 @@ The module implements a comprehensive resume optimization pipeline that includes
 
 ### AI Model Integration
 - **GPT-4o-mini**: Primary model for text generation and structured parsing
-- **text-embedding-3-small**: 1,536-dimensional embedding vectors for similarity analysis
+- **GPT-3.5-turbo**: Used for similarity scoring between resumes and job descriptions
+- **text-embedding-3-large**: 3,072-dimensional embedding vectors for highlight analysis
 - **Caching Strategy**: Embeddings cached in local database to reduce API costs and latency
 
 ### Core Functionality Areas
@@ -48,8 +49,7 @@ The module implements a comprehensive resume optimization pipeline that includes
 
 ### Model Configuration
 ```python
-EMBED_MODEL = "text-embedding-3-small"  # 1,536 dimensional vector
-# Alternative: "text-embedding-3-large"  # 3,072 dimensional vector
+EMBED_MODEL = "text-embedding-3-large"  # 3,072 dimensional vector
 ```
 
 ### API Configuration
@@ -187,7 +187,7 @@ openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
 **Parameters**:
 - `text` (str): Text to embed
 
-**Returns**: 1,536-dimensional floating-point vector
+**Returns**: 3,072-dimensional floating-point vector
 
 **Caching Strategy**:
 1. **Cache Check**: Query local embeddings database first
@@ -197,7 +197,7 @@ openai.api_key = os.getenv("OPENAI_GROUP_PROJECT_KEY")
 
 **Cost Optimization**: Significantly reduces API costs by reusing embeddings
 
-**Model**: text-embedding-3-small (1,536 dimensions)
+**Model**: text-embedding-3-large (3,072 dimensions)
 
 ### get_embeddings(text_list: list[str]) -> list[list[float]]
 
@@ -255,10 +255,8 @@ cosine_similarity = (a · b) / (||a|| × ||b||)
 
 **Scoring Process**:
 1. **Text Extraction**: Retrieve master resume text
-2. **Embedding Generation**: Create vectors for job description and resume(s)
-3. **Similarity Calculation**: Compute cosine similarity scores
-4. **Percentage Conversion**: Scale to 0-100 range for user interpretation
-5. **Comparison Analysis**: Show improvement from master to targeted resume
+2. **GPT Rating**: Send the resume and job description to GPT-3.5-turbo with a prompt asking for a 0‑100% rating
+3. **Comparison Analysis**: If a generated resume is provided, rate that as well and show the improvement
 
 **Score Interpretation**:
 - **0-30**: Poor alignment
