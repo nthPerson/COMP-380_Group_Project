@@ -327,7 +327,7 @@ body {
   border-radius: 4px;             
   font-size: 1.1rem;                   
   margin: 1rem auto;       /* auto left/right to center the block */
-  max-width: 400px;         /* optional — keeps it from going full width */
+  max-width: 600px;         /* optional — keeps it from going full width */
   text-align: center;       /* center the text inside */  
   align-self: center;    
 }

@@ -64,16 +64,15 @@ export default function WelcomeInstructions() {
               </li>
             ))}
           </ol>
-        </div>
-
-        <div className="actions">
-          <Link to="/createResume" className="button">
-            Create RezuMe
-          </Link>
-          <span className="orText">or</span>
-          <Link to="/uploadResume" className="button">
-            Upload Resume
-          </Link>
+          <div className="actions">
+            <Link to="/createResume" className="button">
+              Create RezuMe
+            </Link>
+            <span className="orText">or</span>
+            <Link to="/uploadResume" className="button">
+              Upload Resume
+            </Link>
+          </div>
         </div>
       </main>
     </div>
