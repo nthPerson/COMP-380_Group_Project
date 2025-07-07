@@ -50,11 +50,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "^react-router-dom$": "<rootDir>/__mocks__/react-router-dom.js"
-    }
   }
 }
