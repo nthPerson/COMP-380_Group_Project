@@ -19,6 +19,7 @@ import ResumeArchive from './Components/Pages/ResumeArchive/ResumeArchive';
 import Header from './Components/Helpers/Header/Header';
 import { PdfProvider } from './Components/PdfContext';
 import { TargetedResumeProvider } from './Components/TargetedResumeContext';
+import { JdProvider } from './Components/JobDescription/JdContext';
 import SelectKeywords from './Components/Helpers/SelectKeywords/SelectKeywords';
 
 
@@ -36,6 +37,7 @@ function App() {
   <>
     {!hideHeaderOn.includes(pathname) && <Header />}
     <PdfProvider>
+    <JdProvider>
     <TargetedResumeProvider>
         <Routes>
             {/* App root: Landing page */}
@@ -76,6 +78,7 @@ function App() {
             <Route path="*" element={<Navigate to="/signup" replace />} />
         </Routes>
     </TargetedResumeProvider>
+    </JdProvider>
     </PdfProvider>
     </>
   );
